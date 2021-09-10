@@ -1,7 +1,9 @@
 use std::env;
 use std::fs;
 use std::ops::Deref;
+use std::path::PathBuf;
 
+mod load_texture;
 mod wgpu_canvas;
 
 mod ffi;
@@ -59,4 +61,34 @@ pub fn application_root_dir() -> String {
             )
         }
     }
+}
+
+use lazy_static::*;
+use objc::{
+    rc::StrongPtr,
+    runtime::{Class, Object},
+    *,
+};
+use objc_foundation::{INSString, NSString};
+
+lazy_static! {
+    static ref BUNDLE_PATH: &'static str = get_bundle_url();
+}
+
+fn get_bundle_url() -> &'static str {
+    let cls = class!(NSBundle);
+    let path: &str = unsafe {
+        // Allocate an instance
+        let bundle: *mut Object = msg_send![cls, mainBundle];
+        // let url: *mut Object = msg_send![*bundle, resourcePath];
+        // 资源路径要用 resourcePath
+        let path: &NSString = msg_send![bundle, resourcePath];
+        path.as_str()
+    };
+    path
+}
+pub fn get_texture_file_path(name: &str) -> PathBuf {
+    let base_dir = application_root_dir();
+    let p = get_bundle_url().to_string() + "/assets/" + name;
+    PathBuf::from(&p)
 }

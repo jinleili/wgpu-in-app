@@ -16,6 +16,7 @@
 		AD4B200126EB1D32008A6AEE /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B200026EB1D31008A6AEE /* MetalView.swift */; };
 		ADA4699526EB30A5008B1C7B /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4699426EB3079008B1C7B /* libresolv.tbd */; };
 		ADA4699726EB313B008B1C7B /* libwgpu_on_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */; };
+		ADA4699A26EB40F4008B1C7B /* assets in Resources */ = {isa = PBXBuildFile; fileRef = ADA4699926EB40F4008B1C7B /* assets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wgpu_test-Bridging-Header.h"; sourceTree = "<group>"; };
 		ADA4699426EB3079008B1C7B /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_ios.a; path = "../target/aarch64-apple-ios/debug/libwgpu_on_ios.a"; sourceTree = "<group>"; };
+		ADA4699926EB40F4008B1C7B /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 		AD4B1FE026EB1B90008A6AEE = {
 			isa = PBXGroup;
 			children = (
+				ADA4699926EB40F4008B1C7B /* assets */,
 				AD4B1FEB26EB1B90008A6AEE /* wgpu_test */,
 				AD4B1FEA26EB1B90008A6AEE /* Products */,
 				ADA4699326EB3079008B1C7B /* Frameworks */,
@@ -148,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD4B1FF926EB1B91008A6AEE /* LaunchScreen.storyboard in Resources */,
+				ADA4699A26EB40F4008B1C7B /* assets in Resources */,
 				AD4B1FF626EB1B91008A6AEE /* Assets.xcassets in Resources */,
 				AD4B1FF426EB1B90008A6AEE /* Main.storyboard in Resources */,
 			);
@@ -313,6 +317,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_test/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -339,6 +344,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_test/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

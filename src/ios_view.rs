@@ -40,7 +40,6 @@ impl AppView {
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
 
         let (device, queue) = pollster::block_on(request_device(&instance, &surface));
-        println!("device: {:?} \n queue: {:?}", device, queue);
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
@@ -126,12 +125,22 @@ async fn request_device(
 
     let base_dir = crate::application_root_dir();
     let trace_path = std::path::PathBuf::from(&base_dir).join("WGPU_TRACE_IOS");
+    // iOS device can not support BC compressed texture, A8(iPhone 6, mini 4) and above support ASTC, All support ETC2
+    let optional_features =
+        wgpu::Features::TEXTURE_COMPRESSION_ASTC_LDR | wgpu::Features::TEXTURE_COMPRESSION_ETC2;
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
-                features: adapter_features,
-                limits: wgpu::Limits::default(),
+                features: (optional_features & adapter_features) | adapter_features,
+                // features: adapter_features,
+                limits: wgpu::Limits {
+                    max_dynamic_storage_buffers_per_pipeline_layout: 4,
+                    max_storage_buffers_per_shader_stage: 8,
+                    max_storage_textures_per_shader_stage: 6,
+                    max_push_constant_size: 16,
+                    ..Default::default()
+                },
             },
             Some(&trace_path),
         )

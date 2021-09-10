@@ -14,8 +14,13 @@ default = []
 [dependencies]
 libc = "*"
 wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="bbb9968297e75eadd0837229210c82b1bbb06be4"}
+nalgebra-glm = "*"
+zerocopy = "0.5"
+image =  { version = "0.23", default-features = false, features = ["png"] }
 pollster = "0.2"
+lazy_static = "*"
 futures = { version = "0.3", default-features = false, features = ["std", "executor"] }
 objc = "*"
 core-graphics = "*"
+objc-foundation = "*"
 
