@@ -1,0 +1,21 @@
+[package]
+name = "wgpu-on-ios"
+version = "0.0.0"
+authors = ["li jinlei <grenlight@icloud.com>"]
+edition = "2018"
+resolver = "2"
+
+[lib]
+crate-type = ["rlib", "staticlib"]
+
+[features]
+default = []
+
+[dependencies]
+libc = "*"
+wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="bbb9968297e75eadd0837229210c82b1bbb06be4"}
+pollster = "0.2"
+futures = { version = "0.3", default-features = false, features = ["std", "executor"] }
+objc = "*"
+core-graphics = "*"
+
