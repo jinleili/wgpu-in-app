@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		AD4B1FED26EB1B90008A6AEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */; };
-		AD4B1FEF26EB1B90008A6AEE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FEE26EB1B90008A6AEE /* SceneDelegate.swift */; };
 		AD4B1FF126EB1B90008A6AEE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FF026EB1B90008A6AEE /* ViewController.swift */; };
 		AD4B1FF426EB1B90008A6AEE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF226EB1B90008A6AEE /* Main.storyboard */; };
 		AD4B1FF626EB1B91008A6AEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */; };
@@ -22,7 +21,6 @@
 /* Begin PBXFileReference section */
 		AD4B1FE926EB1B90008A6AEE /* wgpu_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AD4B1FEE26EB1B90008A6AEE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		AD4B1FF026EB1B90008A6AEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AD4B1FF326EB1B90008A6AEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,7 +69,6 @@
 			isa = PBXGroup;
 			children = (
 				AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */,
-				AD4B1FEE26EB1B90008A6AEE /* SceneDelegate.swift */,
 				AD4B1FF026EB1B90008A6AEE /* ViewController.swift */,
 				ADA4699026EB27CB008B1C7B /* libwgpu_on_ios.h */,
 				AD4B200026EB1D31008A6AEE /* MetalView.swift */,
@@ -167,7 +164,6 @@
 				AD4B200126EB1D32008A6AEE /* MetalView.swift in Sources */,
 				AD4B1FF126EB1B90008A6AEE /* ViewController.swift in Sources */,
 				AD4B1FED26EB1B90008A6AEE /* AppDelegate.swift in Sources */,
-				AD4B1FEF26EB1B90008A6AEE /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +240,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -299,7 +295,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -317,7 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_test/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -344,7 +340,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_test/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

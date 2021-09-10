@@ -21,5 +21,6 @@ struct ios_view_obj {
 };
 
 struct wgpu_canvas *create_wgpu_canvas(struct ios_view_obj object);
+void enter_frame(struct wgpu_canvas *data);
 
 #endif /* libwgpu_on_ios_h */
