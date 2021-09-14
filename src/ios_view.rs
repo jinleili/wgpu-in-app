@@ -38,7 +38,6 @@ impl AppView {
 
         let instance = wgpu::Instance::new(wgpu::Backends::PRIMARY);
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
-
         let (device, queue) = pollster::block_on(request_device(&instance, &surface));
 
         let config = wgpu::SurfaceConfiguration {

@@ -3,7 +3,6 @@ use std::fs;
 use std::ops::Deref;
 use std::path::PathBuf;
 
-mod load_texture;
 mod wgpu_canvas;
 
 mod ffi;
@@ -87,8 +86,9 @@ fn get_bundle_url() -> &'static str {
     };
     path
 }
-pub fn get_texture_file_path(name: &str) -> PathBuf {
+
+pub fn get_wgsl_path(name: &str) -> PathBuf {
     let base_dir = application_root_dir();
-    let p = get_bundle_url().to_string() + "/assets/" + name;
+    let p = get_bundle_url().to_string() + "/wgsl_shader/" + name;
     PathBuf::from(&p)
 }

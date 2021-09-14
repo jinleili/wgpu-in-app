@@ -13,7 +13,7 @@ default = []
 
 [dependencies]
 libc = "*"
-wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="bbb9968297e75eadd0837229210c82b1bbb06be4"}
+wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="69e86453"}
 nalgebra-glm = "*"
 zerocopy = "0.5"
 image =  { version = "0.23", default-features = false, features = ["png"] }
