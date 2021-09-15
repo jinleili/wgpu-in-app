@@ -120,7 +120,10 @@ async fn request_device(
         .await
         .unwrap();
 
-    let adapter_features = adapter.features();
+    let all_features = adapter.features();
+    let request_features = wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
+        | wgpu::Features::POLYGON_MODE_LINE
+        | wgpu::Features::VERTEX_WRITABLE_STORAGE;
 
     let base_dir = crate::application_root_dir();
     let trace_path = std::path::PathBuf::from(&base_dir).join("WGPU_TRACE_IOS");
@@ -131,8 +134,8 @@ async fn request_device(
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
-                features: (optional_features & adapter_features) | adapter_features,
-                // features: adapter_features,
+                features: (optional_features & all_features) | request_features,
+                // features: optional_features & all_features,
                 limits: wgpu::Limits {
                     max_dynamic_storage_buffers_per_pipeline_layout: 4,
                     max_storage_buffers_per_shader_stage: 8,
