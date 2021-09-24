@@ -13,13 +13,13 @@ default = []
 
 [dependencies]
 libc = "*"
-wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="69e86453"}
-nalgebra-glm = "*"
-zerocopy = "0.5"
-image =  { version = "0.23", default-features = false, features = ["png"] }
+wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="180e3e35"}
 pollster = "0.2"
 lazy_static = "*"
-futures = { version = "0.3", default-features = false, features = ["std", "executor"] }
+png = "0.16"
+rand = { version = "0.7.2", features = ["wasm-bindgen"] }
+bytemuck = { version = "1.4", features = ["derive"] }
+cgmath = "0.18"
 objc = "*"
 core-graphics = "*"
 objc-foundation = "*"
