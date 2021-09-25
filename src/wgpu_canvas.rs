@@ -10,7 +10,7 @@ use wgpu::util::DeviceExt;
 const NUM_PARTICLES: u32 = 1500;
 
 // number of single-particle calculations (invocations) in each gpu work group
-const PARTICLES_PER_GROUP: u32 = 64;
+const PARTICLES_PER_GROUP: u32 = 16;
 
 pub struct WgpuCanvas {
     pub app_view: AppView,
@@ -79,7 +79,7 @@ impl WgpuCanvas {
                         binding: 1,
                         visibility: wgpu::ShaderStages::COMPUTE,
                         ty: wgpu::BindingType::Buffer {
-                            ty: wgpu::BufferBindingType::Storage { read_only: true },
+                            ty: wgpu::BufferBindingType::Storage { read_only: false },
                             has_dynamic_offset: false,
                             min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
                         },
@@ -183,9 +183,8 @@ impl WgpuCanvas {
                 device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
                     label: Some(&format!("Particle Buffer {}", i)),
                     contents: bytemuck::cast_slice(&initial_particle_data),
-                    usage: wgpu::BufferUsages::VERTEX
-                        | wgpu::BufferUsages::STORAGE
-                        | wgpu::BufferUsages::COPY_DST,
+                    usage: wgpu::BufferUsages::VERTEX | wgpu::BufferUsages::STORAGE,
+                    // | wgpu::BufferUsages::COPY_DST,
                 }),
             );
         }
@@ -241,57 +240,61 @@ impl SurfaceView for WgpuCanvas {
     fn resize(&mut self) {}
 
     fn enter_frame(&mut self) {
-        let (_frame, view) = self.app_view.get_current_frame_view();
         let device = &self.app_view.device;
         let queue = &self.app_view.queue;
-        // create render pass descriptor and its color attachments
-        let color_attachments = [wgpu::RenderPassColorAttachment {
-            view: &view,
-            resolve_target: None,
-            ops: wgpu::Operations {
-                load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
-                store: true,
-            },
-        }];
-        let render_pass_descriptor = wgpu::RenderPassDescriptor {
-            label: None,
-            color_attachments: &color_attachments,
-            depth_stencil_attachment: None,
-        };
 
-        // get command encoder
-        let mut command_encoder =
-            device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
-
-        command_encoder.push_debug_group("compute boid movement");
         {
-            // compute pass
-            let mut cpass =
-                command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor { label: None });
-            cpass.set_pipeline(&self.compute_pipeline);
-            cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
-            cpass.dispatch(self.work_group_count, 1, 1);
-        }
-        command_encoder.pop_debug_group();
+            let (_frame, view) = self.app_view.get_current_frame_view();
 
-        command_encoder.push_debug_group("render boids");
-        {
-            // render pass
-            let mut rpass = command_encoder.begin_render_pass(&render_pass_descriptor);
-            rpass.set_pipeline(&self.render_pipeline);
-            // render dst particles
-            rpass.set_vertex_buffer(0, self.particle_buffers[(self.frame_num + 1) % 2].slice(..));
-            // the three instance-local vertices
-            rpass.set_vertex_buffer(1, self.vertices_buffer.slice(..));
-            rpass.draw(0..3, 0..NUM_PARTICLES);
+            // get command encoder
+            let mut command_encoder =
+                device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
+            command_encoder.push_debug_group("compute boid movement");
+            {
+                // compute pass
+                let mut cpass = command_encoder
+                    .begin_compute_pass(&wgpu::ComputePassDescriptor { label: None });
+                cpass.set_pipeline(&self.compute_pipeline);
+                cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
+                cpass.dispatch(self.work_group_count, 1, 1);
+            }
+            command_encoder.pop_debug_group();
+
+            // create render pass descriptor and its color attachments
+            let color_attachments = [wgpu::RenderPassColorAttachment {
+                view: &view,
+                resolve_target: None,
+                ops: wgpu::Operations {
+                    load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
+                    store: true,
+                },
+            }];
+            let render_pass_descriptor = wgpu::RenderPassDescriptor {
+                label: None,
+                color_attachments: &color_attachments,
+                depth_stencil_attachment: None,
+            };
+            command_encoder.push_debug_group("render boids");
+            {
+                // render pass
+                let mut rpass = command_encoder.begin_render_pass(&render_pass_descriptor);
+                rpass.set_pipeline(&self.render_pipeline);
+                // render dst particles
+                rpass.set_vertex_buffer(
+                    0,
+                    self.particle_buffers[(self.frame_num + 1) % 2].slice(..),
+                );
+                // the three instance-local vertices
+                rpass.set_vertex_buffer(1, self.vertices_buffer.slice(..));
+                rpass.draw(0..3, 0..NUM_PARTICLES);
+            }
+            command_encoder.pop_debug_group();
+            // done
+            queue.submit(Some(command_encoder.finish()));
         }
-        command_encoder.pop_debug_group();
 
         // update frame count
         self.frame_num += 1;
-
-        // done
-        queue.submit(Some(command_encoder.finish()));
 
         if let Some(_callback) = self.app_view.callback_to_app {
             // callback(123);

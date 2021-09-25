@@ -135,7 +135,7 @@ async fn request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
                 features: (optional_features & all_features) | request_features,
-                // features: optional_features & all_features,
+                // features: all_features,
                 limits: wgpu::Limits {
                     max_dynamic_storage_buffers_per_pipeline_layout: 4,
                     max_storage_buffers_per_shader_stage: 8,
