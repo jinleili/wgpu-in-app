@@ -76,7 +76,7 @@ impl AppView {
         }
     }
 
-    pub fn get_current_frame_view(&self) -> (wgpu::SurfaceFrame, wgpu::TextureView) {
+    pub fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
         self.create_current_frame_view(&self.device, &self.surface, &self.config)
     }
 
@@ -85,18 +85,17 @@ impl AppView {
         device: &wgpu::Device,
         surface: &wgpu::Surface,
         config: &wgpu::SurfaceConfiguration,
-    ) -> (wgpu::SurfaceFrame, wgpu::TextureView) {
-        let frame = match surface.get_current_frame() {
+    ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+        let frame = match surface.get_current_texture() {
             Ok(frame) => frame,
             Err(_) => {
                 surface.configure(&device, &config);
                 surface
-                    .get_current_frame()
-                    .expect("Failed to acquire next surface texture!")
+                    .get_current_texture()
+                    .expect("Failed to acquire next swap chain texture!")
             }
         };
         let view = frame
-            .output
             .texture
             .create_view(&wgpu::TextureViewDescriptor::default());
         (frame, view)
@@ -116,6 +115,7 @@ async fn request_device(
         .request_adapter(&wgpu::RequestAdapterOptions {
             power_preference: wgpu::PowerPreference::default(),
             compatible_surface: Some(surface),
+            force_fallback_adapter: false,
         })
         .await
         .unwrap();

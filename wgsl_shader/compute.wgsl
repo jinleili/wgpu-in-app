@@ -3,7 +3,6 @@ struct Particle {
   vel : vec2<f32>;
 };
 
-[[block]]
 struct SimParams {
   deltaT : f32;
   rule1Distance : f32;
@@ -14,13 +13,12 @@ struct SimParams {
   rule3Scale : f32;
 };
 
-[[block]]
 struct Particles {
   particles : [[stride(16)]] array<Particle>;
 };
 
 [[group(0), binding(0)]] var<uniform> params : SimParams;
-[[group(0), binding(1)]] var<storage, read_write> particlesSrc : Particles;
+[[group(0), binding(1)]] var<storage, read> particlesSrc : Particles;
 [[group(0), binding(2)]] var<storage, read_write> particlesDst : Particles;
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp

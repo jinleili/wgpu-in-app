@@ -2,8 +2,7 @@
 name = "wgpu-on-ios"
 version = "0.0.0"
 authors = ["li jinlei <grenlight@icloud.com>"]
-edition = "2018"
-resolver = "2"
+edition = "2021"
 
 [lib]
 crate-type = ["rlib", "staticlib"]
@@ -13,7 +12,9 @@ default = []
 
 [dependencies]
 libc = "*"
-wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="180e3e35"}
+wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="a1251dc3"}
+# wgpu = {git = "https://github.com/kvark/wgpu", rev="97cfdc363f0f84460e305e0e8c31d0ea956c207b"}
+
 pollster = "0.2"
 lazy_static = "*"
 png = "0.16"
@@ -23,4 +24,3 @@ cgmath = "0.18"
 objc = "*"
 core-graphics = "*"
 objc-foundation = "*"
-

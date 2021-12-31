@@ -79,7 +79,7 @@ impl WgpuCanvas {
                         binding: 1,
                         visibility: wgpu::ShaderStages::COMPUTE,
                         ty: wgpu::BindingType::Buffer {
-                            ty: wgpu::BufferBindingType::Storage { read_only: false },
+                            ty: wgpu::BufferBindingType::Storage { read_only: true },
                             has_dynamic_offset: false,
                             min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
                         },
@@ -119,7 +119,7 @@ impl WgpuCanvas {
             layout: Some(&render_pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &draw_shader,
-                entry_point: "main",
+                entry_point: "vs_main",
                 buffers: &[
                     wgpu::VertexBufferLayout {
                         array_stride: 4 * 4,
@@ -135,12 +135,13 @@ impl WgpuCanvas {
             },
             fragment: Some(wgpu::FragmentState {
                 module: &draw_shader,
-                entry_point: "main",
+                entry_point: "fs_main",
                 targets: &[config.format.into()],
             }),
             primitive: wgpu::PrimitiveState::default(),
             depth_stencil: None,
             multisample: wgpu::MultisampleState::default(),
+            multiview: None,
         });
 
         // create compute pipeline
