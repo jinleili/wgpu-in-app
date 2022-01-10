@@ -55,7 +55,7 @@ func callback_to_swift(arg: Int32) {
         case 0:
             print("wgpu canvas created!")
             break
-        case 123:
+        case 1:
             print("canvas enter frame")
             break
             

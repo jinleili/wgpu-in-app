@@ -1,4 +1,4 @@
-use crate::{AppView, SurfaceView};
+use crate::AppView;
 use rand::{
     distributions::{Distribution, Uniform},
     SeedableRng,
@@ -119,7 +119,7 @@ impl WgpuCanvas {
             layout: Some(&render_pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &draw_shader,
-                entry_point: "vs_main",
+                entry_point: "main_vs",
                 buffers: &[
                     wgpu::VertexBufferLayout {
                         array_stride: 4 * 4,
@@ -135,7 +135,7 @@ impl WgpuCanvas {
             },
             fragment: Some(wgpu::FragmentState {
                 module: &draw_shader,
-                entry_point: "fs_main",
+                entry_point: "main_fs",
                 targets: &[config.format.into()],
             }),
             primitive: wgpu::PrimitiveState::default(),
@@ -184,8 +184,9 @@ impl WgpuCanvas {
                 device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
                     label: Some(&format!("Particle Buffer {}", i)),
                     contents: bytemuck::cast_slice(&initial_particle_data),
-                    usage: wgpu::BufferUsages::VERTEX | wgpu::BufferUsages::STORAGE,
-                    // | wgpu::BufferUsages::COPY_DST,
+                    usage: wgpu::BufferUsages::VERTEX
+                        | wgpu::BufferUsages::STORAGE
+                        | wgpu::BufferUsages::COPY_DST,
                 }),
             );
         }
@@ -235,21 +236,33 @@ impl WgpuCanvas {
     }
 
     pub fn reset(&mut self) {}
-}
 
-impl SurfaceView for WgpuCanvas {
-    fn resize(&mut self) {}
-
-    fn enter_frame(&mut self) {
+    pub fn enter_frame(&mut self) {
         let device = &self.app_view.device;
         let queue = &self.app_view.queue;
-
         {
-            let (_frame, view) = self.app_view.get_current_frame_view();
+            let (frame, view) = self.app_view.get_current_frame_view();
+            // create render pass descriptor and its color attachments
+            let color_attachments = [wgpu::RenderPassColorAttachment {
+                view: &view,
+                resolve_target: None,
+                ops: wgpu::Operations {
+                    // Not clearing here in order to test wgpu's zero texture initialization on a surface texture.
+                    // Users should avoid loading uninitialized memory since this can cause additional overhead.
+                    load: wgpu::LoadOp::Load,
+                    store: true,
+                },
+            }];
+            let render_pass_descriptor = wgpu::RenderPassDescriptor {
+                label: None,
+                color_attachments: &color_attachments,
+                depth_stencil_attachment: None,
+            };
 
             // get command encoder
             let mut command_encoder =
                 device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
+
             command_encoder.push_debug_group("compute boid movement");
             {
                 // compute pass
@@ -261,20 +274,6 @@ impl SurfaceView for WgpuCanvas {
             }
             command_encoder.pop_debug_group();
 
-            // create render pass descriptor and its color attachments
-            let color_attachments = [wgpu::RenderPassColorAttachment {
-                view: &view,
-                resolve_target: None,
-                ops: wgpu::Operations {
-                    load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
-                    store: true,
-                },
-            }];
-            let render_pass_descriptor = wgpu::RenderPassDescriptor {
-                label: None,
-                color_attachments: &color_attachments,
-                depth_stencil_attachment: None,
-            };
             command_encoder.push_debug_group("render boids");
             {
                 // render pass
@@ -290,15 +289,16 @@ impl SurfaceView for WgpuCanvas {
                 rpass.draw(0..3, 0..NUM_PARTICLES);
             }
             command_encoder.pop_debug_group();
+
             // done
             queue.submit(Some(command_encoder.finish()));
+            frame.present();
         }
-
         // update frame count
         self.frame_num += 1;
 
         if let Some(_callback) = self.app_view.callback_to_app {
-            // callback(123);
+            // callback(1);
         }
     }
 }

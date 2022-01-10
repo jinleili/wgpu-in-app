@@ -3,6 +3,7 @@ name = "wgpu-on-ios"
 version = "0.0.0"
 authors = ["li jinlei <grenlight@icloud.com>"]
 edition = "2021"
+resolver = "2"
 
 [lib]
 crate-type = ["rlib", "staticlib"]
@@ -12,12 +13,9 @@ default = []
 
 [dependencies]
 libc = "*"
-wgpu = {git = "https://github.com/gfx-rs/wgpu", features = ["trace"], rev="a1251dc3"}
-# wgpu = {git = "https://github.com/kvark/wgpu", rev="97cfdc363f0f84460e305e0e8c31d0ea956c207b"}
-
+wgpu = {git = "https://github.com/gfx-rs/wgpu", version="0.12", rev="f8a63c40"}
 pollster = "0.2"
 lazy_static = "*"
-png = "0.16"
 rand = { version = "0.7.2", features = ["wasm-bindgen"] }
 bytemuck = { version = "1.4", features = ["derive"] }
 cgmath = "0.18"

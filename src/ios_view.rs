@@ -120,21 +120,15 @@ async fn request_device(
         .await
         .unwrap();
 
-    let all_features = adapter.features();
     let request_features = wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
         | wgpu::Features::POLYGON_MODE_LINE
         | wgpu::Features::VERTEX_WRITABLE_STORAGE;
 
-    let base_dir = crate::application_root_dir();
-    let trace_path = std::path::PathBuf::from(&base_dir).join("WGPU_TRACE_IOS");
-    // iOS device can not support BC compressed texture, A8(iPhone 6, mini 4) and above support ASTC, All support ETC2
-    let optional_features =
-        wgpu::Features::TEXTURE_COMPRESSION_ASTC_LDR | wgpu::Features::TEXTURE_COMPRESSION_ETC2;
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
-                features: (optional_features & all_features) | request_features,
+                features: request_features,
                 // features: all_features,
                 limits: wgpu::Limits {
                     max_dynamic_storage_buffers_per_pipeline_layout: 4,
@@ -144,7 +138,7 @@ async fn request_device(
                     ..Default::default()
                 },
             },
-            Some(&trace_path),
+            None,
         )
         .await;
     match res {

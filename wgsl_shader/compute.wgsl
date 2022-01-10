@@ -22,25 +22,16 @@ struct Particles {
 [[group(0), binding(2)]] var<storage, read_write> particlesDst : Particles;
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
-[[stage(compute), workgroup_size(16, 1, 1)]]
-fn main(
-  [[builtin(global_invocation_id)]] global_invocation_id: vec3<u32>) {
-    let total = arrayLength(&particlesSrc.particles);
-    let index = global_invocation_id.x;
-    if (index >= total) {
-      return;
-    }
-    
+[[stage(compute), workgroup_size(64)]]
+fn main([[builtin(global_invocation_id)]] global_invocation_id: vec3<u32>) {
+  let total = arrayLength(&particlesSrc.particles);
+  let index = global_invocation_id.x;
+  if (index >= total) {
+    return;
+  }
 
   var vPos : vec2<f32> = particlesSrc.particles[index].pos;
   var vVel : vec2<f32> = particlesSrc.particles[index].vel;
-  // let particle = particlesSrc.particles[index];
-  // storageBarrier();
-  // workgroupBarrier();
-  // var vPos : vec2<f32> = particle.pos;
-  // var vVel : vec2<f32> = particle.vel;
-// Write back
-  // particlesDst.particles[index] = particle;
 
   var cMass : vec2<f32> = vec2<f32>(0.0, 0.0);
   var cVel : vec2<f32> = vec2<f32>(0.0, 0.0);
@@ -59,6 +50,7 @@ fn main(
 
     let pos = particlesSrc.particles[i].pos;
     let vel = particlesSrc.particles[i].vel;
+
     if (distance(pos, vPos) < params.rule1Distance) {
       cMass = cMass + pos;
       cMassCount = cMassCount + 1;
