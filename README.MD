@@ -1,6 +1,9 @@
 # wgpu on App
 Integrate wgpu on your existing iOS | Android apps. 
 
+## boids demo screenshot
+![wgpu on iOS](screenshot/on_ios.jpg) ![wgpu on Android](screenshot/on_android.jpg) 
+
 ## iOS
 Adding build target for iOS. Since iPhone 5 and later are 64-bit devices, add `aarch64-apple-ios` is enough.
 ```sh

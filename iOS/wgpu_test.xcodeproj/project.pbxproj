@@ -13,8 +13,8 @@
 		AD4B1FF626EB1B91008A6AEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */; };
 		AD4B1FF926EB1B91008A6AEE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF726EB1B91008A6AEE /* LaunchScreen.storyboard */; };
 		AD4B200126EB1D32008A6AEE /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B200026EB1D31008A6AEE /* MetalView.swift */; };
+		ADA4046D279ABF08005BF0DB /* libwgpu_on_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */; };
 		ADA4699526EB30A5008B1C7B /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4699426EB3079008B1C7B /* libresolv.tbd */; };
-		ADA4699726EB313B008B1C7B /* libwgpu_on_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,7 +26,8 @@
 		AD4B1FF826EB1B91008A6AEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AD4B1FFA26EB1B91008A6AEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD4B200026EB1D31008A6AEE /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
-		ADA4699026EB27CB008B1C7B /* libwgpu_on_ios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libwgpu_on_ios.h; sourceTree = "<group>"; };
+		ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_app.a; path = "../target/aarch64-apple-ios/debug/libwgpu_on_app.a"; sourceTree = "<group>"; };
+		ADA4699026EB27CB008B1C7B /* libwgpu_on_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libwgpu_on_app.h; sourceTree = "<group>"; };
 		ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wgpu_test-Bridging-Header.h"; sourceTree = "<group>"; };
 		ADA4699426EB3079008B1C7B /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_ios.a; path = "../target/aarch64-apple-ios/debug/libwgpu_on_ios.a"; sourceTree = "<group>"; };
@@ -38,7 +39,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADA4699526EB30A5008B1C7B /* libresolv.tbd in Frameworks */,
-				ADA4699726EB313B008B1C7B /* libwgpu_on_ios.a in Frameworks */,
+				ADA4046D279ABF08005BF0DB /* libwgpu_on_app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +68,7 @@
 			children = (
 				AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */,
 				AD4B1FF026EB1B90008A6AEE /* ViewController.swift */,
-				ADA4699026EB27CB008B1C7B /* libwgpu_on_ios.h */,
+				ADA4699026EB27CB008B1C7B /* libwgpu_on_app.h */,
 				AD4B200026EB1D31008A6AEE /* MetalView.swift */,
 				AD4B1FF226EB1B90008A6AEE /* Main.storyboard */,
 				AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */,
@@ -81,6 +82,7 @@
 		ADA4699326EB3079008B1C7B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */,
 				ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */,
 				ADA4699426EB3079008B1C7B /* libresolv.tbd */,
 			);
