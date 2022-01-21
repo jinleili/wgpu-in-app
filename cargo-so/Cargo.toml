@@ -1,11 +1,17 @@
 [package]
+authors = ["Jinlei Li<jinlei.li.work@outlook.com>"]
+description = "Helps cargo build Android .so lib files"
+documentation = "https://docs.rs/cargo-so"
 edition = "2021"
+homepage = "https://github.com/jinleili/wgpu_on_app"
+keywords = ["android", "so", "ndk", "jni"]
+license = "MIT OR Apache-2.0"
 name = "cargo-so"
+readme = "cargo-so/README.MD"
+repository = "https://github.com/jinleili/wgpu_on_app"
 version = "0.1.0"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 cargo-subcommand = "0.5.0"
 dunce = "1.0.1"
-ndk-build = {version = "*"}
+ndk-build = "0.4.3"
