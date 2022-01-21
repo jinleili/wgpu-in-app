@@ -7,7 +7,7 @@ homepage = "https://github.com/jinleili/wgpu_on_app"
 keywords = ["android", "so", "ndk", "jni"]
 license = "MIT OR Apache-2.0"
 name = "cargo-so"
-readme = "cargo-so/README.MD"
+readme = "./README.MD"
 repository = "https://github.com/jinleili/wgpu_on_app"
 version = "0.1.0"
 
