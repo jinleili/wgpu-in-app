@@ -1,10 +1,26 @@
-use std::ops::Deref;
-use std::path::PathBuf;
-
+use log::error;
 mod wgpu_canvas;
 
+#[cfg(target_os = "ios")]
+#[path = "ios/ffi.rs"]
 mod ffi;
+
+#[cfg(target_os = "android")]
+#[allow(non_snake_case)]
+#[path = "android/ffi.rs"]
+mod ffi;
+
+#[cfg(all(target_os = "android", target_os = "ios"))]
 pub use ffi::*;
+
+#[cfg(not(target_os = "android"))]
+#[path = "ios/app_view.rs"]
+pub mod app_view;
+#[cfg(target_os = "android")]
+#[path = "android/app_view.rs"]
+pub mod app_view;
+
+use app_view::AppView;
 
 #[repr(C)]
 #[derive(Debug)]
@@ -13,27 +29,8 @@ pub struct ViewSize {
     pub height: u32,
 }
 
-mod ios_view;
-pub use ios_view::{AppView, IOSViewObj};
-
-pub struct AppViewWrapper(pub AppView);
-// `*mut libc::c_void` cannot be sent between threads safely
-unsafe impl Send for AppViewWrapper {}
-unsafe impl Sync for AppViewWrapper {}
-
-impl Deref for AppViewWrapper {
-    type Target = AppView;
-
-    fn deref(&self) -> &AppView {
-        &self.0
-    }
-}
-
 pub trait GPUContext {
-    fn set_view_size(&mut self, _size: (f64, f64)) {}
-    fn get_view_size(&self) -> ViewSize;
     fn resize_surface(&mut self);
-    fn normalize_touch_point(&self, touch_point_x: f32, touch_point_y: f32) -> (f32, f32);
     fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView);
     fn create_current_frame_view(
         &self,
@@ -58,26 +55,43 @@ pub trait GPUContext {
     }
 }
 
-use lazy_static::*;
-use objc::{runtime::Object, *};
-use objc_foundation::{INSString, NSString};
+async fn request_device(
+    instance: &wgpu::Instance,
+    surface: &wgpu::Surface,
+) -> (wgpu::Device, wgpu::Queue) {
+    let adapter = instance
+        .request_adapter(&wgpu::RequestAdapterOptions {
+            power_preference: wgpu::PowerPreference::default(),
+            compatible_surface: Some(surface),
+            force_fallback_adapter: false,
+        })
+        .await
+        .unwrap();
 
-lazy_static! {
-    static ref BUNDLE_PATH: &'static str = get_bundle_url();
-}
-
-fn get_bundle_url() -> &'static str {
-    let cls = class!(NSBundle);
-    let path: &str = unsafe {
-        // Allocate an instance
-        let bundle: *mut Object = msg_send![cls, mainBundle];
-        let path: &NSString = msg_send![bundle, resourcePath];
-        path.as_str()
+    let request_features = if cfg!(target_os = "android") {
+        // unsupported features on some android: POLYGON_MODE_LINE | VERTEX_WRITABLE_STORAGE
+        wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
+    } else {
+        wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
+            | wgpu::Features::POLYGON_MODE_LINE
+            | wgpu::Features::VERTEX_WRITABLE_STORAGE
     };
-    path
-}
 
-pub fn get_wgsl_path(name: &str) -> PathBuf {
-    let p = get_bundle_url().to_string() + "/wgsl_shader/" + name;
-    PathBuf::from(&p)
+    let res = adapter
+        .request_device(
+            &wgpu::DeviceDescriptor {
+                label: None,
+                features: request_features,
+                limits: wgpu::Limits::default(),
+            },
+            None,
+        )
+        .await;
+    match res {
+        Err(err) => {
+            error!("request_device failed: {:?}", err);
+            panic!("request_device failed: {:?}", err);
+        }
+        Ok(tuple) => tuple,
+    }
 }

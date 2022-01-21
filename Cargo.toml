@@ -1,24 +1,34 @@
 [package]
-name = "wgpu-on-ios"
-version = "0.0.0"
 authors = ["li jinlei <grenlight@icloud.com>"]
 edition = "2021"
+name = "wgpu-on-app"
 resolver = "2"
+version = "0.1.0"
 
 [lib]
-crate-type = ["rlib", "staticlib"]
+crate-type = ["rlib", "staticlib", "cdylib"]
 
 [features]
 default = []
 
 [dependencies]
-libc = "*"
-wgpu = {git = "https://github.com/gfx-rs/wgpu", version="0.12", rev="f8a63c40"}
-pollster = "0.2"
-lazy_static = "*"
-rand = { version = "0.7.2", features = ["wasm-bindgen"] }
-bytemuck = { version = "1.4", features = ["derive"] }
+bytemuck = {version = "1.4", features = ["derive"]}
 cgmath = "0.18"
-objc = "*"
+lazy_static = "*"
+libc = "*"
+log = "0.4.14"
+pollster = "0.2"
+rand = {version = "0.7.2", features = ["wasm-bindgen"]}
+wgpu = {git = "https://github.com/gfx-rs/wgpu", version = "0.12", rev = "f8a63c40"}
+
+[target.'cfg(target_os = "ios")'.dependencies]
 core-graphics = "*"
+objc = "*"
 objc-foundation = "*"
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_logger = "0.10.1"
+jni = "0.19"
+jni_fn = "0.1"
+ndk-sys = "*"
+raw-window-handle = "*"

@@ -1,4 +1,4 @@
-use crate::AppView;
+use crate::{AppView, GPUContext};
 use rand::{
     distributions::{Distribution, Uniform},
     SeedableRng,

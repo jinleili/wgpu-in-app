@@ -1,0 +1,11 @@
+[package]
+edition = "2021"
+name = "cargo-so"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cargo-subcommand = "0.5.0"
+dunce = "1.0.1"
+ndk-build = {version = "*"}
