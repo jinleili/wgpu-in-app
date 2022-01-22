@@ -1,8 +1,7 @@
 [package]
-authors = ["li jinlei <grenlight@icloud.com>"]
+authors = ["jinlei li<jinlei.li.work@outlook.com>"]
 edition = "2021"
 name = "wgpu-on-app"
-resolver = "2"
 version = "0.1.0"
 
 [lib]
@@ -11,15 +10,22 @@ crate-type = ["rlib", "staticlib", "cdylib"]
 [features]
 default = []
 
+[dependencies.wgt]
+git = "https://github.com/gfx-rs/wgpu"
+package = "wgpu-types"
+rev = "f3891fed"
+version = "0.12"
+
 [dependencies]
 bytemuck = {version = "1.4", features = ["derive"]}
 cgmath = "0.18"
 lazy_static = "*"
 libc = "*"
 log = "0.4.14"
+noise = {version = "0.7", default-features = false}
 pollster = "0.2"
 rand = {version = "0.7.2", features = ["wasm-bindgen"]}
-wgpu = {git = "https://github.com/gfx-rs/wgpu", version = "0.12", rev = "f8a63c40"}
+wgpu = {git = "https://github.com/gfx-rs/wgpu", version = "0.12", rev = "f3891fed"}
 
 [target.'cfg(target_os = "ios")'.dependencies]
 core-graphics = "*"

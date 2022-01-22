@@ -1,15 +1,14 @@
 use log::error;
+mod examples;
 mod wgpu_canvas;
 
 #[cfg(target_os = "ios")]
 #[path = "ios/ffi.rs"]
 mod ffi;
-
 #[cfg(target_os = "android")]
 #[allow(non_snake_case)]
 #[path = "android/ffi.rs"]
 mod ffi;
-
 #[cfg(all(target_os = "android", target_os = "ios"))]
 pub use ffi::*;
 
@@ -19,7 +18,6 @@ pub mod app_view;
 #[cfg(target_os = "android")]
 #[path = "android/app_view.rs"]
 pub mod app_view;
-
 use app_view::AppView;
 
 #[repr(C)]

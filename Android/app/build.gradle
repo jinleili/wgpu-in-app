@@ -8,7 +8,9 @@ android {
 
     defaultConfig {
         applicationId "name.jinleili.wgpu"
-        minSdk 24
+//        Android 7.1.1, API 25
+//        Android 9.0, API 28
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"

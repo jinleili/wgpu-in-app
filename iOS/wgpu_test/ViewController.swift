@@ -46,6 +46,13 @@ class ViewController: UIViewController {
         // call rust
         enter_frame(canvas)
     }
+    
+    @IBAction func changeExample(sender: UISegmentedControl) {
+        guard let canvas = self.wgpuCanvas else {
+            return
+        }
+        change_example(canvas, Int32(sender.selectedSegmentIndex))
+    }
 
 }
 

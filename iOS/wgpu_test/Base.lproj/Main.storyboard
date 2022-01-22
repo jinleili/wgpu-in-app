@@ -18,8 +18,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bHv-L9-Ngy" customClass="MetalView" customModule="wgpu_test" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="96" width="414" height="766"/>
+                                <rect key="frame" x="0.0" y="168" width="414" height="414"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="bHv-L9-Ngy" secondAttribute="height" multiplier="1:1" id="9dI-QF-8cP"/>
+                                </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wgpu on iOS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SOo-xX-hpl">
                                 <rect key="frame" x="148" y="44" width="118" height="44"/>
@@ -30,6 +33,19 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NML-RE-Kyu">
+                                <rect key="frame" x="41.5" y="112" width="331" height="32"/>
+                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                <segments>
+                                    <segment title="boids"/>
+                                    <segment title="MSAA line"/>
+                                    <segment title="cube"/>
+                                    <segment title="water"/>
+                                </segments>
+                                <connections>
+                                    <action selector="changeExampleWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="rfl-8d-vG6"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemGray5Color"/>
@@ -37,9 +53,10 @@
                             <constraint firstItem="SOo-xX-hpl" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="1hw-HX-Fyb"/>
                             <constraint firstItem="SOo-xX-hpl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BDm-IJ-19Q"/>
                             <constraint firstItem="bHv-L9-Ngy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="BFZ-6E-DiP"/>
-                            <constraint firstItem="bHv-L9-Ngy" firstAttribute="top" secondItem="SOo-xX-hpl" secondAttribute="bottom" constant="8" id="UB1-Nj-yaa"/>
+                            <constraint firstItem="NML-RE-Kyu" firstAttribute="top" secondItem="SOo-xX-hpl" secondAttribute="bottom" constant="24" id="C2l-nU-EsR"/>
+                            <constraint firstItem="bHv-L9-Ngy" firstAttribute="top" secondItem="SOo-xX-hpl" secondAttribute="bottom" constant="80" id="UB1-Nj-yaa"/>
+                            <constraint firstItem="NML-RE-Kyu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d7n-9F-YiU"/>
                             <constraint firstItem="bHv-L9-Ngy" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fUE-eB-pZ9"/>
-                            <constraint firstItem="bHv-L9-Ngy" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="xbM-LR-qUw"/>
                         </constraints>
                     </view>
                     <connections>
@@ -52,6 +69,9 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

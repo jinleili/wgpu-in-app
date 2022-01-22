@@ -9,6 +9,8 @@ class RustBridge {
 
     external fun createWgpuCanvas(surface: Surface): Long
     external fun enterFrame(rustObj: Long)
+    external fun changeExample(rustObj: Long, index: Int)
+
     external fun dropWgpuCanvas(rustObj: Long)
 
 }

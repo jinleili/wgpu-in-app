@@ -1,7 +1,7 @@
 use crate::{wgpu_canvas::WgpuCanvas, AppView};
 use android_logger::Config;
 use jni::objects::JClass;
-use jni::sys::{jlong, jobject};
+use jni::sys::{jint, jlong, jobject};
 use jni::JNIEnv;
 use jni_fn::jni_fn;
 use log::{info, Level};
@@ -20,6 +20,13 @@ pub unsafe fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject) ->
 pub unsafe fn enterFrame(_env: *mut JNIEnv, _: JClass, obj: jlong) {
     let obj = &mut *(obj as *mut WgpuCanvas);
     obj.enter_frame();
+}
+
+#[no_mangle]
+#[jni_fn("name.jinleili.wgpu.RustBridge")]
+pub unsafe fn changeExample(_env: *mut JNIEnv, _: JClass, obj: jlong, index: jint) {
+    let obj = &mut *(obj as *mut WgpuCanvas);
+    obj.change_example(index as i32);
 }
 
 #[no_mangle]

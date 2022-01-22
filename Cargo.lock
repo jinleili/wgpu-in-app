@@ -503,8 +503,7 @@ checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
 [[package]]
 name = "metal"
 version = "0.23.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0514f491f4cc03632ab399ee01e2c1c1b12d3e1cf2d667c1ff5f87d6dcd2084"
+source = "git+https://github.com/gfx-rs/metal-rs?rev=140c8f4#140c8f4e39001ae154f153ffc767da6c0c9d7f06"
 dependencies = [
  "bitflags",
  "block",
@@ -517,7 +516,7 @@ dependencies = [
 [[package]]
 name = "naga"
 version = "0.8.0"
-source = "git+https://github.com/gfx-rs/naga?rev=09d35f3#09d35f363134920a9a477cefa32b29bb4416092b"
+source = "git+https://github.com/gfx-rs/naga?rev=a1840be#a1840beb1a96c9a49980fe3efa8e2f3dcd88abe6"
 dependencies = [
  "bit-set",
  "bitflags",
@@ -538,6 +537,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e5a6ae77c8ee183dcbbba6150e2e6b9f3f4196a7666c02a715a95692ec1fa97"
 dependencies = [
  "jni-sys",
+]
+
+[[package]]
+name = "noise"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82051dd6745d5184c6efb7bc8be14892a7f6d4f3ad6dbf754d1c7d7d5fe24b43"
+dependencies = [
+ "rand",
+ "rand_xorshift",
 ]
 
 [[package]]
@@ -686,6 +695,15 @@ name = "rand_hc"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca3129af7b92a17112d59ad498c6f81eaf463253766b90396d39ea7a39d6613c"
+dependencies = [
+ "rand_core",
+]
+
+[[package]]
+name = "rand_xorshift"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77d416b86801d23dde1aa643023b775c3a462efc0ed96443add11546cdf1dca8"
 dependencies = [
  "rand_core",
 ]
@@ -937,7 +955,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=f8a63c40#f8a63c405591f8f8f92595684e0d5c957aec2a53"
+source = "git+https://github.com/gfx-rs/wgpu?rev=f3891fed#f3891fed335b277376d5185d58441b2148cdc529"
 dependencies = [
  "arrayvec",
  "js-sys",
@@ -957,7 +975,7 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=f8a63c40#f8a63c405591f8f8f92595684e0d5c957aec2a53"
+source = "git+https://github.com/gfx-rs/wgpu?rev=f3891fed#f3891fed335b277376d5185d58441b2148cdc529"
 dependencies = [
  "arrayvec",
  "bitflags",
@@ -979,7 +997,7 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=f8a63c40#f8a63c405591f8f8f92595684e0d5c957aec2a53"
+source = "git+https://github.com/gfx-rs/wgpu?rev=f3891fed#f3891fed335b277376d5185d58441b2148cdc529"
 dependencies = [
  "arrayvec",
  "ash",
@@ -1027,18 +1045,20 @@ dependencies = [
  "libc",
  "log",
  "ndk-sys",
+ "noise",
  "objc",
  "objc-foundation",
  "pollster",
  "rand",
  "raw-window-handle",
  "wgpu",
+ "wgpu-types",
 ]
 
 [[package]]
 name = "wgpu-types"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=f8a63c40#f8a63c405591f8f8f92595684e0d5c957aec2a53"
+source = "git+https://github.com/gfx-rs/wgpu?rev=f3891fed#f3891fed335b277376d5185d58441b2148cdc529"
 dependencies = [
  "bitflags",
 ]

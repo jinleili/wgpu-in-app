@@ -59,4 +59,11 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         invalidate()
     }
 
+    fun changeExample(index: Int) {
+        println("$index")
+        if (rustObj != Long.MAX_VALUE ){
+            rustBrige.changeExample(rustObj, index)
+        }
+    }
+
 }
