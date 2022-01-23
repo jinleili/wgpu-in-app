@@ -9,7 +9,7 @@ Integrate wgpu on your existing iOS | Android apps.
 
 
 ## **iOS**
-### Adding build target for iOS
+### Add build target
 
 Since iPhone 5 and later are 64-bit devices, add `aarch64-apple-ios` is enough.
 
@@ -17,7 +17,7 @@ Since iPhone 5 and later are 64-bit devices, add `aarch64-apple-ios` is enough.
 rustup target add aarch64-apple-ios
 ```
 
-### building
+### build
 ```sh
 cargo build --target aarch64-apple-ios
 ```
@@ -37,10 +37,10 @@ Then, use Xcode to open ```iOS/wgpu_test.xcodeproj``` and connect iOS device to 
 Assuming your computer already has Android Studio installed, go to `Android Studio` > `Tools` > `SDK Manager` > `Android SDK` > `SDK Tools`. Check the following options for installation and click OK. 
 
 - [x] Android SDK Build-Tools
-- [x] NDK(Side by side)
 - [x] Android SDK Command-line Tools
-- [x] CMake
 - [x] Android SDK Platform-Tools
+- [x] NDK(Side by side)
+- [x] CMake
 
 Then, set two following environment variables:
 
@@ -51,13 +51,13 @@ export NDK_HOME=$ANDROID_SDK_ROOT/ndk/23.1.7779620
 ```
 
 
-### Adding build targets for Android 
+### Add build targets
 
 Since simulator and virtual devices only support GLES, `x86_64-linux-android` and `i686-linux-android` targets are not necessary
 ```sh
 rustup target add aarch64-linux-android armv7-linux-androideabi
 ```
-### Installing cargo so subcommand
+### Install cargo so subcommand
 ```sh
 # from crates.io
 cargo install cargo-so
@@ -65,7 +65,7 @@ cargo install cargo-so
 cargo install --path cargo-so
 ```
 
-### Building
+### Build
 ```sh
 # currently, multi-target build only useable on the nightly channel
 cargo so b --target aarch64-linux-android --release

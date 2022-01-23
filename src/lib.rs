@@ -65,22 +65,26 @@ async fn request_device(
         })
         .await
         .unwrap();
-
     let request_features = if cfg!(target_os = "android") {
         // unsupported features on some android: POLYGON_MODE_LINE | VERTEX_WRITABLE_STORAGE
-        wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
+        wgpu::Features::default()
     } else {
         wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
             | wgpu::Features::POLYGON_MODE_LINE
             | wgpu::Features::VERTEX_WRITABLE_STORAGE
     };
 
+    // These downlevel limits will allow the code to run on all possible hardware
+    let downlevel_limits = wgpu::Limits::downlevel_webgl2_defaults();
+    // Make sure we use the texture resolution limits from the adapter, so we can support images the size of the surface.
+    let needed_limits = downlevel_limits.using_resolution(adapter.limits());
+
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
                 features: request_features,
-                limits: wgpu::Limits::default(),
+                limits: needed_limits,
             },
             None,
         )

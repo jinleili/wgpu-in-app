@@ -18,9 +18,13 @@ impl AppView {
         let native_window = unsafe {
             NativeWindow::new(ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface))
         };
-        let instance = wgpu::Instance::new(wgpu::Backends::PRIMARY);
+        let instance = wgpu::Instance::new(wgpu::Backends::VULKAN | wgpu::Backends::GL);
         let surface = unsafe { instance.create_surface(&native_window) };
+        log::info!("surface created");
+
         let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
+        log::info!("(device, queue) created");
+
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: wgpu::TextureFormat::Rgba8UnormSrgb,
