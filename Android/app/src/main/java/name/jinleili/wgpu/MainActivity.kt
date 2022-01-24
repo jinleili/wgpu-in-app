@@ -8,6 +8,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         var surfaceV = findViewById<WGPUSurfaceView>(R.id.wgpuSurfaceView)
         var toggleBt = findViewById<MaterialButtonToggleGroup>(R.id.toggleBt)
@@ -26,4 +27,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

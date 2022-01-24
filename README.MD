@@ -38,7 +38,6 @@ Assuming your computer already has Android Studio installed, go to `Android Stud
 
 - [x] Android SDK Build-Tools
 - [x] Android SDK Command-line Tools
-- [x] Android SDK Platform-Tools
 - [x] NDK(Side by side)
 
 Then, set two following environment variables:

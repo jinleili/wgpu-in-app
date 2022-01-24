@@ -74,16 +74,16 @@ async fn request_device(
             | wgpu::Features::VERTEX_WRITABLE_STORAGE
     };
 
-    // These downlevel limits will allow the code to run on all possible hardware
-    let downlevel_limits = wgpu::Limits::downlevel_webgl2_defaults();
-    // Make sure we use the texture resolution limits from the adapter, so we can support images the size of the surface.
-    let needed_limits = downlevel_limits.using_resolution(adapter.limits());
+    // // These downlevel limits will allow the code to run on all possible hardware
+    // let downlevel_limits = wgpu::Limits::downlevel_webgl2_defaults();
+    // // Make sure we use the texture resolution limits from the adapter, so we can support images the size of the surface.
+    // let needed_limits = downlevel_limits.using_resolution(adapter.limits());
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
                 features: request_features,
-                limits: needed_limits,
+                limits: adapter.limits(),
             },
             None,
         )

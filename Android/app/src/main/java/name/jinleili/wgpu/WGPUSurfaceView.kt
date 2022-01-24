@@ -9,6 +9,7 @@ import android.view.SurfaceView
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var rustBrige = RustBridge()
     private var rustObj: Long = Long.MAX_VALUE
+    private var idx: Int = 1
 
     constructor(context: Context) : super(context) {
     }
@@ -27,6 +28,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         holder.addCallback(this)
     }
 
+
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
     }
 
@@ -38,7 +40,7 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         holder.let { h ->
-            rustObj = rustBrige.createWgpuCanvas(h.surface)
+            rustObj = rustBrige.createWgpuCanvas(h.surface, this.idx)
             setWillNotDraw(false)
         }
     }
@@ -60,9 +62,9 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     }
 
     fun changeExample(index: Int) {
-        println("$index")
         if (rustObj != Long.MAX_VALUE ){
             rustBrige.changeExample(rustObj, index)
+            this.idx = index
         }
     }
 
