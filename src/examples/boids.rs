@@ -42,6 +42,7 @@ impl Boids {
                 "../../wgsl_shader/draw.wgsl"
             ))),
         });
+
         // buffer for simulation parameters uniform
         let sim_param_data = [
             0.04f32, // deltaT
@@ -53,59 +54,55 @@ impl Boids {
             0.005,   // rule3Scale
         ]
         .to_vec();
-        let sim_param_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Simulation Parameter Buffer"),
-            contents: bytemuck::cast_slice(&sim_param_data),
-            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
-        });
 
         // create compute bind layout group and compute pipeline layout
+        let bgl_desc = wgpu::BindGroupLayoutDescriptor {
+            entries: &[
+                wgpu::BindGroupLayoutEntry {
+                    binding: 0,
+                    visibility: wgpu::ShaderStages::COMPUTE,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Uniform,
+                        has_dynamic_offset: false,
+                        min_binding_size: wgpu::BufferSize::new(
+                            (sim_param_data.len() * mem::size_of::<f32>()) as _,
+                        ),
+                    },
+                    count: None,
+                },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 1,
+                    visibility: wgpu::ShaderStages::COMPUTE,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Storage { read_only: true },
+                        has_dynamic_offset: false,
+                        min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
+                    },
+                    count: None,
+                },
+                wgpu::BindGroupLayoutEntry {
+                    binding: 2,
+                    visibility: wgpu::ShaderStages::COMPUTE,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Storage { read_only: false },
+                        has_dynamic_offset: false,
+                        min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
+                    },
+                    count: None,
+                },
+            ],
+            label: None,
+        };
+        log::info!("bgl_desc created");
+        let compute_bind_group_layout = device.create_bind_group_layout(&bgl_desc);
+        log::info!("compute_bind_group_layout created");
 
-        let compute_bind_group_layout =
-            device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
-                entries: &[
-                    wgpu::BindGroupLayoutEntry {
-                        binding: 0,
-                        visibility: wgpu::ShaderStages::COMPUTE,
-                        ty: wgpu::BindingType::Buffer {
-                            ty: wgpu::BufferBindingType::Uniform,
-                            has_dynamic_offset: false,
-                            min_binding_size: wgpu::BufferSize::new(
-                                (sim_param_data.len() * mem::size_of::<f32>()) as _,
-                            ),
-                        },
-                        count: None,
-                    },
-                    wgpu::BindGroupLayoutEntry {
-                        binding: 1,
-                        visibility: wgpu::ShaderStages::COMPUTE,
-                        ty: wgpu::BindingType::Buffer {
-                            ty: wgpu::BufferBindingType::Storage { read_only: true },
-                            has_dynamic_offset: false,
-                            min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
-                        },
-                        count: None,
-                    },
-                    wgpu::BindGroupLayoutEntry {
-                        binding: 2,
-                        visibility: wgpu::ShaderStages::COMPUTE,
-                        ty: wgpu::BindingType::Buffer {
-                            ty: wgpu::BufferBindingType::Storage { read_only: false },
-                            has_dynamic_offset: false,
-                            min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
-                        },
-                        count: None,
-                    },
-                ],
-                label: None,
-            });
         let compute_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("compute"),
                 bind_group_layouts: &[&compute_bind_group_layout],
                 push_constant_ranges: &[],
             });
-
         // create render pipeline with empty bind group layout
 
         let render_pipeline_layout =
@@ -114,7 +111,6 @@ impl Boids {
                 bind_group_layouts: &[],
                 push_constant_ranges: &[],
             });
-
         let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
             label: None,
             layout: Some(&render_pipeline_layout),
@@ -144,7 +140,6 @@ impl Boids {
             multisample: wgpu::MultisampleState::default(),
             multiview: None,
         });
-
         // create compute pipeline
 
         let compute_pipeline = device.create_compute_pipeline(&wgpu::ComputePipelineDescriptor {
@@ -194,7 +189,11 @@ impl Boids {
 
         // create two bind groups, one for each buffer as the src
         // where the alternate buffer is used as the dst
-
+        let sim_param_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Simulation Parameter Buffer"),
+            contents: bytemuck::cast_slice(&sim_param_data),
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+        });
         for i in 0..2 {
             particle_bind_groups.push(device.create_bind_group(&wgpu::BindGroupDescriptor {
                 layout: &compute_bind_group_layout,

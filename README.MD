@@ -4,7 +4,7 @@ Integrate wgpu on your existing iOS | Android apps.
 `winit`-free mode can useful for integrating wgpu into existing apps to implement some graphics features. 
 
 ## Screenshot
-|![wgpu on iOS](screenshot/on_ios.png)|![wgpu on Android](screenshot/on_android.jpg)|
+|![wgpu on iOS](screenshot/on_ios_380.png)|![wgpu on Android](screenshot/on_android.png)|
 |---|---|
 
 
@@ -40,7 +40,6 @@ Assuming your computer already has Android Studio installed, go to `Android Stud
 - [x] Android SDK Command-line Tools
 - [x] Android SDK Platform-Tools
 - [x] NDK(Side by side)
-- [x] CMake
 
 Then, set two following environment variables:
 

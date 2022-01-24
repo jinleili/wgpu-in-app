@@ -21,7 +21,6 @@ impl AppView {
         let instance = wgpu::Instance::new(wgpu::Backends::VULKAN | wgpu::Backends::GL);
         let surface = unsafe { instance.create_surface(&native_window) };
         log::info!("surface created");
-
         let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
         log::info!("(device, queue) created");
 

@@ -78,7 +78,6 @@ async fn request_device(
     let downlevel_limits = wgpu::Limits::downlevel_webgl2_defaults();
     // Make sure we use the texture resolution limits from the adapter, so we can support images the size of the surface.
     let needed_limits = downlevel_limits.using_resolution(adapter.limits());
-
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {

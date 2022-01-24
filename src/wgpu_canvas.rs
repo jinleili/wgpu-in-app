@@ -9,9 +9,9 @@ pub struct WgpuCanvas {
 #[allow(dead_code)]
 impl WgpuCanvas {
     pub fn new(app_view: AppView) -> Self {
-        let example = Self::create_a_example(&app_view, 0);
+        let example = Self::create_a_example(&app_view, 1);
+        log::info!("example created");
         let instance = WgpuCanvas { app_view, example };
-
         if let Some(callback) = instance.app_view.callback_to_app {
             callback(0);
         }

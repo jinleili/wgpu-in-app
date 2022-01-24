@@ -17,32 +17,45 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp">
+
             <Button
                 android:id="@+id/button0"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
-                android:text="boids" android:tag="0" android:textSize="14sp"/>
+                android:text="boids"
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/button1"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
-                android:text="MSAA line" android:tag="1" android:textSize="14sp"/>
+                android:text="MSAA line"
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/button2"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
-                android:text="cube" android:tag="2" android:textSize="14sp"/>
+                android:text="cube"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/button3"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="water"
+                android:textSize="12sp" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <name.jinleili.wgpu.WGPUSurfaceView
             android:id="@+id/wgpuSurfaceView"
             android:layout_width="match_parent"
-            android:layout_height="512dp"
-            android:layout_marginTop="20dp"
-            />
+            android:layout_height="430dp"
+            android:layout_marginTop="20dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 
