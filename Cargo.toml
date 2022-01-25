@@ -21,6 +21,7 @@ wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "effcf087"}
 
 [target.'cfg(target_os = "ios")'.dependencies]
 core-graphics = "*"
+env_logger = "0.9"
 lazy_static = "*"
 libc = "*"
 objc = "*"

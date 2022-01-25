@@ -31,6 +31,9 @@ unsafe impl Sync for AppView {}
 
 impl AppView {
     pub fn new(obj: IOSViewObj) -> Self {
+        // hook up rust logging
+        env_logger::init();
+
         let scale_factor = get_scale_factor(obj.view);
         let s: CGRect = unsafe { msg_send![obj.view, frame] };
         let physical = crate::ViewSize {
@@ -44,7 +47,7 @@ impl AppView {
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            format: wgpu::TextureFormat::Bgra8Unorm,
+            format: wgpu::TextureFormat::Bgra8UnormSrgb,
             width: physical.width,
             height: physical.height,
             present_mode: wgpu::PresentMode::Fifo,

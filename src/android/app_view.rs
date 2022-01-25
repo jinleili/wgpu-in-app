@@ -18,7 +18,7 @@ impl AppView {
         let native_window = unsafe {
             NativeWindow::new(ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface))
         };
-        let instance = wgpu::Instance::new(wgpu::Backends::GL);
+        let instance = wgpu::Instance::new(wgpu::Backends::VULKAN);
         let surface = unsafe { instance.create_surface(&native_window) };
         let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
 

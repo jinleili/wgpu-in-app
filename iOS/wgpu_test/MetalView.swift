@@ -30,6 +30,7 @@ class MetalView: UIView {
         layer.contentsScale = UIScreen.main.nativeScale
         layer.removeAllAnimations()
         self.contentScaleFactor = UIScreen.main.nativeScale
+        print("UIScreen.main.nativeScale \(UIScreen.main.nativeScale), \(UIScreen.main.scale)")
     }
 }
 

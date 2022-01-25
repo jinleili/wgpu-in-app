@@ -18,19 +18,21 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        let viewPointer = UnsafeMutableRawPointer(Unmanaged.passRetained(self.metalV).toOpaque())
-        let metalLayer = UnsafeMutableRawPointer(Unmanaged.passRetained(self.metalV.layer).toOpaque())
-        let maximumFrames = UIScreen.main.maximumFramesPerSecond
-        
-        let viewObj = ios_view_obj(view: viewPointer, metal_layer: metalLayer,maximum_frames: Int32(maximumFrames), callback_to_swift: callback_to_swift)
-        
-        wgpuCanvas = create_wgpu_canvas(viewObj)
         self.displayLink.add(to: .current, forMode: .default)
         self.displayLink.isPaused = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if wgpuCanvas == nil {
+            let viewPointer = UnsafeMutableRawPointer(Unmanaged.passRetained(self.metalV).toOpaque())
+            let metalLayer = UnsafeMutableRawPointer(Unmanaged.passRetained(self.metalV.layer).toOpaque())
+            let maximumFrames = UIScreen.main.maximumFramesPerSecond
+            
+            let viewObj = ios_view_obj(view: viewPointer, metal_layer: metalLayer,maximum_frames: Int32(maximumFrames), callback_to_swift: callback_to_swift)
+            
+            wgpuCanvas = create_wgpu_canvas(viewObj)
+        }
         self.displayLink.isPaused = false
     }
     
