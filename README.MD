@@ -11,18 +11,21 @@ Integrate wgpu on your existing iOS | Android apps.
 ## **iOS**
 ### Add build target
 
-Since iPhone 5 and later are 64-bit devices, add `aarch64-apple-ios` is enough.
+Since iPhone 5 and later are 64-bit devices, add `aarch64-apple-ios` and `aarch64-apple-ios-sim` is enough.
 
 ```sh
-rustup target add aarch64-apple-ios
+# Add for iPhone 
+rustup target add aarch64-apple-ios 
+# Add for iOS simulator
+rustup target add aarch64-apple-ios-sim
 ```
 
 ### build
 ```sh
-cargo build --target aarch64-apple-ios
+cargo build --target aarch64-apple-ios && cargo build --target aarch64-apple-ios-sim
 ```
 
-Then, use Xcode to open ```iOS/wgpu_test.xcodeproj``` and connect iOS device to run.
+Then, use Xcode to open ```iOS/wgpu_on_iOS.xcodeproj``` and run.
 
 ### About Rust and Swift Interaction
 [Passing Primitive Data Between Rust and iOS](https://bignerdranch.com/blog/building-an-ios-app-in-rust-part-2-passing-primitive-data-between-rust-and-ios/)

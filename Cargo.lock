@@ -490,6 +490,7 @@ checksum = "8c2352bd1d0bceb871cb9d40f24360c8133c11d7486b68b5381c1dd1a32015e3"
 dependencies = [
  "libc",
  "libloading",
+ "pkg-config",
 ]
 
 [[package]]
@@ -674,6 +675,12 @@ dependencies = [
  "smallvec",
  "winapi",
 ]
+
+[[package]]
+name = "pkg-config"
+version = "0.3.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "58893f751c9b0412871a09abd62ecd2a00298c6c83befa223ef98c52aef40cbe"
 
 [[package]]
 name = "pollster"
@@ -1014,7 +1021,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=effcf087#effcf0874fb41c21d1f5f48642019520ee63925e"
+source = "git+https://github.com/gfx-rs/wgpu?rev=92194898#921948989499b3a9948c06f3a95f182783729314"
 dependencies = [
  "arrayvec",
  "js-sys",
@@ -1034,7 +1041,7 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=effcf087#effcf0874fb41c21d1f5f48642019520ee63925e"
+source = "git+https://github.com/gfx-rs/wgpu?rev=92194898#921948989499b3a9948c06f3a95f182783729314"
 dependencies = [
  "arrayvec",
  "bitflags",
@@ -1056,7 +1063,7 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=effcf087#effcf0874fb41c21d1f5f48642019520ee63925e"
+source = "git+https://github.com/gfx-rs/wgpu?rev=92194898#921948989499b3a9948c06f3a95f182783729314"
 dependencies = [
  "arrayvec",
  "ash",
@@ -1117,7 +1124,7 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=effcf087#effcf0874fb41c21d1f5f48642019520ee63925e"
+source = "git+https://github.com/gfx-rs/wgpu?rev=92194898#921948989499b3a9948c06f3a95f182783729314"
 dependencies = [
  "bitflags",
 ]

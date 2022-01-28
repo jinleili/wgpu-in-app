@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AD4B1FE826EB1B90008A6AEE"
-               BuildableName = "wgpu_test.app"
-               BlueprintName = "wgpu_test"
-               ReferencedContainer = "container:wgpu_test.xcodeproj">
+               BuildableName = "wgpu_phone.app"
+               BlueprintName = "wgpu_phone"
+               ReferencedContainer = "container:wgpu_on_iOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AD4B1FE826EB1B90008A6AEE"
-            BuildableName = "wgpu_test.app"
-            BlueprintName = "wgpu_test"
-            ReferencedContainer = "container:wgpu_test.xcodeproj">
+            BuildableName = "wgpu_phone.app"
+            BlueprintName = "wgpu_phone"
+            ReferencedContainer = "container:wgpu_on_iOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -79,16 +79,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AD4B1FE826EB1B90008A6AEE"
-            BuildableName = "wgpu_test.app"
-            BlueprintName = "wgpu_test"
-            ReferencedContainer = "container:wgpu_test.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

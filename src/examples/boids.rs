@@ -93,9 +93,7 @@ impl Boids {
             ],
             label: None,
         };
-        log::info!("bgl_desc created");
         let compute_bind_group_layout = device.create_bind_group_layout(&bgl_desc);
-        log::info!("compute_bind_group_layout created");
 
         let compute_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -141,7 +139,6 @@ impl Boids {
             multiview: None,
         });
         // create compute pipeline
-
         let compute_pipeline = device.create_compute_pipeline(&wgpu::ComputePipelineDescriptor {
             label: Some("Compute pipeline"),
             layout: Some(&compute_pipeline_layout),
@@ -150,7 +147,6 @@ impl Boids {
         });
 
         // buffer for the three 2d triangle vertices of each instance
-
         let vertex_buffer_data = [-0.01f32, -0.02, 0.01, -0.02, 0.00, 0.02];
         let vertices_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
@@ -159,7 +155,6 @@ impl Boids {
         });
 
         // buffer for all particles data of type [(posx,posy,velx,vely),...]
-
         let mut initial_particle_data = vec![0.0f32; (4 * NUM_PARTICLES) as usize];
         let mut rng = rand::rngs::StdRng::seed_from_u64(42);
         let unif = Uniform::new_inclusive(-1.0, 1.0);
@@ -172,7 +167,6 @@ impl Boids {
 
         // creates two buffers of particle data each of size NUM_PARTICLES
         // the two buffers alternate as dst and src for each frame
-
         let mut particle_buffers = Vec::<wgpu::Buffer>::new();
         let mut particle_bind_groups = Vec::<wgpu::BindGroup>::new();
         for i in 0..2 {
@@ -235,8 +229,8 @@ impl Example for Boids {
     fn enter_frame(&mut self, app_view: &AppView) {
         let device = &app_view.device;
         let queue = &app_view.queue;
+        let (frame, view) = app_view.get_current_frame_view();
         {
-            let (frame, view) = app_view.get_current_frame_view();
             // create render pass descriptor and its color attachments
             let color_attachments = [wgpu::RenderPassColorAttachment {
                 view: &view,
@@ -287,8 +281,8 @@ impl Example for Boids {
 
             // done
             queue.submit(Some(command_encoder.finish()));
-            frame.present();
         }
+        frame.present();
         // update frame count
         self.frame_num += 1;
     }

@@ -9,7 +9,7 @@ import android.view.SurfaceView
 class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
     private var rustBrige = RustBridge()
     private var rustObj: Long = Long.MAX_VALUE
-    private var idx: Int = 1
+    private var idx: Int = 0
 
     constructor(context: Context) : super(context) {
     }

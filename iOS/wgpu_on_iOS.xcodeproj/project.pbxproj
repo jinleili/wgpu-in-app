@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD0CB7D827A402180041811B /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4699426EB3079008B1C7B /* libresolv.tbd */; };
+		AD0CB7DA27A402490041811B /* libwgpu_on_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD0CB7D927A402370041811B /* libwgpu_on_app.a */; };
+		AD0CB7DB27A4036B0041811B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */; };
+		AD0CB7DC27A4036B0041811B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FF026EB1B90008A6AEE /* ViewController.swift */; };
+		AD0CB7DD27A403890041811B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF226EB1B90008A6AEE /* Main.storyboard */; };
+		AD0CB7DE27A4038F0041811B /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B200026EB1D31008A6AEE /* MetalView.swift */; };
+		AD0CB7DF27A403940041811B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */; };
+		AD0CB7E027A4039A0041811B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF726EB1B91008A6AEE /* LaunchScreen.storyboard */; };
 		AD4B1FED26EB1B90008A6AEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */; };
 		AD4B1FF126EB1B90008A6AEE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FF026EB1B90008A6AEE /* ViewController.swift */; };
 		AD4B1FF426EB1B90008A6AEE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF226EB1B90008A6AEE /* Main.storyboard */; };
@@ -18,7 +26,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AD4B1FE926EB1B90008A6AEE /* wgpu_test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_test.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD0CB7C327A402060041811B /* wgpu_simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD0CB7D327A402060041811B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD0CB7D927A402370041811B /* libwgpu_on_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_app.a; path = "../target/aarch64-apple-ios-sim/debug/libwgpu_on_app.a"; sourceTree = "<group>"; };
+		AD4B1FE926EB1B90008A6AEE /* wgpu_phone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_phone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AD4B1FF026EB1B90008A6AEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AD4B1FF326EB1B90008A6AEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -34,6 +45,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AD0CB7C027A402060041811B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD0CB7D827A402180041811B /* libresolv.tbd in Frameworks */,
+				AD0CB7DA27A402490041811B /* libwgpu_on_app.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD4B1FE626EB1B90008A6AEE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,10 +66,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD0CB7C427A402060041811B /* wgpu_simulator */ = {
+			isa = PBXGroup;
+			children = (
+				AD0CB7D327A402060041811B /* Info.plist */,
+			);
+			path = wgpu_simulator;
+			sourceTree = "<group>";
+		};
+		AD0CB7E127A4061E0041811B /* base */ = {
+			isa = PBXGroup;
+			children = (
+				AD4B1FF026EB1B90008A6AEE /* ViewController.swift */,
+				ADA4699026EB27CB008B1C7B /* libwgpu_on_app.h */,
+				AD4B200026EB1D31008A6AEE /* MetalView.swift */,
+				ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */,
+				AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */,
+				AD4B1FF226EB1B90008A6AEE /* Main.storyboard */,
+				AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */,
+			);
+			path = base;
+			sourceTree = "<group>";
+		};
 		AD4B1FE026EB1B90008A6AEE = {
 			isa = PBXGroup;
 			children = (
-				AD4B1FEB26EB1B90008A6AEE /* wgpu_test */,
+				AD0CB7E127A4061E0041811B /* base */,
+				AD4B1FEB26EB1B90008A6AEE /* wgpu_phone */,
+				AD0CB7C427A402060041811B /* wgpu_simulator */,
 				AD4B1FEA26EB1B90008A6AEE /* Products */,
 				ADA4699326EB3079008B1C7B /* Frameworks */,
 			);
@@ -58,31 +102,26 @@
 		AD4B1FEA26EB1B90008A6AEE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AD4B1FE926EB1B90008A6AEE /* wgpu_test.app */,
+				AD4B1FE926EB1B90008A6AEE /* wgpu_phone.app */,
+				AD0CB7C327A402060041811B /* wgpu_simulator.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AD4B1FEB26EB1B90008A6AEE /* wgpu_test */ = {
+		AD4B1FEB26EB1B90008A6AEE /* wgpu_phone */ = {
 			isa = PBXGroup;
 			children = (
-				AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */,
-				AD4B1FF026EB1B90008A6AEE /* ViewController.swift */,
-				ADA4699026EB27CB008B1C7B /* libwgpu_on_app.h */,
-				AD4B200026EB1D31008A6AEE /* MetalView.swift */,
-				AD4B1FF226EB1B90008A6AEE /* Main.storyboard */,
-				AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */,
 				AD4B1FF726EB1B91008A6AEE /* LaunchScreen.storyboard */,
 				AD4B1FFA26EB1B91008A6AEE /* Info.plist */,
-				ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */,
 			);
-			path = wgpu_test;
+			path = wgpu_phone;
 			sourceTree = "<group>";
 		};
 		ADA4699326EB3079008B1C7B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */,
+				AD0CB7D927A402370041811B /* libwgpu_on_app.a */,
 				ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */,
 				ADA4699426EB3079008B1C7B /* libresolv.tbd */,
 			);
@@ -92,9 +131,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AD4B1FE826EB1B90008A6AEE /* wgpu_test */ = {
+		AD0CB7C227A402060041811B /* wgpu_simulator */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AD4B1FFD26EB1B91008A6AEE /* Build configuration list for PBXNativeTarget "wgpu_test" */;
+			buildConfigurationList = AD0CB7D427A402060041811B /* Build configuration list for PBXNativeTarget "wgpu_simulator" */;
+			buildPhases = (
+				AD0CB7BF27A402060041811B /* Sources */,
+				AD0CB7C027A402060041811B /* Frameworks */,
+				AD0CB7C127A402060041811B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = wgpu_simulator;
+			productName = wgpu_simulator;
+			productReference = AD0CB7C327A402060041811B /* wgpu_simulator.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AD4B1FE826EB1B90008A6AEE /* wgpu_phone */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD4B1FFD26EB1B91008A6AEE /* Build configuration list for PBXNativeTarget "wgpu_phone" */;
 			buildPhases = (
 				AD4B1FE526EB1B90008A6AEE /* Sources */,
 				AD4B1FE626EB1B90008A6AEE /* Frameworks */,
@@ -104,9 +160,9 @@
 			);
 			dependencies = (
 			);
-			name = wgpu_test;
+			name = wgpu_phone;
 			productName = wgpu_test;
-			productReference = AD4B1FE926EB1B90008A6AEE /* wgpu_test.app */;
+			productReference = AD4B1FE926EB1B90008A6AEE /* wgpu_phone.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -115,15 +171,18 @@
 		AD4B1FE126EB1B90008A6AEE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1250;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
+					AD0CB7C227A402060041811B = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
 					AD4B1FE826EB1B90008A6AEE = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
 				};
 			};
-			buildConfigurationList = AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_test" */;
+			buildConfigurationList = AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_on_iOS" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -136,12 +195,23 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AD4B1FE826EB1B90008A6AEE /* wgpu_test */,
+				AD4B1FE826EB1B90008A6AEE /* wgpu_phone */,
+				AD0CB7C227A402060041811B /* wgpu_simulator */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AD0CB7C127A402060041811B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD0CB7E027A4039A0041811B /* LaunchScreen.storyboard in Resources */,
+				AD0CB7DF27A403940041811B /* Assets.xcassets in Resources */,
+				AD0CB7DD27A403890041811B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD4B1FE726EB1B90008A6AEE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -155,6 +225,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AD0CB7BF27A402060041811B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD0CB7DE27A4038F0041811B /* MetalView.swift in Sources */,
+				AD0CB7DC27A4036B0041811B /* ViewController.swift in Sources */,
+				AD0CB7DB27A4036B0041811B /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AD4B1FE526EB1B90008A6AEE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -187,6 +267,72 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		AD0CB7D527A402060041811B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P3HQ9GDFCW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = wgpu_simulator/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "wgpu on simulator";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../target/aarch64-apple-ios-sim/debug";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.jinleili.wgpu.wgpu-simulator";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AD0CB7D727A402060041811B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P3HQ9GDFCW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = wgpu_simulator/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "wgpu on simulator";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../target/aarch64-apple-ios-sim/release";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.jinleili.wgpu.wgpu-simulator";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		AD4B1FFB26EB1B91008A6AEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -306,17 +452,20 @@
 		AD4B1FFE26EB1B91008A6AEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
-				INFOPLIST_FILE = wgpu_test/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				INFOPLIST_FILE = wgpu_phone/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../target/aarch64-apple-ios/debug";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -324,7 +473,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "wgpu_test/wgpu_test-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -333,17 +482,20 @@
 		AD4B1FFF26EB1B91008A6AEE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
-				INFOPLIST_FILE = wgpu_test/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				INFOPLIST_FILE = wgpu_phone/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../target/aarch64-apple-ios/release";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -351,7 +503,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "wgpu_test/wgpu_test-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -360,7 +512,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_test" */ = {
+		AD0CB7D427A402060041811B /* Build configuration list for PBXNativeTarget "wgpu_simulator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD0CB7D527A402060041811B /* Debug */,
+				AD0CB7D727A402060041811B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_on_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD4B1FFB26EB1B91008A6AEE /* Debug */,
@@ -369,7 +530,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AD4B1FFD26EB1B91008A6AEE /* Build configuration list for PBXNativeTarget "wgpu_test" */ = {
+		AD4B1FFD26EB1B91008A6AEE /* Build configuration list for PBXNativeTarget "wgpu_phone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD4B1FFE26EB1B91008A6AEE /* Debug */,
