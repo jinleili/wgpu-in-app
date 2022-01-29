@@ -21,33 +21,50 @@
             <Button
                 android:id="@+id/button0"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="38dp"
+                android:textAllCaps="false"
+                android:padding="5dp"
                 android:text="boids"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/button1"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="38dp"
+                android:textAllCaps="false"
+                android:padding="5dp"
                 android:text="MSAA line"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/button2"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="38dp"
+                android:textAllCaps="false"
+                android:padding="5dp"
                 android:text="cube"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/button3"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="38dp"
+                android:textAllCaps="false"
+                android:padding="5dp"
                 android:text="water"
+                android:textSize="12sp" />
+            <Button
+                android:id="@+id/button4"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="70dp"
+                android:layout_height="38dp"
+                android:textAllCaps="false"
+                android:padding="5dp"
+                android:text="shadow"
                 android:textSize="12sp" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 

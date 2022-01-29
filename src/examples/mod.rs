@@ -16,6 +16,9 @@ mod point_gen;
 mod water;
 pub use water::Water;
 
+mod shadow;
+pub use shadow::Shadow;
+
 // copy from wgpu's example
 #[rustfmt::skip]
 #[allow(unused)]

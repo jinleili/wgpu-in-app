@@ -31,14 +31,16 @@ impl WgpuCanvas {
     }
 
     fn create_a_example(app_view: &AppView, index: i32) -> Box<dyn Example> {
-        if index == 1 {
+        if index == 0 {
+            Box::new(Boids::new(app_view))
+        } else if index == 1 {
             Box::new(MSAALine::new(app_view))
         } else if index == 2 {
             Box::new(Cube::new(app_view))
         } else if index == 3 {
             Box::new(Water::new(app_view))
         } else {
-            Box::new(Boids::new(app_view))
+            Box::new(Shadow::new(app_view))
         }
     }
 }

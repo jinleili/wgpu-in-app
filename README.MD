@@ -20,12 +20,13 @@ rustup target add aarch64-apple-ios
 rustup target add aarch64-apple-ios-sim
 ```
 
-### build
+### Build and run
+Build for iOS device and simulator
 ```sh
 cargo build --target aarch64-apple-ios && cargo build --target aarch64-apple-ios-sim
 ```
 
-Then, use Xcode to open ```iOS/wgpu_on_iOS.xcodeproj``` and run.
+Then, Open `iOS/wgpu_on_iOS.xcodeproj` with Xcode, select `wgpu_phone` scheme run on iOS device, `wgpu_simulator` scheme run on simulator. 
 
 ### About Rust and Swift Interaction
 [Passing Primitive Data Between Rust and iOS](https://bignerdranch.com/blog/building-an-ios-app-in-rust-part-2-passing-primitive-data-between-rust-and-ios/)
