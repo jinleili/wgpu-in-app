@@ -26,14 +26,15 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
 
     init {
         holder.addCallback(this)
-    }
+        println("fda init")
 
+    }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        if (rustObj != Long.MAX_VALUE ){
+        if (rustObj != Long.MAX_VALUE) {
             rustBrige.dropWgpuCanvas(rustObj)
         }
     }
@@ -55,14 +56,14 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
-        if (rustObj != Long.MAX_VALUE ){
+        if (rustObj != Long.MAX_VALUE) {
             rustBrige.enterFrame(rustObj)
         }
         invalidate()
     }
 
     fun changeExample(index: Int) {
-        if (rustObj != Long.MAX_VALUE ){
+        if (rustObj != Long.MAX_VALUE && this.idx != index) {
             rustBrige.changeExample(rustObj, index)
             this.idx = index
         }

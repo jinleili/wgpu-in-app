@@ -44,7 +44,7 @@ impl AppView {
         let instance = wgpu::Instance::new(wgpu::Backends::METAL);
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
         let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
-
+        println!("{:?}", device.limits());
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: wgpu::TextureFormat::Bgra8UnormSrgb,
@@ -53,7 +53,6 @@ impl AppView {
             present_mode: wgpu::PresentMode::Fifo,
         };
         surface.configure(&device, &config);
-
         AppView {
             view: obj.view,
             scale_factor,

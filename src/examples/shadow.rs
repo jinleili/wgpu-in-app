@@ -281,12 +281,17 @@ impl Shadow {
 
         let entity_uniform_size = mem::size_of::<EntityUniforms>() as wgpu::BufferAddress;
         let num_entities = 1 + cube_descs.len() as wgpu::BufferAddress;
-        let mut uniform_alignment =
-            device.limits().min_uniform_buffer_offset_alignment as wgpu::BufferAddress;
-        // Make the uniform_alignment >= entity_uniform_size and aligned to `min_uniform_buffer_offset_alignment`.
-        uniform_alignment *=
-            (entity_uniform_size as f32 / uniform_alignment as f32).ceil() as wgpu::BufferAddress;
-
+        // Make the `uniform_alignment` >= `entity_uniform_size` and aligned to `min_uniform_buffer_offset_alignment`.
+        let uniform_alignment = {
+            let alignment =
+                device.limits().min_uniform_buffer_offset_alignment as wgpu::BufferAddress;
+            let multiple = entity_uniform_size / alignment;
+            if entity_uniform_size % alignment != 0 {
+                alignment * (multiple + 1)
+            } else {
+                alignment * multiple
+            }
+        };
         // Note: dynamic uniform offsets also have to be aligned to `Limits::min_uniform_buffer_offset_alignment`.
         let entity_uniform_buf = device.create_buffer(&wgpu::BufferDescriptor {
             label: None,

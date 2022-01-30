@@ -4,7 +4,7 @@ Integrate wgpu on your existing iOS | Android apps.
 `winit`-free mode can useful for integrating wgpu into existing apps to implement some graphics features. 
 
 ## Screenshot
-|![wgpu on iOS](screenshot/on_ios_380.png)|![wgpu on Android](screenshot/on_android.png)|
+|![wgpu on iOS](screenshot/on_ios.png)|![wgpu on Android](screenshot/on_android.png)|
 |---|---|
 
 
