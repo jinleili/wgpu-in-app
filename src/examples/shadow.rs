@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
-use super::{point_gen, Example};
-use crate::{AppView, GPUContext};
+use super::Example;
+use crate::{AppSurface, FrameContext};
 
 use std::{borrow::Cow, iter, mem, num::NonZeroU32, ops::Range, rc::Rc};
 
@@ -209,10 +209,9 @@ impl Shadow {
         depth_texture.create_view(&wgpu::TextureViewDescriptor::default())
     }
 
-    pub fn new(app_view: &AppView) -> Self {
-        let config = &app_view.config;
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    pub fn new(app_surface: &AppSurface) -> Self {
+        let config = &app_surface.config;
+        let device = &app_surface.device;
 
         // Create the vertex and index buffers
         let vertex_size = mem::size_of::<Vertex>();
@@ -674,10 +673,10 @@ impl Shadow {
 }
 
 impl Example for Shadow {
-    fn resize(&mut self, app_view: &AppView) {
-        let config = &app_view.config;
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    fn resize(&mut self, app_surface: &AppSurface) {
+        let config = &app_surface.config;
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
         // update view-projection matrix
         let mx_total = Self::generate_matrix(config.width as f32 / config.height as f32);
         let mx_ref: &[f32; 16] = mx_total.as_ref();
@@ -690,9 +689,9 @@ impl Example for Shadow {
         self.forward_depth = Self::create_depth_texture(config, device);
     }
 
-    fn enter_frame(&mut self, app_view: &AppView) {
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    fn enter_frame(&mut self, app_surface: &AppSurface) {
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
         // update uniforms
         for entity in self.entities.iter_mut() {
             if entity.rotation_speed != 0.0 {
@@ -775,7 +774,7 @@ impl Example for Shadow {
         }
         encoder.pop_debug_group();
 
-        let (frame, view) = app_view.get_current_frame_view();
+        let (frame, view) = app_surface.get_current_frame_view();
 
         // forward pass
         encoder.push_debug_group("forward rendering pass");

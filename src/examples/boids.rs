@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
 use super::Example;
-use crate::{AppView, GPUContext};
+use crate::{AppSurface, FrameContext};
 use rand::{
     distributions::{Distribution, Uniform},
     SeedableRng,
@@ -26,9 +26,9 @@ pub struct Boids {
 }
 
 impl Boids {
-    pub fn new(app_view: &AppView) -> Self {
-        let config = &app_view.config;
-        let device = &app_view.device;
+    pub fn new(app_surface: &AppSurface) -> Self {
+        let config = &app_surface.config;
+        let device = &app_surface.device;
 
         let compute_shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
             label: None,
@@ -226,10 +226,10 @@ impl Boids {
 }
 
 impl Example for Boids {
-    fn enter_frame(&mut self, app_view: &AppView) {
-        let device = &app_view.device;
-        let queue = &app_view.queue;
-        let (frame, view) = app_view.get_current_frame_view();
+    fn enter_frame(&mut self, app_surface: &AppSurface) {
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
+        let (frame, view) = app_surface.get_current_frame_view();
         {
             // create render pass descriptor and its color attachments
             let color_attachments = [wgpu::RenderPassColorAttachment {

@@ -1,9 +1,9 @@
-use crate::app_view::{AppView, IOSViewObj};
+use crate::app_surface::{AppSurface, IOSViewObj};
 use crate::wgpu_canvas::WgpuCanvas;
 
 #[no_mangle]
 pub unsafe extern "C" fn create_wgpu_canvas(ios_obj: IOSViewObj) -> *mut libc::c_void {
-    let obj = WgpuCanvas::new(AppView::new(ios_obj), 0_i32);
+    let obj = WgpuCanvas::new(AppSurface::new(ios_obj), 0_i32);
     let box_obj = Box::new(obj);
     let heap_pointer = Box::into_raw(box_obj);
 

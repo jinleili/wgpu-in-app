@@ -20,6 +20,10 @@ rand = {version = "0.7.2"}
 wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "766c6cda"}
 # wgpu = {path = "../../fork 的项目/wgpu/wgpu"}
 
+[target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
+async-executor = "1.0"
+winit = "*"
+
 [target.'cfg(target_os = "ios")'.dependencies]
 core-graphics = "*"
 env_logger = "0.9"

@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
 use super::{point_gen, Example};
-use crate::{AppView, GPUContext};
+use crate::{AppSurface, FrameContext};
 
 use bytemuck::{Pod, Zeroable};
 use cgmath::Point3;
@@ -95,10 +95,10 @@ pub struct Water {
 }
 
 impl Water {
-    pub fn new(app_view: &AppView) -> Self {
-        let config = &app_view.config;
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    pub fn new(app_surface: &AppSurface) -> Self {
+        let config = &app_surface.config;
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
         // Size of one water vertex
         let water_vertex_size = mem::size_of::<point_gen::WaterVertexAttributes>();
 
@@ -626,10 +626,10 @@ impl Water {
 }
 
 impl Example for Water {
-    fn resize(&mut self, app_view: &AppView) {
-        let config = &app_view.config;
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    fn resize(&mut self, app_surface: &AppSurface) {
+        let config = &app_surface.config;
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
         if config.width == 0 && config.height == 0 {
             // Stop rendering altogether.
             self.active = None;
@@ -655,9 +655,9 @@ impl Example for Water {
     }
 
     #[allow(clippy::eq_op)]
-    fn enter_frame(&mut self, app_view: &AppView) {
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    fn enter_frame(&mut self, app_surface: &AppSurface) {
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
         // Increment frame count regardless of if we draw.
         self.current_frame += 1;
         let back_color = wgpu::Color {
@@ -690,7 +690,7 @@ impl Example for Water {
             label: Some("Main Command Encoder"),
         });
 
-        let (frame, view) = app_view.get_current_frame_view();
+        let (frame, view) = app_surface.get_current_frame_view();
         // First pass: render the reflection.
         {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {

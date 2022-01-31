@@ -1,6 +1,6 @@
 pub trait Example {
-    fn resize(&mut self, _app_view: &crate::AppView) {}
-    fn enter_frame(&mut self, app_view: &crate::AppView);
+    fn resize(&mut self, _app_surface: &crate::AppSurface) {}
+    fn enter_frame(&mut self, app_surface: &crate::AppSurface);
 }
 
 mod boids;

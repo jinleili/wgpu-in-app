@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
 use super::Example;
-use crate::{AppView, GPUContext};
+use crate::{AppSurface, FrameContext};
 use bytemuck::{Pod, Zeroable};
 use std::{borrow::Cow, future::Future, mem, pin::Pin, task};
 use wgpu::util::DeviceExt;
@@ -112,9 +112,9 @@ pub struct Cube {
 }
 
 impl Cube {
-    pub fn new(app_view: &AppView) -> Self {
-        let config = &app_view.config;
-        let device = &app_view.device;
+    pub fn new(app_surface: &AppSurface) -> Self {
+        let config = &app_surface.config;
+        let device = &app_surface.device;
         // Create the vertex and index buffers
         let vertex_size = mem::size_of::<Vertex>();
         let (vertex_data, index_data) = create_vertices();
@@ -181,7 +181,7 @@ impl Cube {
             usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
         });
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor::default());
-        app_view.queue.write_texture(
+        app_surface.queue.write_texture(
             texture.as_image_copy(),
             &texels,
             wgpu::ImageDataLayout {
@@ -331,19 +331,19 @@ impl Cube {
 }
 
 impl Example for Cube {
-    fn resize(&mut self, app_view: &AppView) {
-        let config = &app_view.config;
-        let queue = &app_view.queue;
+    fn resize(&mut self, app_surface: &AppSurface) {
+        let config = &app_surface.config;
+        let queue = &app_surface.queue;
         let mx_total = Self::generate_matrix(config.width as f32 / config.height as f32);
         let mx_ref: &[f32; 16] = mx_total.as_ref();
         queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mx_ref));
     }
 
-    fn enter_frame(&mut self, app_view: &AppView) {
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    fn enter_frame(&mut self, app_surface: &AppSurface) {
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
         device.push_error_scope(wgpu::ErrorFilter::Validation);
-        let (frame, view) = app_view.get_current_frame_view();
+        let (frame, view) = app_surface.get_current_frame_view();
         let mut encoder =
             device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
         {

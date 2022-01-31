@@ -1,6 +1,6 @@
-use log::error;
 mod examples;
 mod wgpu_canvas;
+pub use wgpu_canvas::WgpuCanvas;
 
 #[cfg(target_os = "ios")]
 #[path = "ios/ffi.rs"]
@@ -12,22 +12,26 @@ mod ffi;
 #[cfg(all(target_os = "android", target_os = "ios"))]
 pub use ffi::*;
 
-#[cfg(not(target_os = "android"))]
-#[path = "ios/app_view.rs"]
-pub mod app_view;
+#[cfg(target_os = "ios")]
+#[path = "ios/app_surface.rs"]
+mod app_surface;
 #[cfg(target_os = "android")]
-#[path = "android/app_view.rs"]
-pub mod app_view;
-use app_view::AppView;
+#[path = "android/app_surface.rs"]
+mod app_surface;
+#[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
+#[path = "app_surface.rs"]
+mod app_surface;
 
-#[repr(C)]
-#[derive(Debug)]
-pub struct ViewSize {
-    pub width: u32,
-    pub height: u32,
+pub use app_surface::AppSurface;
+
+impl std::ops::Deref for AppSurface {
+    type Target = wgpu::Queue;
+    fn deref(&self) -> &Self::Target {
+        &self.queue
+    }
 }
 
-pub trait GPUContext {
+pub trait FrameContext {
     fn resize_surface(&mut self);
     fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView);
     fn create_current_frame_view(
@@ -50,6 +54,19 @@ pub trait GPUContext {
             .create_view(&wgpu::TextureViewDescriptor::default());
         // frame cannot be drop early
         (frame, view)
+    }
+}
+
+impl FrameContext for AppSurface {
+    fn resize_surface(&mut self) {
+        let size = self.get_view_size();
+        self.config.width = size.0;
+        self.config.height = size.1;
+        self.surface.configure(&self.device, &self.config);
+    }
+
+    fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+        self.create_current_frame_view(&self.device, &self.surface, &self.config)
     }
 }
 

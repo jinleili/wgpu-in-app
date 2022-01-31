@@ -1,12 +1,7 @@
-use libc::c_void;
-use std::marker::Sync;
-use std::path::PathBuf;
-
-use lazy_static::*;
-use objc_foundation::{INSString, NSString};
-
 use core_graphics::{base::CGFloat, geometry::CGRect};
+use libc::c_void;
 use objc::{runtime::Object, *};
+use std::marker::Sync;
 
 #[repr(C)]
 pub struct IOSViewObj {
@@ -16,7 +11,7 @@ pub struct IOSViewObj {
     pub callback_to_swift: extern "C" fn(arg: i32),
 }
 
-pub struct AppView {
+pub struct AppSurface {
     pub view: *mut Object,
     pub scale_factor: f32,
     pub device: wgpu::Device,
@@ -27,33 +22,32 @@ pub struct AppView {
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
 }
 
-unsafe impl Sync for AppView {}
+unsafe impl Sync for AppSurface {}
 
-impl AppView {
+impl AppSurface {
     pub fn new(obj: IOSViewObj) -> Self {
         // hook up rust logging
         env_logger::init();
 
         let scale_factor = get_scale_factor(obj.view);
         let s: CGRect = unsafe { msg_send![obj.view, frame] };
-        let physical = crate::ViewSize {
-            width: (s.size.width as f32 * scale_factor) as u32,
-            height: (s.size.height as f32 * scale_factor) as u32,
-        };
+        let physical = (
+            (s.size.width as f32 * scale_factor) as u32,
+            (s.size.height as f32 * scale_factor) as u32,
+        );
 
         let instance = wgpu::Instance::new(wgpu::Backends::METAL);
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
         let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
-        println!("{:?}", device.limits());
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: wgpu::TextureFormat::Bgra8UnormSrgb,
-            width: physical.width,
-            height: physical.height,
+            width: physical.0,
+            height: physical.1,
             present_mode: wgpu::PresentMode::Fifo,
         };
         surface.configure(&device, &config);
-        AppView {
+        AppSurface {
             view: obj.view,
             scale_factor,
             device,
@@ -65,49 +59,16 @@ impl AppView {
         }
     }
 
-    fn get_view_size(&self) -> crate::ViewSize {
+    pub fn get_view_size(&self) -> (u32, u32) {
         let s: CGRect = unsafe { msg_send![self.view, frame] };
-        crate::ViewSize {
-            width: (s.size.width as f32 * self.scale_factor) as u32,
-            height: (s.size.height as f32 * self.scale_factor) as u32,
-        }
+        (
+            (s.size.width as f32 * self.scale_factor) as u32,
+            (s.size.height as f32 * self.scale_factor) as u32,
+        )
     }
-}
-
-impl crate::GPUContext for AppView {
-    fn resize_surface(&mut self) {
-        let size = self.get_view_size();
-        self.config.width = size.width;
-        self.config.height = size.height;
-        self.surface.configure(&self.device, &self.config);
-    }
-
-    fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
-        self.create_current_frame_view(&self.device, &self.surface, &self.config)
-    }
-}
-
-lazy_static! {
-    static ref BUNDLE_PATH: &'static str = get_bundle_url();
 }
 
 fn get_scale_factor(obj: *mut Object) -> f32 {
     let s: CGFloat = unsafe { msg_send![obj, contentScaleFactor] };
     s as f32
-}
-
-fn get_bundle_url() -> &'static str {
-    let cls = class!(NSBundle);
-    let path: &str = unsafe {
-        // Allocate an instance
-        let bundle: *mut Object = msg_send![cls, mainBundle];
-        let path: &NSString = msg_send![bundle, resourcePath];
-        path.as_str()
-    };
-    path
-}
-
-pub fn get_wgsl_path(name: &str) -> PathBuf {
-    let p = get_bundle_url().to_string() + "/wgsl_shader/" + name;
-    PathBuf::from(&p)
 }

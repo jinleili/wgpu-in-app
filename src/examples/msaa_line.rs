@@ -10,7 +10,7 @@
 //! *   Vertices and Indices describe the two points that make up a line.
 
 use super::Example;
-use crate::{AppView, GPUContext};
+use crate::{AppSurface, FrameContext};
 
 use std::{borrow::Cow, iter};
 
@@ -37,9 +37,9 @@ pub struct MSAALine {
 }
 
 impl MSAALine {
-    pub fn new(app_view: &AppView) -> Self {
-        let config = &app_view.config;
-        let device = &app_view.device;
+    pub fn new(app_surface: &AppSurface) -> Self {
+        let config = &app_surface.config;
+        let device = &app_surface.device;
         let sample_count = 4;
 
         let shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
@@ -186,18 +186,18 @@ impl MSAALine {
 }
 
 impl Example for MSAALine {
-    fn resize(&mut self, app_view: &AppView) {
-        self.config = app_view.config.clone();
+    fn resize(&mut self, app_surface: &AppSurface) {
+        self.config = app_surface.config.clone();
         self.multisampled_framebuffer = Self::create_multisampled_framebuffer(
-            &app_view.device,
-            &app_view.config,
+            &app_surface.device,
+            &app_surface.config,
             self.sample_count,
         );
     }
 
-    fn enter_frame(&mut self, app_view: &crate::AppView) {
-        let device = &app_view.device;
-        let queue = &app_view.queue;
+    fn enter_frame(&mut self, app_surface: &crate::AppSurface) {
+        let device = &app_surface.device;
+        let queue = &app_surface.queue;
         if self.rebuild_bundle {
             self.bundle = Self::create_bundle(
                 device,
@@ -212,7 +212,7 @@ impl Example for MSAALine {
                 MSAALine::create_multisampled_framebuffer(device, &self.config, self.sample_count);
             self.rebuild_bundle = false;
         }
-        let (frame, view) = app_view.get_current_frame_view();
+        let (frame, view) = app_surface.get_current_frame_view();
         let mut encoder =
             device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
         {

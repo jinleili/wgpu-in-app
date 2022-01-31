@@ -3,7 +3,7 @@ use jni::sys::jobject;
 use jni::JNIEnv;
 use raw_window_handle::{AndroidNdkHandle, HasRawWindowHandle, RawWindowHandle};
 
-pub struct AppView {
+pub struct AppSurface {
     native_window: NativeWindow,
     pub scale_factor: f32,
     pub device: wgpu::Device,
@@ -13,7 +13,7 @@ pub struct AppView {
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
 }
 
-impl AppView {
+impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = unsafe {
             NativeWindow::new(ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface))
@@ -41,17 +41,12 @@ impl AppView {
             callback_to_app: None,
         }
     }
-}
 
-impl crate::GPUContext for AppView {
-    fn resize_surface(&mut self) {
-        self.config.width = self.native_window.get_width();
-        self.config.height = self.native_window.get_height();
-        self.surface.configure(&self.device, &self.config);
-    }
-
-    fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
-        self.create_current_frame_view(&self.device, &self.surface, &self.config)
+    pub fn get_view_size(&self) -> (u32, u32) {
+        (
+            self.native_window.get_width(),
+            self.native_window.get_height(),
+        )
     }
 }
 

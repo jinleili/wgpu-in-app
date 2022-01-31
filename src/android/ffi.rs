@@ -1,4 +1,4 @@
-use crate::{wgpu_canvas::WgpuCanvas, AppView};
+use crate::{wgpu_canvas::WgpuCanvas, AppSurface};
 use android_logger::Config;
 use jni::objects::JClass;
 use jni::sys::{jint, jlong, jobject};
@@ -10,7 +10,7 @@ use log::{info, Level};
 #[jni_fn("name.jinleili.wgpu.RustBridge")]
 pub unsafe fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject, idx: jint) -> jlong {
     android_logger::init_once(Config::default().with_min_level(Level::Trace));
-    let canvas = WgpuCanvas::new(AppView::new(env as *mut _, surface), idx as i32);
+    let canvas = WgpuCanvas::new(AppSurface::new(env as *mut _, surface), idx as i32);
     info!("WgpuCanvas created!");
     Box::into_raw(Box::new(canvas)) as jlong
 }
