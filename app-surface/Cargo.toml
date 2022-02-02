@@ -1,23 +1,18 @@
 [package]
 authors = ["jinlei li<jinlei.li.work@outlook.com>"]
 edition = "2021"
-name = "wgpu-on-app"
+name = "app-surface"
 version = "0.1.0"
 
 [lib]
-crate-type = ["rlib", "staticlib", "cdylib"]
+crate-type = ["rlib"]
 
 [features]
 default = []
 
 [dependencies]
-app-surface = {path = "./app-surface"}
-bytemuck = {version = "1.4", features = ["derive"]}
-cgmath = "0.18"
 log = "0.4.14"
-noise = {version = "0.7", default-features = false}
 pollster = "0.2"
-rand = {version = "0.7.2"}
 wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "766c6cda"}
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
@@ -25,10 +20,15 @@ async-executor = "1.0"
 winit = "*"
 
 [target.'cfg(target_os = "ios")'.dependencies]
+core-graphics = "*"
 env_logger = "0.9"
+lazy_static = "*"
 libc = "*"
+objc = "*"
+objc-foundation = "*"
 
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.10.1"
 jni = "0.19"
-jni_fn = "0.1"
+ndk-sys = "*"
+raw-window-handle = "*"

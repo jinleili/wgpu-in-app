@@ -51,12 +51,14 @@
                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                         <constraints>
                             <constraint firstItem="SOo-xX-hpl" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="1hw-HX-Fyb"/>
+                            <constraint firstItem="NML-RE-Kyu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="5gs-kM-69D"/>
                             <constraint firstItem="SOo-xX-hpl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BDm-IJ-19Q"/>
                             <constraint firstItem="bHv-L9-Ngy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="BFZ-6E-DiP"/>
                             <constraint firstItem="NML-RE-Kyu" firstAttribute="top" secondItem="SOo-xX-hpl" secondAttribute="bottom" constant="24" id="C2l-nU-EsR"/>
                             <constraint firstItem="bHv-L9-Ngy" firstAttribute="top" secondItem="SOo-xX-hpl" secondAttribute="bottom" constant="80" id="UB1-Nj-yaa"/>
                             <constraint firstItem="NML-RE-Kyu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d7n-9F-YiU"/>
                             <constraint firstItem="bHv-L9-Ngy" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fUE-eB-pZ9"/>
+                            <constraint firstItem="NML-RE-Kyu" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="kwY-x6-cW2"/>
                         </constraints>
                     </view>
                     <connections>

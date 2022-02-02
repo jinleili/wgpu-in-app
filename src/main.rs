@@ -3,8 +3,9 @@ fn main() {}
 
 #[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
 fn main() {
+    use app_surface::AppSurface;
     use std::time::{Duration, Instant};
-    use wgpu_on_app::{AppSurface, WgpuCanvas};
+    use wgpu_on_app::WgpuCanvas;
     use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
     use winit::{
         event_loop::{ControlFlow, EventLoop},

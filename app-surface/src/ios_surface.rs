@@ -2,6 +2,7 @@ use core_graphics::{base::CGFloat, geometry::CGRect};
 use libc::c_void;
 use objc::{runtime::Object, *};
 use std::marker::Sync;
+use std::sync::Arc;
 
 #[repr(C)]
 pub struct IOSViewObj {
@@ -14,10 +15,7 @@ pub struct IOSViewObj {
 pub struct AppSurface {
     pub view: *mut Object,
     pub scale_factor: f32,
-    pub device: wgpu::Device,
-    pub queue: wgpu::Queue,
-    pub surface: wgpu::Surface,
-    pub config: wgpu::SurfaceConfiguration,
+    pub sdq: crate::SurfaceDeviceQueue,
     pub maximum_frames: i32,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
 }
@@ -38,7 +36,8 @@ impl AppSurface {
 
         let instance = wgpu::Instance::new(wgpu::Backends::METAL);
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
-        let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
+        let (_adapter, device, queue) =
+            pollster::block_on(crate::request_device(&instance, &surface));
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: wgpu::TextureFormat::Bgra8UnormSrgb,
@@ -50,10 +49,12 @@ impl AppSurface {
         AppSurface {
             view: obj.view,
             scale_factor,
-            device,
-            queue,
-            surface,
-            config,
+            sdq: crate::SurfaceDeviceQueue {
+                surface: surface,
+                config,
+                device: Arc::new(device),
+                queue: Arc::new(queue),
+            },
             callback_to_app: Some(obj.callback_to_swift),
             maximum_frames: obj.maximum_frames,
         }

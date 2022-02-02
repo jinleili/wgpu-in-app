@@ -2,25 +2,27 @@ use core::ffi::c_void;
 use jni::sys::jobject;
 use jni::JNIEnv;
 use raw_window_handle::{AndroidNdkHandle, HasRawWindowHandle, RawWindowHandle};
+use std::sync::Arc;
 
 pub struct AppSurface {
     native_window: NativeWindow,
     pub scale_factor: f32,
-    pub device: wgpu::Device,
-    pub queue: wgpu::Queue,
-    pub surface: wgpu::Surface,
-    pub config: wgpu::SurfaceConfiguration,
+    pub sdq: crate::SurfaceDeviceQueue,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
 }
 
 impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = unsafe {
-            NativeWindow::new(ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface))
+            NativeWindow::new(ndk_sys::ANativeWindow_fromSurface(
+                env as *mut _,
+                surface as *mut _,
+            ))
         };
         let instance = wgpu::Instance::new(wgpu::Backends::VULKAN);
         let surface = unsafe { instance.create_surface(&native_window) };
-        let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
+        let (_adapter, device, queue) =
+            pollster::block_on(crate::request_device(&instance, &surface));
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
@@ -34,10 +36,12 @@ impl AppSurface {
         Self {
             native_window,
             scale_factor: 1.0,
-            device,
-            queue,
-            surface,
-            config,
+            sdq: crate::SurfaceDeviceQueue {
+                surface: surface,
+                config,
+                device: Arc::new(device),
+                queue: Arc::new(queue),
+            },
             callback_to_app: None,
         }
     }

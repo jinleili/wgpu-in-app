@@ -79,8 +79,8 @@ cp target/armv7-linux-androideabi/release/libwgpu_on_app.so android/app/libs/arm
 ```
 
 ## **Desktop**
-### Run
 ```sh
+# Run
 cargo run
+# Then, press 0, 1, 2, 3, 4 keys change running example.
 ```
-Then, press 0, 1, 2, 3, 4 keys change running example.

@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
 use super::Example;
-use crate::{AppSurface, FrameContext};
+use app_surface::{AppSurface, FrameContext};
 
 use std::{borrow::Cow, iter, mem, num::NonZeroU32, ops::Range, rc::Rc};
 

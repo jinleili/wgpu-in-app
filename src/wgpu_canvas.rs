@@ -1,5 +1,5 @@
 use crate::examples::*;
-use crate::{AppSurface, FrameContext};
+use app_surface::{AppSurface, FrameContext};
 
 pub struct WgpuCanvas {
     pub app_surface: AppSurface,

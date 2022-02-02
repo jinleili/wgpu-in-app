@@ -1,5 +1,5 @@
-use crate::app_surface::{AppSurface, IOSViewObj};
 use crate::wgpu_canvas::WgpuCanvas;
+use app_surface::app_surface::{AppSurface, IOSViewObj};
 
 #[no_mangle]
 pub unsafe extern "C" fn create_wgpu_canvas(ios_obj: IOSViewObj) -> *mut libc::c_void {

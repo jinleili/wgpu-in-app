@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
 use super::Example;
-use crate::{AppSurface, FrameContext};
+use app_surface::{AppSurface, FrameContext};
 use rand::{
     distributions::{Distribution, Uniform},
     SeedableRng,

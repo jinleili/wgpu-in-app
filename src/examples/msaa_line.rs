@@ -10,7 +10,7 @@
 //! *   Vertices and Indices describe the two points that make up a line.
 
 use super::Example;
-use crate::{AppSurface, FrameContext};
+use app_surface::{AppSurface, FrameContext};
 
 use std::{borrow::Cow, iter};
 
@@ -195,7 +195,7 @@ impl Example for MSAALine {
         );
     }
 
-    fn enter_frame(&mut self, app_surface: &crate::AppSurface) {
+    fn enter_frame(&mut self, app_surface: &AppSurface) {
         let device = &app_surface.device;
         let queue = &app_surface.queue;
         if self.rebuild_bundle {

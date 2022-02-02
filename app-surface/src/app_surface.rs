@@ -1,10 +1,9 @@
+use std::sync::Arc;
+
 pub struct AppSurface {
     pub view: winit::window::Window,
     pub scale_factor: f32,
-    pub device: wgpu::Device,
-    pub queue: wgpu::Queue,
-    pub surface: wgpu::Surface,
-    pub config: wgpu::SurfaceConfiguration,
+    pub sdq: crate::SurfaceDeviceQueue,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
     pub temporary_directory: &'static str,
     pub library_directory: &'static str,
@@ -16,7 +15,8 @@ impl AppSurface {
         let backend = wgpu::util::backend_bits_from_env().unwrap_or(wgpu::Backends::PRIMARY);
         let instance = wgpu::Instance::new(backend);
         let (physical, surface) = unsafe { (view.inner_size(), instance.create_surface(&view)) };
-        let (device, queue) = pollster::block_on(crate::request_device(&instance, &surface));
+        let (_adapter, device, queue) =
+            pollster::block_on(crate::request_device(&instance, &surface));
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
@@ -29,10 +29,12 @@ impl AppSurface {
         AppSurface {
             view,
             scale_factor: scale_factor as f32,
-            device,
-            queue,
-            surface,
-            config,
+            sdq: crate::SurfaceDeviceQueue {
+                surface: surface,
+                config,
+                device: Arc::new(device),
+                queue: Arc::new(queue),
+            },
             callback_to_app: None,
             temporary_directory: "",
             library_directory: "",

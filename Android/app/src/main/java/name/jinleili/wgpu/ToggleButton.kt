@@ -26,8 +26,7 @@ fun ToggleButton(
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Min)
-            .border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(6.dp))
-            .clip(RoundedCornerShape(6.dp))
+            .background(color = Color.LightGray, shape = RoundedCornerShape(6.dp))
     ) {
         toggleStates.forEachIndexed { index, toggleState ->
             val isSelected = currentSelection.lowercase() == toggleState.lowercase()
@@ -36,17 +35,17 @@ fun ToggleButton(
 
             if (index != 0) {
                 Divider(
-                    color = Color.LightGray,
+                    color = Color(0x55666666),
                     modifier = Modifier
                         .fillMaxHeight()
+                        .padding(horizontal = 0.dp, vertical = 7.dp)
                         .width(1.dp)
                 )
             }
 
             Row(
                 modifier = Modifier
-                    .background(backgroundTint)
-                    .padding(vertical = 2.dp, horizontal = 2.dp)
+                    .background(color = backgroundTint, shape = RoundedCornerShape(6.dp))
                     .toggleable(
                         value = isSelected,
                         enabled = true,

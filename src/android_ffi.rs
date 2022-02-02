@@ -1,5 +1,6 @@
-use crate::{wgpu_canvas::WgpuCanvas, AppSurface};
+use crate::wgpu_canvas::WgpuCanvas;
 use android_logger::Config;
+use app_surface::AppSurface;
 use jni::objects::JClass;
 use jni::sys::{jint, jlong, jobject};
 use jni::JNIEnv;
