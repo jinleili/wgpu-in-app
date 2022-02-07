@@ -1,13 +1,10 @@
 use std::sync::Arc;
 
-#[cfg(target_os = "ios")]
-#[path = "ios_surface.rs"]
-pub mod app_surface;
-#[cfg(target_os = "android")]
-#[path = "android_surface.rs"]
-mod app_surface;
-#[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
-#[path = "app_surface.rs"]
+mod touch;
+pub use touch::*;
+
+#[cfg_attr(target_os = "ios", path = "ios.rs")]
+#[cfg_attr(target_os = "android", path = "android.rs")]
 mod app_surface;
 
 pub use app_surface::AppSurface;
@@ -26,8 +23,11 @@ impl std::ops::Deref for AppSurface {
     }
 }
 
-pub trait FrameContext {
+pub trait Frame {
+    // After App view's size or orientation changed, need to resize surface.
     fn resize_surface(&mut self);
+    fn pintch(&mut self, _touch: Touch, _scale: f32) {}
+    fn touch(&mut self, _touch: Touch) {}
     fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView);
     fn create_current_frame_view(
         &self,
@@ -52,7 +52,7 @@ pub trait FrameContext {
     }
 }
 
-impl FrameContext for AppSurface {
+impl Frame for AppSurface {
     fn resize_surface(&mut self) {
         let size = self.get_view_size();
         self.sdq.config.width = size.0;

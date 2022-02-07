@@ -18,7 +18,8 @@ log = "0.4.14"
 noise = {version = "0.7", default-features = false}
 pollster = "0.2"
 rand = {version = "0.7.2"}
-wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "766c6cda"}
+wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "6b4f1b84"}
+# wgpu = {path = "../../forks/wgpu/wgpu"}
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
 async-executor = "1.0"

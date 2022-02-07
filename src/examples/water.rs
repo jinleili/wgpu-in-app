@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
 use super::{point_gen, Example};
-use app_surface::{AppSurface, FrameContext};
+use app_surface::{AppSurface, Frame};
 
 use bytemuck::{Pod, Zeroable};
 use cgmath::Point3;
