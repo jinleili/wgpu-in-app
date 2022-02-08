@@ -1,12 +1,12 @@
 [package]
-authors = ["Jinlei Li<jinlei.li.work@outlook.com>"]
+authors = ["jinleili"]
 description = "Helps cargo build Android .so lib files"
 edition = "2021"
 keywords = ["android", "so", "ndk", "jni"]
 license = "MIT OR Apache-2.0"
 name = "cargo-so"
 readme = "./README.MD"
-repository = "https://github.com/jinleili/wgpu_on_app"
+repository = "https://github.com/jinleili/wgpu-on-app"
 version = "0.1.2"
 
 [dependencies]

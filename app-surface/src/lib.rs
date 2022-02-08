@@ -7,7 +7,7 @@ pub use touch::*;
 #[cfg_attr(target_os = "android", path = "android.rs")]
 mod app_surface;
 
-pub use app_surface::AppSurface;
+pub use app_surface::*;
 
 pub struct SurfaceDeviceQueue {
     pub surface: wgpu::Surface,
