@@ -1,6 +1,5 @@
 //
 //  MetalView.swift
-//  vulkan_ios
 //
 //  Created by grenlight on 2018/11/23.
 //
@@ -27,7 +26,6 @@ class MetalView: UIView {
         layer.framebufferOnly = true
         // nativeScale is real physical pixel scale
         // https://tomisacat.xyz/tech/2017/06/17/scale-nativescale-contentsscale.html
-        layer.contentsScale = UIScreen.main.nativeScale
         layer.removeAllAnimations()
         self.contentScaleFactor = UIScreen.main.nativeScale
     }

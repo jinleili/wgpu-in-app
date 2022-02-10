@@ -1,6 +1,5 @@
 //
 //  wgpu_test-Bridging-Header.h
-//  wgpu_test
 //
 //  Created by LiJinlei on 2021/9/10.
 //

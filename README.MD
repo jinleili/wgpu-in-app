@@ -11,19 +11,22 @@ Integrate wgpu on your existing iOS | Android apps.
 ## **iOS**
 ### Add build target
 
-Since iPhone 5 and later are 64-bit devices, add `aarch64-apple-ios` and `aarch64-apple-ios-sim` is enough.
+Since iPhone 5 and later are 64-bit devices, `armv7s-apple-ios` and `armv7-apple-ios` are not required.
 
 ```sh
-# Add for iPhone 
+# Add hardware iOS target
 rustup target add aarch64-apple-ios 
-# Add for iOS simulator
+# Add iOS simulator target
+# Intel CPU Mac
+rustup target add x86_64-apple-ios
+# M1 Mac
 rustup target add aarch64-apple-ios-sim
 ```
 
 ### Build and run
 Build for iOS device and simulator
 ```sh
-cargo build --target aarch64-apple-ios && cargo build --target aarch64-apple-ios-sim
+cargo build --target aarch64-apple-ios && cargo build --target <aarch64-apple-ios-sim or x86_64-apple-ios>
 ```
 
 Then, Open `iOS/wgpu_on_iOS.xcodeproj` with Xcode, select `wgpu_phone` scheme run on iOS device, `wgpu_simulator` scheme run on simulator. 

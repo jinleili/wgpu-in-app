@@ -1,6 +1,5 @@
 //
 //  AppDelegate.swift
-//  wgpu_test
 //
 //  Created by LiJinlei on 2021/9/10.
 //
