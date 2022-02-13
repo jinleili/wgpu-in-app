@@ -32,7 +32,7 @@ rustup target add armv7-linux-androideabi aarch64-linux-android i686-linux-andro
 Build
 ```sh
 # build to all android targets
-cargo so build
+cargo so build --lib 
 # build to the specified target
-cargo so b --target aarch64-linux-android
+cargo so b --lib --target aarch64-linux-android
 ```

@@ -26,6 +26,7 @@ rustup target add aarch64-apple-ios-sim
 ### Build and run
 Build for iOS device and simulator
 ```sh
+# Use Metal backend
 cargo build --target aarch64-apple-ios && cargo build --target <aarch64-apple-ios-sim or x86_64-apple-ios>
 ```
 
@@ -83,7 +84,10 @@ cp target/armv7-linux-androideabi/release/libwgpu_on_app.so android/app/libs/arm
 
 ## **Desktop**
 ```sh
-# Run
+# Use Metal backend.
 cargo run
+# Or, use GL backend, need `Angle` libs on your computer.
+# https://github.com/gfx-rs/wgpu/pull/2461
+WGPU_BACKEND=gl cargo run --features=angle
 # Then, press 0, 1, 2, 3, 4 keys change running example.
 ```

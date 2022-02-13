@@ -38,7 +38,7 @@
                                 <segments>
                                     <segment title="boids"/>
                                     <segment title="MSAA line"/>
-                                    <segment title="cube"/>
+                                    <segment title="HDR ASTC"/>
                                     <segment title="water"/>
                                     <segment title="shadow"/>
                                 </segments>

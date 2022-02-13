@@ -23,7 +23,7 @@ fn main() {
                 for target in build_targets {
                     let triple = target.rust_triple();
                     // setting ar, linker value
-                    let mut cargo = cargo_ndk(&ndk, target, 30).unwrap();
+                    let mut cargo = cargo_ndk(&ndk, target, 24).unwrap();
                     cargo.arg("rustc");
                     if cmd.target().is_none() {
                         cargo.arg("--target").arg(triple);
@@ -37,7 +37,10 @@ fn main() {
                         let _ = std::fs::create_dir_all(&gcc_link_dir);
                         std::fs::write(gcc_link_dir.join("libgcc.a"), "INPUT(-lunwind)")
                             .expect("Failed to write");
-                        cargo.arg("-L").arg(gcc_link_dir);
+                        println!("gcc_dir: {:?}", gcc_link_dir);
+                        let test_dir = "/Users/lijinlei/Rust/android-ndk-rs/target/cargo-apk-temp-extra-link-libraries";
+                        // cargo.arg("-L").arg(gcc_link_dir);
+                        cargo.arg("-L").arg(test_dir);
                     }
 
                     if !cargo.status().unwrap().success() {

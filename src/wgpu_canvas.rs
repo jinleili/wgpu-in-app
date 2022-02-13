@@ -8,8 +8,8 @@ pub struct WgpuCanvas {
 
 #[allow(dead_code)]
 impl WgpuCanvas {
-    pub fn new(app_surface: AppSurface, idx: i32) -> Self {
-        let example = Self::create_a_example(&app_surface, idx);
+    pub fn new(app_surface: AppSurface, _idx: i32) -> Self {
+        let example = Box::new(Boids::new(&app_surface));
         log::info!("example created");
         let instance = WgpuCanvas {
             app_surface,
@@ -34,10 +34,10 @@ impl WgpuCanvas {
     }
 
     pub fn change_example(&mut self, index: i32) {
-        self.example = Self::create_a_example(&self.app_surface, index);
+        self.example = Self::create_a_example(&mut self.app_surface, index);
     }
 
-    fn create_a_example(app_surface: &AppSurface, index: i32) -> Box<dyn Example> {
+    fn create_a_example(app_surface: &mut AppSurface, index: i32) -> Box<dyn Example> {
         if index == 0 {
             Box::new(Boids::new(app_surface))
         } else if index == 1 {
@@ -46,8 +46,11 @@ impl WgpuCanvas {
             Box::new(Cube::new(app_surface))
         } else if index == 3 {
             Box::new(Water::new(app_surface))
-        } else {
+        } else if index == 4 {
             Box::new(Shadow::new(app_surface))
+        } else {
+            println!("dafd");
+            Box::new(HDRImageView::new(app_surface))
         }
     }
 }

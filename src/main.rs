@@ -7,25 +7,20 @@ fn main() {
     use std::time::{Duration, Instant};
     use wgpu_on_app::WgpuCanvas;
     use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
-    use winit::{
-        event_loop::{ControlFlow, EventLoop},
-        window::Window,
-    };
+    use winit::event_loop::{ControlFlow, EventLoop};
 
     let events_loop = EventLoop::new();
-    let window = {
-        let window = Window::new(&events_loop).unwrap();
-        let size = winit::dpi::Size::Logical(winit::dpi::LogicalSize {
-            width: 800.0,
-            height: 800.0,
-        });
-        window.set_inner_size(size);
-        window.set_max_inner_size(Some(size));
-        window.set_title("wgpu on Desktop");
-        window
-    };
+    let size = winit::dpi::Size::Logical(winit::dpi::LogicalSize {
+        width: 1600.0,
+        height: 800.0,
+    });
+    let builder = winit::window::WindowBuilder::new()
+        .with_inner_size(size)
+        .with_max_inner_size(size)
+        .with_title("wgpu on Desktop");
+    let window = builder.build(&events_loop).unwrap();
 
-    let mut canvas = WgpuCanvas::new(AppSurface::new(window), 0_i32);
+    let mut canvas = WgpuCanvas::new(AppSurface::new(window), 2_i32);
 
     let mut last_update_inst = Instant::now();
     let target_frametime = Duration::from_secs_f64(1.0 / 60.0);
@@ -83,6 +78,8 @@ fn main() {
                     VirtualKeyCode::Key2 => canvas.change_example(2),
                     VirtualKeyCode::Key3 => canvas.change_example(3),
                     VirtualKeyCode::Key4 => canvas.change_example(4),
+                    VirtualKeyCode::Key5 => canvas.change_example(5),
+
                     _ => canvas.change_example(0),
                 },
                 _ => {}

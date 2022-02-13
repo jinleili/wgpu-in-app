@@ -46,7 +46,7 @@ version = "0.1.0"
 dependencies = [
  "android_logger",
  "async-executor",
- "core-graphics 0.19.2",
+ "core-graphics 0.22.3",
  "env_logger 0.9.0",
  "jni",
  "lazy_static",
@@ -817,7 +817,7 @@ dependencies = [
 [[package]]
 name = "metal"
 version = "0.23.1"
-source = "git+https://github.com/gfx-rs/metal-rs?rev=140c8f4#140c8f4e39001ae154f153ffc767da6c0c9d7f06"
+source = "git+https://github.com/gfx-rs/metal-rs?rev=44af5cc#44af5cca340617d42d701264f9bf71d1f3e68096"
 dependencies = [
  "bitflags",
  "block",
@@ -1565,7 +1565,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=6931e571#6931e5718024c7148c1c4f9107a2716bbfa65aee"
+source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
 dependencies = [
  "arrayvec",
  "js-sys",
@@ -1585,7 +1585,7 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=6931e571#6931e5718024c7148c1c4f9107a2716bbfa65aee"
+source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
 dependencies = [
  "arrayvec",
  "bitflags",
@@ -1607,7 +1607,7 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=6931e571#6931e5718024c7148c1c4f9107a2716bbfa65aee"
+source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
 dependencies = [
  "arrayvec",
  "ash",
@@ -1665,7 +1665,7 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=6931e571#6931e5718024c7148c1c4f9107a2716bbfa65aee"
+source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
 dependencies = [
  "bitflags",
 ]

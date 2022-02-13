@@ -19,10 +19,11 @@ impl AppSurface {
                 surface as *mut _,
             ))
         };
-        let instance = wgpu::Instance::new(wgpu::Backends::VULKAN);
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::VULKAN);
+        let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface(&native_window) };
         let (_adapter, device, queue) =
-            pollster::block_on(crate::request_device(&instance, &surface));
+            pollster::block_on(crate::request_device(&instance, backend, &surface));
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,

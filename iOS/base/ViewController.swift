@@ -52,7 +52,11 @@ class ViewController: UIViewController {
         guard let canvas = self.wgpuCanvas else {
             return
         }
-        change_example(canvas, Int32(sender.selectedSegmentIndex))
+        var index = sender.selectedSegmentIndex
+        if index == 2 {
+            index = 5
+        }
+        change_example(canvas, Int32(index))
     }
 
 }

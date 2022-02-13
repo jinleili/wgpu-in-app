@@ -28,6 +28,9 @@ class MetalView: UIView {
         // https://tomisacat.xyz/tech/2017/06/17/scale-nativescale-contentsscale.html
         layer.removeAllAnimations()
         self.contentScaleFactor = UIScreen.main.nativeScale
+        
+        // 支持 HDR
+        // opt-in EDR
     }
 }
 

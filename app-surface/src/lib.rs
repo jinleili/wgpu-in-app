@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{ops::Deref, sync::Arc};
 
 mod touch;
 pub use touch::*;
@@ -14,6 +14,13 @@ pub struct SurfaceDeviceQueue {
     pub config: wgpu::SurfaceConfiguration,
     pub device: Arc<wgpu::Device>,
     pub queue: Arc<wgpu::Queue>,
+}
+
+impl SurfaceDeviceQueue {
+    pub fn update_config_format(&mut self, format: wgpu::TextureFormat) {
+        self.config.format = format;
+        self.surface.configure(&self.device, &self.config);
+    }
 }
 
 impl std::ops::Deref for AppSurface {
@@ -47,7 +54,6 @@ pub trait Frame {
         let view = frame
             .texture
             .create_view(&wgpu::TextureViewDescriptor::default());
-        // frame cannot be drop early
         (frame, view)
     }
 }
@@ -67,24 +73,28 @@ impl Frame for AppSurface {
 
 async fn request_device(
     instance: &wgpu::Instance,
+    backend: wgpu::Backends,
     surface: &wgpu::Surface,
 ) -> (wgpu::Adapter, wgpu::Device, wgpu::Queue) {
-    let adapter = instance
-        .request_adapter(&wgpu::RequestAdapterOptions {
-            power_preference: wgpu::PowerPreference::default(),
-            compatible_surface: Some(surface),
-            force_fallback_adapter: false,
-        })
-        .await
-        .unwrap();
-    let request_features = if cfg!(target_os = "android") {
-        // unsupported features on some android: POLYGON_MODE_LINE | VERTEX_WRITABLE_STORAGE
-        wgpu::Features::default()
-    } else {
-        wgpu::Features::MAPPABLE_PRIMARY_BUFFERS
-            | wgpu::Features::POLYGON_MODE_LINE
-            | wgpu::Features::VERTEX_WRITABLE_STORAGE
-    };
+    let adapter =
+        wgpu::util::initialize_adapter_from_env_or_default(instance, backend, Some(surface))
+            .await
+            .expect("No suitable GPU adapters found on the system!");
+    let adapter_info = adapter.get_info();
+    println!("Using {} ({:?})", adapter_info.name, adapter_info.backend);
+
+    // unsupported features on some android: POLYGON_MODE_LINE | VERTEX_WRITABLE_STORAGE
+    let mut request_features = wgpu::Features::empty();
+    for f in [
+        wgpu::Features::MAPPABLE_PRIMARY_BUFFERS,
+        wgpu::Features::POLYGON_MODE_LINE,
+        wgpu::Features::VERTEX_WRITABLE_STORAGE,
+        wgpu::Features::TEXTURE_COMPRESSION_ASTC_HDR,
+    ] {
+        if adapter.features().contains(f) {
+            request_features |= f;
+        }
+    }
 
     let res = adapter
         .request_device(

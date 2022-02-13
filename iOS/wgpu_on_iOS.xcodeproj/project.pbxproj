@@ -37,6 +37,7 @@
 		AD4B1FF826EB1B91008A6AEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AD4B1FFA26EB1B91008A6AEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD4B200026EB1D31008A6AEE /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		AD59976927B36E6A00C1D01B /* libwgpu_example.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_example.a; path = "../../../forks/wgpu-example/target/aarch64-apple-ios/debug/libwgpu_example.a"; sourceTree = "<group>"; };
 		ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_app.a; path = "../target/aarch64-apple-ios/debug/libwgpu_on_app.a"; sourceTree = "<group>"; };
 		ADA4699026EB27CB008B1C7B /* libwgpu_on_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libwgpu_on_app.h; sourceTree = "<group>"; };
 		ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wgpu_test-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 		ADA4699326EB3079008B1C7B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD59976927B36E6A00C1D01B /* libwgpu_example.a */,
 				ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */,
 				AD0CB7D927A402370041811B /* libwgpu_on_app.a */,
 				ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */,
@@ -459,12 +461,15 @@
 				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_phone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../target/aarch64-apple-ios/debug";
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../target/aarch64-apple-ios/debug",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -489,12 +494,15 @@
 				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_phone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../target/aarch64-apple-ios/release";
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../target/aarch64-apple-ios/release",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

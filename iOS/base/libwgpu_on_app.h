@@ -24,4 +24,6 @@ struct wgpu_canvas *create_wgpu_canvas(struct ios_view_obj object);
 void enter_frame(struct wgpu_canvas *data);
 void change_example(struct wgpu_canvas *data, int32_t index);
 
+void ffi_main();
+
 #endif /* libwgpu_on_ios_h */

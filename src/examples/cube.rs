@@ -377,9 +377,7 @@ impl Example for Cube {
                 rpass.draw_indexed(0..self.index_count as u32, 0, 0..1);
             }
         }
-
         queue.submit(Some(encoder.finish()));
-
         frame.present();
     }
 }
