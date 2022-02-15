@@ -3,6 +3,7 @@ use app_surface::{AppSurface, Frame};
 use std::borrow::Cow;
 use wgpu::util::DeviceExt;
 use wgpu::PrimitiveTopology;
+use wgpu::{AstcBlock, AstcChannel, TextureFormat};
 
 #[allow(dead_code)]
 pub struct HDRImageView {
@@ -32,7 +33,10 @@ impl HDRImageView {
                 mip_level_count: 1,
                 sample_count: 1,
                 dimension: wgpu::TextureDimension::D2,
-                format: wgpu::TextureFormat::Astc6x6RgbaHdr,
+                format: TextureFormat::Astc {
+                    block: AstcBlock::B6x6,
+                    channel: AstcChannel::Hdr,
+                },
                 usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
                 label: None,
             },

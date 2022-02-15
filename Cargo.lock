@@ -1565,7 +1565,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.12.0"
-source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
+source = "git+https://github.com/jinleili/wgpu?rev=92d7b257#92d7b257f1a8653455e7fafb04e8ae4adb39858c"
 dependencies = [
  "arrayvec",
  "js-sys",
@@ -1585,7 +1585,7 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.12.0"
-source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
+source = "git+https://github.com/jinleili/wgpu?rev=92d7b257#92d7b257f1a8653455e7fafb04e8ae4adb39858c"
 dependencies = [
  "arrayvec",
  "bitflags",
@@ -1607,7 +1607,7 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.12.0"
-source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
+source = "git+https://github.com/jinleili/wgpu?rev=92d7b257#92d7b257f1a8653455e7fafb04e8ae4adb39858c"
 dependencies = [
  "arrayvec",
  "ash",
@@ -1665,7 +1665,7 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "0.12.0"
-source = "git+https://github.com/jinleili/wgpu?rev=33c168c#33c168c752b78ae4f83fecae05d484b75e932ec1"
+source = "git+https://github.com/jinleili/wgpu?rev=92d7b257#92d7b257f1a8653455e7fafb04e8ae4adb39858c"
 dependencies = [
  "bitflags",
 ]

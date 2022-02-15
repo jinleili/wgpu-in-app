@@ -49,7 +49,6 @@ impl WgpuCanvas {
         } else if index == 4 {
             Box::new(Shadow::new(app_surface))
         } else {
-            println!("dafd");
             Box::new(HDRImageView::new(app_surface))
         }
     }
