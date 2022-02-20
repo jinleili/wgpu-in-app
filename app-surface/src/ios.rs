@@ -33,7 +33,7 @@ impl AppSurface {
             (s.size.width as f32 * scale_factor) as u32,
             (s.size.height as f32 * scale_factor) as u32,
         );
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::METAL);
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(wgpu::Backends::all);
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
         let (_adapter, device, queue) =

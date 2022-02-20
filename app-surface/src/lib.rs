@@ -95,6 +95,7 @@ async fn request_device(
             request_features |= f;
         }
     }
+    // request_features |= wgpu::Features::TEXTURE_COMPRESSION_ASTC_HDR;
 
     let res = adapter
         .request_device(
@@ -108,6 +109,8 @@ async fn request_device(
         .await;
     match res {
         Err(err) => {
+            log::info!("hdr 1, {:?}", err);
+
             panic!("request_device failed: {:?}", err);
         }
         Ok(tuple) => (adapter, tuple.0, tuple.1),

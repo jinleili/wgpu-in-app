@@ -86,8 +86,11 @@ cp target/armv7-linux-androideabi/release/libwgpu_on_app.so android/app/libs/arm
 ```sh
 # Use Metal backend.
 cargo run
-# Or, use GL backend, need `Angle` libs on your computer.
+# Use GL backend, need `Angle` libs on your computer.
 # https://github.com/gfx-rs/wgpu/pull/2461
-WGPU_BACKEND=gl cargo run --features=angle
+cargo run --features angle
+# Use Vulkan backend
+# https://github.com/gfx-rs/wgpu/pull/2488
+cargo run --features vulkan-portability
 # Then, press 0, 1, 2, 3, 4 keys change running example.
 ```

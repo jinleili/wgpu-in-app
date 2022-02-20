@@ -41,7 +41,7 @@ var surfaceView: WGPUSurfaceView? = null
 @Composable
 fun SurfaceCard() {
     var selected by remember { mutableStateOf("boids") }
-    val toggleValues = listOf("boids", "MSAA line", "cube", "water", "shadow")
+    val toggleValues = listOf("boids", "MSAA line", "cube", "water", "shadow", "HDR ASTC")
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
