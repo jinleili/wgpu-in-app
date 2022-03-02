@@ -1,5 +1,5 @@
 use super::Example;
-use app_surface::{AppSurface, Frame};
+use app_surface::{AppSurface, SurfaceFrame};
 use std::borrow::Cow;
 use wgpu::util::DeviceExt;
 use wgpu::PrimitiveTopology;

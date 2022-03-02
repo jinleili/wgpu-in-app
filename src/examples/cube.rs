@@ -1,7 +1,7 @@
 //! copy from wgpu's example
 
 use super::Example;
-use app_surface::{AppSurface, Frame};
+use app_surface::{AppSurface, SurfaceFrame};
 use bytemuck::{Pod, Zeroable};
 use std::{borrow::Cow, future::Future, mem, pin::Pin, task};
 use wgpu::util::DeviceExt;

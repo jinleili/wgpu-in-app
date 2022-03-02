@@ -10,7 +10,7 @@
 //! *   Vertices and Indices describe the two points that make up a line.
 
 use super::Example;
-use app_surface::{AppSurface, Frame};
+use app_surface::{AppSurface, SurfaceFrame};
 
 use std::{borrow::Cow, iter};
 

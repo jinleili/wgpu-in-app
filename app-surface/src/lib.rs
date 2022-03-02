@@ -1,13 +1,15 @@
 use std::{ops::Deref, sync::Arc};
 
+pub mod math;
 mod touch;
 pub use touch::*;
 
 #[cfg_attr(target_os = "ios", path = "ios.rs")]
 #[cfg_attr(target_os = "android", path = "android.rs")]
 mod app_surface;
-
 pub use app_surface::*;
+
+pub mod fs;
 
 pub struct SurfaceDeviceQueue {
     pub surface: wgpu::Surface,
@@ -23,19 +25,22 @@ impl SurfaceDeviceQueue {
     }
 }
 
-impl std::ops::Deref for AppSurface {
+impl Deref for AppSurface {
     type Target = SurfaceDeviceQueue;
     fn deref(&self) -> &Self::Target {
         &self.sdq
     }
 }
 
-pub trait Frame {
+pub trait SurfaceFrame {
     // After App view's size or orientation changed, need to resize surface.
     fn resize_surface(&mut self);
     fn pintch(&mut self, _touch: Touch, _scale: f32) {}
     fn touch(&mut self, _touch: Touch) {}
-    fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView);
+    fn enter_frame(&mut self) {}
+    fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+        unimplemented!()
+    }
     fn create_current_frame_view(
         &self,
         device: &wgpu::Device,
@@ -58,7 +63,7 @@ pub trait Frame {
     }
 }
 
-impl Frame for AppSurface {
+impl SurfaceFrame for AppSurface {
     fn resize_surface(&mut self) {
         let size = self.get_view_size();
         self.sdq.config.width = size.0;
@@ -109,8 +114,6 @@ async fn request_device(
         .await;
     match res {
         Err(err) => {
-            log::info!("hdr 1, {:?}", err);
-
             panic!("request_device failed: {:?}", err);
         }
         Ok(tuple) => (adapter, tuple.0, tuple.1),

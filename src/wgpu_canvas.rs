@@ -1,5 +1,5 @@
 use crate::examples::*;
-use app_surface::{AppSurface, Frame};
+use app_surface::{AppSurface, SurfaceFrame};
 
 pub struct WgpuCanvas {
     pub app_surface: AppSurface,
@@ -9,10 +9,10 @@ pub struct WgpuCanvas {
 #[allow(dead_code)]
 impl WgpuCanvas {
     pub fn new(app_surface: AppSurface, _idx: i32) -> Self {
-        let example = Box::new(Water::new(&app_surface));
+        let example = Box::new(MSAALine::new(&app_surface));
         // let hdr_view = HDRImageView::new(&mutapp_surface);
         log::info!("example created");
-        let mut instance = WgpuCanvas {
+        let instance = WgpuCanvas {
             app_surface,
             example,
         };

@@ -20,9 +20,8 @@ impl AppSurface {
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            // format: wgpu::TextureFormat::Bgra8UnormSrgb,
-            format: wgpu::TextureFormat::Rgba16Float,
-
+            format: wgpu::TextureFormat::Bgra8UnormSrgb,
+            // format: wgpu::TextureFormat::Rgba16Float,
             width: physical.width as u32,
             height: physical.height as u32,
             present_mode: wgpu::PresentMode::Fifo,

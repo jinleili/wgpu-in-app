@@ -13,8 +13,8 @@ default = []
 [dependencies]
 log = "0.4"
 pollster = "0.2"
-# wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "6931e571"}
-wgpu = {git = "https://github.com/jinleili/wgpu", rev = "305eadb1"}
+wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "810dc5aa"}
+# wgpu = {git = "https://github.com/jinleili/wgpu", rev = "305eadb1"}
 # wgpu = {path = "../../../forks/wgpu/wgpu"}
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
@@ -39,3 +39,10 @@ android_logger = "0.10.1"
 jni = "0.19"
 ndk-sys = "*"
 raw-window-handle = "0.4"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# The `wasm-bindgen` crate provides the bare minimum functionality needed
+# to interact with JavaScript.
+wasm-bindgen = "0.2.79"
+web-sys = {version = "=0.3.56", optional = true}
+wee_alloc = {version = "0.4.5", optional = true}
