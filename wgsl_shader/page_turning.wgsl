@@ -1,18 +1,18 @@
 
 
 struct MVPMatUniform {  
-    mvp: mat4x4<f32>;
+    mvp: mat4x4<f32>,
 };
 
 
 struct TurningUniform {
     // 开始卷动的半径
-    radius: f32;
-    angle: f32;
-    np: vec2<f32>;
-    n: vec2<f32>;
-    alpha: f32;
-    instance_index: i32;
+    radius: f32,
+    angle: f32,
+    np: vec2<f32>,
+    n: vec2<f32>,
+    alpha: f32,
+    instance_index: i32,
 };
 
 @group(0) @binding(0) var<uniform> mvp_mat: MVPMatUniform;

@@ -1,8 +1,8 @@
 struct Uniforms {
-    view: mat4x4<f32>;
-    projection: mat4x4<f32>;
-    time_size_width: vec4<f32>;
-    viewport_height: f32;
+    view: mat4x4<f32>,
+    projection: mat4x4<f32>,
+    time_size_width: vec4<f32>,
+    viewport_height: f32,
 };
 @group(0) @binding(0) var<uniform> uniforms: Uniforms;
 
@@ -181,10 +181,10 @@ fn calc_specular(eye: vec3<f32>, normal: vec3<f32>, light: vec3<f32>) -> f32 {
 }
 
 struct VertexOutput {
-    @builtin(position) position: vec4<f32>;
-    @location(0) f_WaterScreenPos: vec2<f32>;
-    @location(1) f_Fresnel: f32;
-    @location(2) f_Light: vec3<f32>;
+    @builtin(position) position: vec4<f32>,
+    @location(0) f_WaterScreenPos: vec2<f32>,
+    @location(1) f_Fresnel: f32,
+    @location(2) f_Light: vec3<f32>,
 };
 
 @stage(vertex)
@@ -225,6 +225,7 @@ let zFar = 400.0;
 @group(0) @binding(1) var reflection: texture_2d<f32>;
 @group(0) @binding(2) var terrain_depth_tex: texture_2d<f32>;
 @group(0) @binding(3) var colour_sampler: sampler;
+@group(0) @binding(4) var depth_sampler: sampler;
 
 fn to_linear_depth(depth: f32) -> f32 {
     let z_n = 2.0 * depth - 1.0;
@@ -238,7 +239,7 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
 
     let pixel_depth = to_linear_depth(in.position.z);
     let normalized_coords = in.position.xy / vec2<f32>(uniforms.time_size_width.w, uniforms.viewport_height);
-    let terrain_depth = to_linear_depth(textureSample(terrain_depth_tex, colour_sampler, normalized_coords).r);
+    let terrain_depth = to_linear_depth(textureSample(terrain_depth_tex, depth_sampler, normalized_coords).r);
 
     let dist = terrain_depth - pixel_depth;
     let clamped = pow(smoothStep(0.0, 1.5, dist), 4.8);

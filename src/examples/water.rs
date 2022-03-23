@@ -4,9 +4,9 @@ use super::{point_gen, Example};
 use app_surface::{AppSurface, SurfaceFrame};
 
 use bytemuck::{Pod, Zeroable};
-use cgmath::Point3;
+use glam::Vec3;
 use rand::SeedableRng;
-use std::{borrow::Cow, iter, mem};
+use std::{borrow::Cow, f32::consts, iter, mem};
 use wgpu::util::DeviceExt;
 
 ///
@@ -23,16 +23,12 @@ const SIZE: f32 = 29.0;
 /// Location of the camera.
 /// Location of light is in terrain/water shaders.
 ///
-const CAMERA: Point3<f32> = Point3 {
-    x: -200.0,
-    y: 70.0,
-    z: 200.0,
-};
+const CAMERA: Vec3 = glam::const_vec3!([-200.0, 70.0, 200.0,]);
 
 struct Matrices {
-    view: cgmath::Matrix4<f32>,
-    flipped_view: cgmath::Matrix4<f32>,
-    projection: cgmath::Matrix4<f32>,
+    view: glam::Mat4,
+    flipped_view: glam::Mat4,
+    projection: glam::Mat4,
 }
 
 #[repr(C)]
@@ -153,11 +149,7 @@ impl Water {
                     SNOW
                 };
                 point_gen::TerrainVertex {
-                    position: Point3 {
-                        x: point[0],
-                        y,
-                        z: point[1],
-                    },
+                    position: Vec3::new(point[0], y, point[1]),
                     colour: mul_arr(colour, random),
                 }
             });
@@ -223,6 +215,13 @@ impl Water {
                         binding: 3,
                         visibility: wgpu::ShaderStages::FRAGMENT,
                         ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
+                        count: None,
+                    },
+                    // Sampler to be able to sample the textures.
+                    wgpu::BindGroupLayoutEntry {
+                        binding: 4,
+                        visibility: wgpu::ShaderStages::FRAGMENT,
+                        ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::NonFiltering),
                         count: None,
                     },
                 ],
@@ -463,31 +462,29 @@ impl Water {
     /// Creates the view matrices, and the corrected projection matrix.
     ///
     fn generate_matrices(aspect_ratio: f32) -> Matrices {
-        let projection = cgmath::perspective(cgmath::Deg(45f32), aspect_ratio, 10.0, 400.0);
-        let reg_view = cgmath::Matrix4::look_at_rh(
+        let projection = glam::Mat4::perspective_rh(consts::FRAC_PI_4, aspect_ratio, 10.0, 400.0);
+        let reg_view = glam::Mat4::look_at_rh(
             CAMERA,
-            cgmath::Point3::new(0f32, 0.0, 0.0),
-            cgmath::Vector3::unit_y(), //Note that y is up. Differs from other examples.
+            glam::Vec3::new(0f32, 0.0, 0.0),
+            glam::Vec3::Y, //Note that y is up. Differs from other examples.
         );
 
-        let scale = cgmath::Matrix4::from_nonuniform_scale(8.0, 1.5, 8.0);
+        let scale = glam::Mat4::from_scale(glam::Vec3::new(8.0, 1.5, 8.0));
 
         let reg_view = reg_view * scale;
 
-        let flipped_view = cgmath::Matrix4::look_at_rh(
-            cgmath::Point3::new(CAMERA.x, -CAMERA.y, CAMERA.z),
-            cgmath::Point3::new(0f32, 0.0, 0.0),
-            cgmath::Vector3::unit_y(),
+        let flipped_view = glam::Mat4::look_at_rh(
+            glam::Vec3::new(CAMERA.x, -CAMERA.y, CAMERA.z),
+            glam::Vec3::ZERO,
+            glam::Vec3::Y,
         );
-
-        let correction = super::OPENGL_TO_WGPU_MATRIX;
 
         let flipped_view = flipped_view * scale;
 
         Matrices {
             view: reg_view,
             flipped_view,
-            projection: correction * projection,
+            projection,
         }
     }
 
@@ -579,14 +576,19 @@ impl Water {
                 | wgpu::TextureUsages::RENDER_ATTACHMENT,
         });
 
-        let sampler = device.create_sampler(&wgpu::SamplerDescriptor {
-            label: Some("Texture Sampler"),
+        let color_sampler = device.create_sampler(&wgpu::SamplerDescriptor {
+            label: Some("Color Sampler"),
             address_mode_u: wgpu::AddressMode::ClampToEdge,
             address_mode_v: wgpu::AddressMode::ClampToEdge,
             address_mode_w: wgpu::AddressMode::ClampToEdge,
             mag_filter: wgpu::FilterMode::Nearest,
             min_filter: wgpu::FilterMode::Linear,
             mipmap_filter: wgpu::FilterMode::Nearest,
+            ..Default::default()
+        });
+
+        let depth_sampler = device.create_sampler(&wgpu::SamplerDescriptor {
+            label: Some("Depth Sampler"),
             ..Default::default()
         });
 
@@ -611,7 +613,11 @@ impl Water {
                 },
                 wgpu::BindGroupEntry {
                     binding: 3,
-                    resource: wgpu::BindingResource::Sampler(&sampler),
+                    resource: wgpu::BindingResource::Sampler(&color_sampler),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 4,
+                    resource: wgpu::BindingResource::Sampler(&depth_sampler),
                 },
             ],
             label: Some("Water Bind Group"),

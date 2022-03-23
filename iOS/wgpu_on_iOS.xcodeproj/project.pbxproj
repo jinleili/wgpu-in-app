@@ -38,6 +38,7 @@
 		AD4B1FFA26EB1B91008A6AEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD4B200026EB1D31008A6AEE /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		AD59976927B36E6A00C1D01B /* libwgpu_example.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_example.a; path = "../../../forks/wgpu-example/target/aarch64-apple-ios/debug/libwgpu_example.a"; sourceTree = "<group>"; };
+		AD5ED90427D24621001C5EEC /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS15.2.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_app.a; path = "../target/aarch64-apple-ios/debug/libwgpu_on_app.a"; sourceTree = "<group>"; };
 		ADA4699026EB27CB008B1C7B /* libwgpu_on_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libwgpu_on_app.h; sourceTree = "<group>"; };
 		ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wgpu_test-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -121,6 +122,7 @@
 		ADA4699326EB3079008B1C7B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD5ED90427D24621001C5EEC /* libresolv.tbd */,
 				AD59976927B36E6A00C1D01B /* libwgpu_example.a */,
 				ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */,
 				AD0CB7D927A402370041811B /* libwgpu_on_app.a */,

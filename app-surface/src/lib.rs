@@ -88,25 +88,11 @@ async fn request_device(
     let adapter_info = adapter.get_info();
     println!("Using {} ({:?})", adapter_info.name, adapter_info.backend);
 
-    // unsupported features on some android: POLYGON_MODE_LINE | VERTEX_WRITABLE_STORAGE
-    let mut request_features = wgpu::Features::empty();
-    for f in [
-        wgpu::Features::MAPPABLE_PRIMARY_BUFFERS,
-        wgpu::Features::POLYGON_MODE_LINE,
-        wgpu::Features::VERTEX_WRITABLE_STORAGE,
-        wgpu::Features::TEXTURE_COMPRESSION_ASTC_HDR,
-    ] {
-        if adapter.features().contains(f) {
-            request_features |= f;
-        }
-    }
-    // request_features |= wgpu::Features::TEXTURE_COMPRESSION_ASTC_HDR;
-
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
-                features: request_features,
+                features: adapter.features(),
                 limits: adapter.limits(),
             },
             None,

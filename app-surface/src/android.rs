@@ -19,7 +19,7 @@ impl AppSurface {
                 surface as *mut _,
             ))
         };
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::VULKAN);
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::GL);
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface(&native_window) };
         let (_adapter, device, queue) =

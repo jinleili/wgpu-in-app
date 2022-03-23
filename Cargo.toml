@@ -16,12 +16,13 @@ vulkan-portability = ["wgpu/vulkan-portability"]
 app-surface = {path = "./app-surface"}
 bytemuck = {version = "1.4", features = ["derive"]}
 cgmath = "0.18"
+glam = "0.20.2"
 log = "0.4"
 noise = {version = "0.7", default-features = false}
 pollster = "0.2"
 rand = {version = "0.7.2"}
-wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "810dc5aa"}
-# wgpu = {git = "https://github.com/jinleili/wgpu", rev = "305eadb1"}
+# wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "810dc5aa"}
+wgpu = {git = "https://github.com/jinleili/wgpu", rev = "2010fbbe"}
 # wgpu = {path = "../../forks/wgpu/wgpu"}
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]

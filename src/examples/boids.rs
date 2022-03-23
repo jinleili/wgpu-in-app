@@ -213,6 +213,9 @@ impl Boids {
         let work_group_count =
             ((NUM_PARTICLES as f32) / (PARTICLES_PER_GROUP as f32)).ceil() as u32;
 
+        let timestamp_period = app_surface.queue.get_timestamp_period();
+        println!("timestamp_period: {}", timestamp_period);
+
         Self {
             particle_bind_groups,
             particle_buffers,
@@ -238,7 +241,7 @@ impl Example for Boids {
                 ops: wgpu::Operations {
                     // Not clearing here in order to test wgpu's zero texture initialization on a surface texture.
                     // Users should avoid loading uninitialized memory since this can cause additional overhead.
-                    load: wgpu::LoadOp::Load,
+                    load: wgpu::LoadOp::Clear(wgpu::Color::TRANSPARENT),
                     store: true,
                 },
             }];
@@ -281,6 +284,7 @@ impl Example for Boids {
 
             // done
             queue.submit(Some(command_encoder.finish()));
+            queue.submit(None);
         }
         frame.present();
         // update frame count
