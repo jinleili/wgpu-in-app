@@ -31,7 +31,7 @@ struct VertexOutput {
     @location(4) instance_index: u32;
 };
 
-@stage(vertex)
+@vertex
 fn vs_main(
     @builtin(instance_index) instance_index: u32,
     @location(0) position: vec3<f32>,
@@ -97,7 +97,7 @@ fn vs_main(
 let whiteWeight: f32 = 0.25;
 let texWeight: f32 = 0.75;
 
-@stage(fragment)
+@fragment
 fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     // 使用内置的 gl_InstanceIndex 实例索引来区分绘制，第一个实例只绘制背景纸，有翻页效果的第二个实例需要带上笔墨效果
     // let tex = select(front_texture, bg_texture, in.instance_index == 0u);

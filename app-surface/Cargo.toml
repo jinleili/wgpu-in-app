@@ -7,14 +7,18 @@ version = "0.1.0"
 [lib]
 crate-type = ["rlib"]
 
+[profile.release]
+# Rust 1.59+
+strip = "all"
+
 [features]
 default = []
 
 [dependencies]
 log = "0.4"
 pollster = "0.2"
-# wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "810dc5aa"}
-wgpu = {git = "https://github.com/jinleili/wgpu", rev = "2010fbbe"}
+wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "cb7ad30d"}
+# wgpu = {git = "https://github.com/jinleili/wgpu", rev = "2010fbbe"}
 # wgpu = {path = "../../../forks/wgpu/wgpu"}
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]

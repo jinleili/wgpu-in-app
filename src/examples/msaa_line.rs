@@ -29,7 +29,7 @@ pub struct MSAALine {
     shader: wgpu::ShaderModule,
     pipeline_layout: wgpu::PipelineLayout,
     multisampled_framebuffer: wgpu::TextureView,
-    vertex_buffer: wgpu::Buffer,
+    vertex_buffer_list: Vec<wgpu::Buffer>,
     vertex_count: u32,
     sample_count: u32,
     rebuild_bundle: bool,
@@ -58,28 +58,42 @@ impl MSAALine {
         let multisampled_framebuffer =
             Self::create_multisampled_framebuffer(device, config, sample_count);
 
-        let mut vertex_data = vec![];
+        let mut vertex_data_list = vec![];
 
         let max = 50;
-        for i in 0..max {
-            let percent = i as f32 / max as f32;
-            let (sin, cos) = (percent * 2.0 * std::f32::consts::PI).sin_cos();
-            vertex_data.push(Vertex {
-                _pos: [0.0, 0.0],
-                _color: [1.0, -sin, cos, 1.0],
-            });
-            vertex_data.push(Vertex {
-                _pos: [1.0 * cos, 1.0 * sin],
-                _color: [sin, -cos, 1.0, 1.0],
-            });
+        let list_count = 5;
+
+        let step = 2.0 / (list_count as f32 + 1.0);
+        let mut x = -1.0;
+        for _ in 0..list_count {
+            let mut vertex_data = vec![];
+            x += step;
+            for i in 0..max {
+                let percent = i as f32 / max as f32;
+                let (sin, cos) = (percent * 2.0 * std::f32::consts::PI).sin_cos();
+                vertex_data.push(Vertex {
+                    _pos: [x, 0.0],
+                    _color: [1.0, -sin, cos, 1.0],
+                });
+                vertex_data.push(Vertex {
+                    _pos: [1.0 * cos, 1.0 * sin],
+                    _color: [sin, -cos, 1.0, 1.0],
+                });
+            }
+            vertex_data_list.push(vertex_data);
         }
 
-        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(&vertex_data),
-            usage: wgpu::BufferUsages::VERTEX,
-        });
-        let vertex_count = vertex_data.len() as u32;
+        let mut vertex_buffer_list: Vec<wgpu::Buffer> = vec![];
+        for i in 0..list_count {
+            let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+                label: Some("Vertex Buffer"),
+                contents: bytemuck::cast_slice(&vertex_data_list[i]),
+                usage: wgpu::BufferUsages::VERTEX,
+            });
+            vertex_buffer_list.push(vertex_buffer);
+        }
+
+        let vertex_count = max as u32 * 2;
 
         let bundle = Self::create_bundle(
             device,
@@ -87,7 +101,7 @@ impl MSAALine {
             &shader,
             &pipeline_layout,
             sample_count,
-            &vertex_buffer,
+            &vertex_buffer_list,
             vertex_count,
         );
 
@@ -96,7 +110,7 @@ impl MSAALine {
             shader,
             pipeline_layout,
             multisampled_framebuffer,
-            vertex_buffer,
+            vertex_buffer_list,
             vertex_count,
             sample_count,
             rebuild_bundle: false,
@@ -110,7 +124,7 @@ impl MSAALine {
         shader: &wgpu::ShaderModule,
         pipeline_layout: &wgpu::PipelineLayout,
         sample_count: u32,
-        vertex_buffer: &wgpu::Buffer,
+        vertex_buffer_list: &Vec<wgpu::Buffer>,
         vertex_count: u32,
     ) -> wgpu::RenderBundle {
         log::info!("sample_count: {}", sample_count);
@@ -152,8 +166,12 @@ impl MSAALine {
                 multiview: None,
             });
         encoder.set_pipeline(&pipeline);
-        encoder.set_vertex_buffer(0, vertex_buffer.slice(..));
-        encoder.draw(0..vertex_count, 0..1);
+        for buf in vertex_buffer_list {
+            encoder.set_vertex_buffer(0, buf.slice(..));
+            encoder.draw(0..vertex_count, 0..1);
+        }
+        // encoder.set_vertex_buffer(0, vertex_buffer_list[0].slice(..));
+        // encoder.draw(0..vertex_count, 0..1);
         encoder.finish(&wgpu::RenderBundleDescriptor {
             label: Some("main"),
         })
@@ -205,7 +223,7 @@ impl Example for MSAALine {
                 &self.shader,
                 &self.pipeline_layout,
                 self.sample_count,
-                &self.vertex_buffer,
+                &self.vertex_buffer_list,
                 self.vertex_count,
             );
             self.multisampled_framebuffer =
