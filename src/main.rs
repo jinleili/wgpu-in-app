@@ -11,7 +11,7 @@ fn main() {
 
     let events_loop = EventLoop::new();
     let size = winit::dpi::Size::Logical(winit::dpi::LogicalSize {
-        width: 1600.0,
+        width: 1200.0,
         height: 800.0,
     });
     let builder = winit::window::WindowBuilder::new()

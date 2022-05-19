@@ -12,16 +12,17 @@ pub struct AppSurface {
 impl AppSurface {
     pub fn new(view: winit::window::Window) -> Self {
         let scale_factor = view.scale_factor();
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(wgpu::Backends::all);
+        let backend =
+            wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::PRIMARY);
         let instance = wgpu::Instance::new(backend);
         let (physical, surface) = unsafe { (view.inner_size(), instance.create_surface(&view)) };
-        let (_adapter, device, queue) =
+        let (adapter, device, queue) =
             pollster::block_on(crate::request_device(&instance, backend, &surface));
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            format: wgpu::TextureFormat::Bgra8UnormSrgb,
-            // format: wgpu::TextureFormat::Rgba16Float,
+            // format: wgpu::TextureFormat::Bgra8UnormSrgb,
+            format: surface.get_preferred_format(&adapter).unwrap(),
             width: physical.width as u32,
             height: physical.height as u32,
             present_mode: wgpu::PresentMode::Fifo,

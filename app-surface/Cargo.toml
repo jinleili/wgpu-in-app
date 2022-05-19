@@ -1,7 +1,7 @@
 [package]
+name = "app-surface"
 authors = ["jinleili"]
 edition = "2021"
-name = "app-surface"
 version = "0.1.0"
 
 [lib]
@@ -17,12 +17,12 @@ default = []
 [dependencies]
 log = "0.4"
 pollster = "0.2"
-wgpu = {git = "https://github.com/gfx-rs/wgpu", rev = "cb7ad30d"}
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "8b2e6fe3" }
 # wgpu = {git = "https://github.com/jinleili/wgpu", rev = "2010fbbe"}
-# wgpu = {path = "../../../forks/wgpu/wgpu"}
+# wgpu = { path = "../../../forks/wgpu/wgpu" }
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
-async-executor = "1.0"
+async-executor = "1.4.1"
 winit = "0.26"
 
 [target.'cfg(target_os = "macos")'.dependencies]
@@ -47,6 +47,6 @@ raw-window-handle = "0.4"
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 # The `wasm-bindgen` crate provides the bare minimum functionality needed
 # to interact with JavaScript.
-wasm-bindgen = "0.2.79"
-web-sys = {version = "=0.3.56", optional = true}
-wee_alloc = {version = "0.4.5", optional = true}
+wasm-bindgen = "0.2.80"
+web-sys = { version = "=0.3.57", optional = true }
+wee_alloc = { version = "0.4.5", optional = true }

@@ -39,20 +39,20 @@ fn vs_main(
     @location(2) tex_coord: vec2<f32>,
 ) -> VertexOutput {
 
-    var out: VertexOutput;
-    out.brush_uv = tex_coord;
-    out.paper_uv = paper_texcoord;
-    out.instance_index = instance_index;
+    var result: VertexOutput;
+    result.brush_uv = tex_coord;
+    result.paper_uv = paper_texcoord;
+    result.instance_index = instance_index;
 
     // 从 np 位置到 position 的矢量
     let v: vec2<f32> = position.xy - params.np;
     // v 在单位矢量 n 上的投影长度
     let l: f32 = dot(v, params.n);
     if (instance_index == 0u) {
-        out.verCoord = position;
-        out.roll_height = 0.0;
+        result.verCoord = position;
+        result.roll_height = 0.0;
         // 将底下的 paper z-index 放低一些, 避免 z fighting
-        out.position = mvp_mat.mvp * vec4<f32>(position.xy, position.z - 0.00001, 1.0);
+        result.position = mvp_mat.mvp * vec4<f32>(position.xy, position.z - 0.00001, 1.0);
     } else {
         // 投影长度值为正，表示 position 是需要被卷起的点
         if (l > 0.0) {
@@ -78,16 +78,16 @@ fn vs_main(
             // new_position.z *= -1;
             new_position.y -= sin(params.angle) * d;
             new_position.x -= cos(params.angle) * d;
-            out.roll_height = new_position.z;
-            out.verCoord = new_position;
-            out.position = mvp_mat.mvp * vec4<f32>(new_position, 1.0);
+            result.roll_height = new_position.z;
+            result.verCoord = new_position;
+            result.position = mvp_mat.mvp * vec4<f32>(new_position, 1.0);
         } else {
-            out.verCoord = position;
-            out.roll_height = 0.0;
-            out.position = mvp_mat.mvp * vec4<f32>(position, 1.0);
+            result.verCoord = position;
+            result.roll_height = 0.0;
+            result.position = mvp_mat.mvp * vec4<f32>(position, 1.0);
         }
     }
-    return out;
+    return result;
 }
 
 @group(0) @binding(2) var bg_texture: texture_2d<f32>;
@@ -98,27 +98,27 @@ let whiteWeight: f32 = 0.25;
 let texWeight: f32 = 0.75;
 
 @fragment
-fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
+fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
     // 使用内置的 gl_InstanceIndex 实例索引来区分绘制，第一个实例只绘制背景纸，有翻页效果的第二个实例需要带上笔墨效果
-    // let tex = select(front_texture, bg_texture, in.instance_index == 0u);
-        // var tex_color: vec4<f32> = textureSample(bg_texture, tex_sampler, in.paper_uv);
+    // let tex = select(front_texture, bg_texture, vertex.instance_index == 0u);
+        // var tex_color: vec4<f32> = textureSample(bg_texture, tex_sampler, vertex.paper_uv);
     if (params.instance_index == 0) {
-        return textureSample(bg_texture, tex_sampler, in.paper_uv);
+        return textureSample(bg_texture, tex_sampler, vertex.paper_uv);
     } else {
-        var tex_color: vec4<f32> = textureSample(front_texture, tex_sampler, in.paper_uv);
+        var tex_color: vec4<f32> = textureSample(front_texture, tex_sampler, vertex.paper_uv);
         var rgb_color: vec3<f32> = vec3<f32>(0.0);
-        if (in.instance_index == 1u) {
+        if (vertex.instance_index == 1u) {
             let diameter = params.radius * 2.0;
-            if (in.roll_height > 0.0) {
-                if (in.roll_height > params.radius) {
+            if (vertex.roll_height > 0.0) {
+                if (vertex.roll_height > params.radius) {
                     rgb_color = tex_color.rgb * texWeight + whiteWeight;
-                    if (in.roll_height < diameter) {
+                    if (vertex.roll_height < diameter) {
                         //模拟卷起片段的背面阴影, 卷起得越高,阴影越小
-                        rgb_color *= (1.0 - 0.15 * ((diameter - in.roll_height) / params.radius));
+                        rgb_color *= (1.0 - 0.15 * ((diameter - vertex.roll_height) / params.radius));
                     }
                 } else {
                     //高效模拟卷起片段的内面阴影, 卷起得越高,阴影越大
-                    rgb_color = tex_color.rgb * (1.0 - 0.2 * (in.roll_height / params.radius));
+                    rgb_color = tex_color.rgb * (1.0 - 0.2 * (vertex.roll_height / params.radius));
                 }
             } 
         }
