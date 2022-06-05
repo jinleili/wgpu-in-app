@@ -9,6 +9,7 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet var metalV: MetalView!
     var wgpuCanvas: OpaquePointer?
+    var canInvokeEnterFrame = true
     lazy var displayLink: CADisplayLink = {
         let link = CADisplayLink.init(target: self, selector: #selector(enterFrame))
         return link
@@ -30,7 +31,9 @@ class ViewController: UIViewController {
             
             let viewObj = ios_view_obj(view: viewPointer, metal_layer: metalLayer,maximum_frames: Int32(maximumFrames), callback_to_swift: callback_to_swift)
             
-            wgpuCanvas = create_wgpu_canvas(viewObj)
+            DispatchQueue.global().async { [weak self] in
+                self?.wgpuCanvas = create_wgpu_canvas(viewObj)
+            }
         }
         self.displayLink.isPaused = false
     }
@@ -45,7 +48,13 @@ class ViewController: UIViewController {
             return
         }
         // call rust
-        enter_frame(canvas)
+        if canInvokeEnterFrame {
+            canInvokeEnterFrame = false
+            DispatchQueue.global().async {
+                enter_frame(canvas)
+            }
+        }
+        
     }
     
     @IBAction func changeExample(sender: UISegmentedControl) {
@@ -68,7 +77,10 @@ func callback_to_swift(arg: Int32) {
             print("wgpu canvas created!")
             break
         case 1:
-            print("canvas enter frame")
+            // rust enter frame callback
+            if let controller = UIApplication.shared.keyWindow?.rootViewController as? ViewController {
+                controller.canInvokeEnterFrame = true
+            }
             break
             
         default:

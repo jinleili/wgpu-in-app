@@ -26,8 +26,8 @@ impl WgpuCanvas {
     pub fn enter_frame(&mut self) {
         self.example.enter_frame(&self.app_surface);
 
-        if let Some(_callback) = self.app_surface.callback_to_app {
-            // callback(1);
+        if let Some(callback) = self.app_surface.callback_to_app {
+            callback(1);
         }
     }
 
