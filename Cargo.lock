@@ -23,6 +23,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "android-properties"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fc7eb209b1518d6bb87b283c20095f5228ecda460da70b44f0802523dea6da04"
+
+[[package]]
 name = "android_log-sys"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1574,7 +1580,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=8b2e6fe3#8b2e6fe3a22837403fdaf5ecc5bf37d5297340cd"
+source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
 dependencies = [
  "arrayvec",
  "js-sys",
@@ -1594,9 +1600,10 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=8b2e6fe3#8b2e6fe3a22837403fdaf5ecc5bf37d5297340cd"
+source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
 dependencies = [
  "arrayvec",
+ "bit-vec",
  "bitflags",
  "cfg_aliases",
  "codespan-reporting",
@@ -1616,8 +1623,9 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=8b2e6fe3#8b2e6fe3a22837403fdaf5ecc5bf37d5297340cd"
+source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
 dependencies = [
+ "android-properties",
  "arrayvec",
  "ash",
  "bit-set",
@@ -1675,7 +1683,7 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=8b2e6fe3#8b2e6fe3a22837403fdaf5ecc5bf37d5297340cd"
+source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
 dependencies = [
  "bitflags",
 ]

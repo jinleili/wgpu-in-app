@@ -25,7 +25,7 @@ impl AppSurface {
             format: surface.get_preferred_format(&adapter).unwrap(),
             width: physical.width as u32,
             height: physical.height as u32,
-            present_mode: wgpu::PresentMode::Fifo,
+            present_mode: wgpu::PresentMode::Mailbox,
         };
         surface.configure(&device, &config);
         AppSurface {

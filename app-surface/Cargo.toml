@@ -17,8 +17,8 @@ default = []
 [dependencies]
 log = "0.4"
 pollster = "0.2"
-wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "8b2e6fe3" }
-# wgpu = {git = "https://github.com/jinleili/wgpu", rev = "2010fbbe"}
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "444836f7" }
+# wgpu = { git = "https://github.com/cwfitzgerald/wgpu", branch = "fix-sampling-usage" }
 # wgpu = { path = "../../../forks/wgpu/wgpu" }
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
