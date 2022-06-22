@@ -14,8 +14,9 @@ Integrate wgpu on your existing iOS | Android apps.
 Since iPhone 5 and later are 64-bit devices, `armv7s-apple-ios` and `armv7-apple-ios` are not required.
 
 ```sh
-# Add hardware iOS target
+# Add iOS device target
 rustup target add aarch64-apple-ios 
+
 # Add iOS simulator target
 # Intel CPU Mac
 rustup target add x86_64-apple-ios

@@ -21,7 +21,7 @@ log = "0.4"
 noise = { version = "0.7", default-features = false }
 pollster = "0.2"
 rand = { version = "0.7.2" }
-wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "444836f7" }
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "aba7197f" }
 # wgpu = {git = "https://github.com/jinleili/wgpu", rev = "2010fbbe"}
 # wgpu = { path = "../../forks/wgpu/wgpu" }
 

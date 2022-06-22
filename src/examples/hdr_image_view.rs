@@ -19,7 +19,7 @@ impl HDRImageView {
         let device = &app_surface.device;
         let queue = &app_surface.queue;
 
-        let astc_data = &include_bytes!("../../assets/12x12.astc")[..];
+        let astc_data = &include_bytes!("../../assets/8x8.astc")[..];
         let size = wgpu::Extent3d {
             width: 4096,
             height: 2048,
@@ -34,7 +34,7 @@ impl HDRImageView {
                 sample_count: 1,
                 dimension: wgpu::TextureDimension::D2,
                 format: TextureFormat::Astc {
-                    block: AstcBlock::B12x12,
+                    block: AstcBlock::B8x8,
                     channel: AstcChannel::Hdr,
                 },
                 usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,

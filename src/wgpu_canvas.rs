@@ -8,15 +8,14 @@ pub struct WgpuCanvas {
 
 #[allow(dead_code)]
 impl WgpuCanvas {
-    pub fn new(app_surface: AppSurface, _idx: i32) -> Self {
-        let example = Box::new(Boids::new(&app_surface));
-        // let hdr_view = HDRImageView::new(&mutapp_surface);
+    pub fn new(app_surface: AppSurface, idx: i32) -> Self {
+        let example = Box::new(Empty::new(&app_surface));
         log::info!("example created");
-        let instance = WgpuCanvas {
+        let mut instance = WgpuCanvas {
             app_surface,
             example,
         };
-        // instance.change_example(5);
+        instance.change_example(idx);
         if let Some(callback) = instance.app_surface.callback_to_app {
             callback(0);
         }

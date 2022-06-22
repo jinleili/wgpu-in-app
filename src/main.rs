@@ -20,7 +20,7 @@ fn main() {
         .with_title("wgpu on Desktop");
     let window = builder.build(&events_loop).unwrap();
 
-    let mut canvas = WgpuCanvas::new(AppSurface::new(window), 0_i32);
+    let mut canvas = WgpuCanvas::new(AppSurface::new(window), 0);
 
     let mut last_update_inst = Instant::now();
     let target_frametime = Duration::from_secs_f64(1.0 / 60.0);

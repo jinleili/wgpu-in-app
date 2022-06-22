@@ -17,7 +17,7 @@ default = []
 [dependencies]
 log = "0.4"
 pollster = "0.2"
-wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "444836f7" }
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "aba7197f" }
 # wgpu = { git = "https://github.com/cwfitzgerald/wgpu", branch = "fix-sampling-usage" }
 # wgpu = { path = "../../../forks/wgpu/wgpu" }
 

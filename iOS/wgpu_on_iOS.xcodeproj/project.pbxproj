@@ -29,6 +29,7 @@
 		AD0CB7C327A402060041811B /* wgpu_simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD0CB7D327A402060041811B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD0CB7D927A402370041811B /* libwgpu_on_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_app.a; path = "../target/aarch64-apple-ios-sim/debug/libwgpu_on_app.a"; sourceTree = "<group>"; };
+		AD20D48A2863001E00E2C98C /* wgpu_phone.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wgpu_phone.entitlements; sourceTree = "<group>"; };
 		AD4B1FE926EB1B90008A6AEE /* wgpu_phone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_phone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AD4B1FF026EB1B90008A6AEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 		AD4B1FEB26EB1B90008A6AEE /* wgpu_phone */ = {
 			isa = PBXGroup;
 			children = (
+				AD20D48A2863001E00E2C98C /* wgpu_phone.entitlements */,
 				AD4B1FF726EB1B91008A6AEE /* LaunchScreen.storyboard */,
 				AD4B1FFA26EB1B91008A6AEE /* Info.plist */,
 			);
@@ -280,7 +282,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P3HQ9GDFCW;
+				DEVELOPMENT_TEAM = K3H55AGK36;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = wgpu_simulator/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "wgpu on simulator";
@@ -313,7 +315,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P3HQ9GDFCW;
+				DEVELOPMENT_TEAM = K3H55AGK36;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = wgpu_simulator/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "wgpu on simulator";
@@ -459,11 +461,13 @@
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = wgpu_phone/wgpu_phone.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_phone/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -480,9 +484,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -492,11 +497,13 @@
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = wgpu_phone/wgpu_phone.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_phone/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -513,9 +520,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};

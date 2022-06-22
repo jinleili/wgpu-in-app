@@ -213,9 +213,6 @@ impl Boids {
         let work_group_count =
             ((NUM_PARTICLES as f32) / (PARTICLES_PER_GROUP as f32)).ceil() as u32;
 
-        let timestamp_period = app_surface.queue.get_timestamp_period();
-        println!("timestamp_period: {}", timestamp_period);
-
         Self {
             particle_bind_groups,
             particle_buffers,

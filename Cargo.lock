@@ -871,7 +871,7 @@ dependencies = [
 [[package]]
 name = "naga"
 version = "0.8.0"
-source = "git+https://github.com/gfx-rs/naga?rev=571302e#571302e3ff09cb856f63a3683da308159872b7cc"
+source = "git+https://github.com/gfx-rs/naga?rev=0b60f410#0b60f410ab7bd0ca0d67d024c8b5da84b55fbf18"
 dependencies = [
  "bit-set",
  "bitflags",
@@ -1580,7 +1580,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=aba7197f#aba7197fe84c3008ea48686b848916e0bdafabea"
 dependencies = [
  "arrayvec",
  "js-sys",
@@ -1600,7 +1600,7 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=aba7197f#aba7197fe84c3008ea48686b848916e0bdafabea"
 dependencies = [
  "arrayvec",
  "bit-vec",
@@ -1616,6 +1616,7 @@ dependencies = [
  "raw-window-handle",
  "smallvec",
  "thiserror",
+ "web-sys",
  "wgpu-hal",
  "wgpu-types",
 ]
@@ -1623,7 +1624,7 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=aba7197f#aba7197fe84c3008ea48686b848916e0bdafabea"
 dependencies = [
  "android-properties",
  "arrayvec",
@@ -1683,7 +1684,7 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "0.12.0"
-source = "git+https://github.com/gfx-rs/wgpu?rev=444836f7#444836f7471a2742f280b17faab2562486249cc7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=aba7197f#aba7197fe84c3008ea48686b848916e0bdafabea"
 dependencies = [
  "bitflags",
 ]
