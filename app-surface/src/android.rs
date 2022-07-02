@@ -31,6 +31,8 @@ impl AppSurface {
             width: native_window.get_width(),
             height: native_window.get_height(),
             present_mode: wgpu::PresentMode::Fifo,
+            alpha_mode: wgpu::CompositeAlphaMode::PreMultiplied,
+            // alpha_mode: wgpu::CompositeAlphaMode::PostMultiplied,
         };
         surface.configure(&device, &config);
 

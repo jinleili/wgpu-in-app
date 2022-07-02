@@ -93,7 +93,7 @@ impl HDRImageView {
             ],
             label: None,
         });
-        let shader_module = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+        let shader_module = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!(
                 "../../wgsl_shader/bufferless.wgsl"
@@ -112,11 +112,11 @@ impl HDRImageView {
             fragment: Some(wgpu::FragmentState {
                 module: &shader_module,
                 entry_point: "fs_main",
-                targets: &[wgpu::ColorTargetState {
+                targets: &[Some(wgpu::ColorTargetState {
                     format: hdr_pixel_format,
                     blend: None,
                     write_mask: wgpu::ColorWrites::ALL,
-                }],
+                })],
             }),
             primitive: wgpu::PrimitiveState {
                 topology: PrimitiveTopology::TriangleList,
@@ -147,14 +147,14 @@ impl Example for HDRImageView {
         {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: Some("bufferless rpass"),
-                color_attachments: &[wgpu::RenderPassColorAttachment {
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
                         store: true,
                     },
-                }],
+                })],
                 depth_stencil_attachment: None,
             });
             rpass.set_pipeline(&self.pipeline);

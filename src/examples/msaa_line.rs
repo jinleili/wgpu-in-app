@@ -42,7 +42,7 @@ impl MSAALine {
         let device = &app_surface.device;
         let sample_count = 4;
 
-        let shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+        let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!(
                 "../../wgsl_shader/msaa_line.wgsl"
@@ -143,7 +143,7 @@ impl MSAALine {
             fragment: Some(wgpu::FragmentState {
                 module: shader,
                 entry_point: "fs_main",
-                targets: &[config.format.into()],
+                targets: &[Some(config.format.into())],
             }),
             primitive: wgpu::PrimitiveState {
                 topology: wgpu::PrimitiveTopology::LineList,
@@ -160,7 +160,7 @@ impl MSAALine {
         let mut encoder =
             device.create_render_bundle_encoder(&wgpu::RenderBundleEncoderDescriptor {
                 label: None,
-                color_formats: &[config.format],
+                color_formats: &[Some(config.format)],
                 depth_stencil: None,
                 sample_count,
                 multiview: None,
@@ -239,7 +239,7 @@ impl Example for MSAALine {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
+                        load: wgpu::LoadOp::Clear(wgpu::Color::TRANSPARENT),
                         store: true,
                     },
                 }
@@ -248,7 +248,7 @@ impl Example for MSAALine {
                     view: &self.multisampled_framebuffer,
                     resolve_target: Some(&view),
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
+                        load: wgpu::LoadOp::Clear(wgpu::Color::TRANSPARENT),
                         // Storing pre-resolve MSAA data is unnecessary if it isn't used later.
                         // On tile-based GPU, avoid store can reduce your app's memory footprint.
                         store: false,
@@ -259,7 +259,7 @@ impl Example for MSAALine {
             encoder
                 .begin_render_pass(&wgpu::RenderPassDescriptor {
                     label: None,
-                    color_attachments: &[rpass_color_attachment],
+                    color_attachments: &[Some(rpass_color_attachment)],
                     depth_stencil_attachment: None,
                 })
                 .execute_bundles(iter::once(&self.bundle));

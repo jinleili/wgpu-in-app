@@ -17,6 +17,7 @@ fn main() {
     let builder = winit::window::WindowBuilder::new()
         .with_inner_size(size)
         .with_max_inner_size(size)
+        .with_transparent(true)
         .with_title("wgpu on Desktop");
     let window = builder.build(&events_loop).unwrap();
 

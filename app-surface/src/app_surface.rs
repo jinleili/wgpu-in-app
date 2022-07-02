@@ -22,10 +22,11 @@ impl AppSurface {
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             // format: wgpu::TextureFormat::Bgra8UnormSrgb,
-            format: surface.get_preferred_format(&adapter).unwrap(),
+            format: surface.get_supported_formats(&adapter)[0],
             width: physical.width as u32,
             height: physical.height as u32,
-            present_mode: wgpu::PresentMode::Mailbox,
+            present_mode: wgpu::PresentMode::Fifo,
+            alpha_mode: wgpu::CompositeAlphaMode::PreMultiplied,
         };
         surface.configure(&device, &config);
         AppSurface {

@@ -314,13 +314,13 @@ impl Water {
         });
 
         // Upload/compile them to GPU code.
-        let terrain_module = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+        let terrain_module = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("terrain"),
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!(
                 "../../wgsl_shader/terrain.wgsl"
             ))),
         });
-        let water_module = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+        let water_module = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("water"),
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!(
                 "../../wgsl_shader/water.wgsl"
@@ -354,7 +354,7 @@ impl Water {
                 entry_point: "fs_main",
                 // Describes how the colour will be interpolated
                 // and assigned to the output attachment.
-                targets: &[wgpu::ColorTargetState {
+                targets: &[Some(wgpu::ColorTargetState {
                     format: config.format,
                     blend: Some(wgpu::BlendState {
                         color: wgpu::BlendComponent {
@@ -369,7 +369,7 @@ impl Water {
                         },
                     }),
                     write_mask: wgpu::ColorWrites::ALL,
-                }],
+                })],
             }),
             // How the triangles will be rasterized. This is more important
             // for the terrain because of the beneath-the water shot.
@@ -415,7 +415,7 @@ impl Water {
             fragment: Some(wgpu::FragmentState {
                 module: &terrain_module,
                 entry_point: "fs_main",
-                targets: &[config.format.into()],
+                targets: &[Some(config.format.into())],
             }),
             primitive: wgpu::PrimitiveState {
                 front_face: wgpu::FrontFace::Ccw,
@@ -701,14 +701,14 @@ impl Example for Water {
         {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: None,
-                color_attachments: &[wgpu::RenderPassColorAttachment {
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                     view: &self.reflect_view,
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(back_color),
                         store: true,
                     },
-                }],
+                })],
                 // We still need to use the depth buffer here
                 // since the pipeline requires it.
                 depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
@@ -730,14 +730,14 @@ impl Example for Water {
         {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: None,
-                color_attachments: &[wgpu::RenderPassColorAttachment {
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(back_color),
                         store: true,
                     },
-                }],
+                })],
                 depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
                     view: &self.depth_buffer,
                     depth_ops: Some(wgpu::Operations {
@@ -757,14 +757,14 @@ impl Example for Water {
         {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: None,
-                color_attachments: &[wgpu::RenderPassColorAttachment {
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Load,
                         store: true,
                     },
-                }],
+                })],
                 depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
                     view: &self.depth_buffer,
                     depth_ops: None,

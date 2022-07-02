@@ -1,5 +1,6 @@
 package name.jinleili.wgpu
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,7 +28,8 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = colorResource(id = R.color.teal_700)
+//                    color = colorResource(id = R.color.transparent)
                 ) {
                     SurfaceCard()
                 }
@@ -84,7 +87,7 @@ fun SurfaceCard() {
                 sv
             }, modifier = Modifier
                 .fillMaxWidth()
-                .height(screenWidth)
-        )
+                .height(screenWidth),
+            )
     }
 }

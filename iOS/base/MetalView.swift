@@ -15,6 +15,7 @@ class MetalView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         configLayer()
+        self.layer.backgroundColor = UIColor.clear.cgColor
     }
     
     private func configLayer() {

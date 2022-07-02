@@ -30,13 +30,13 @@ impl Boids {
         let config = &app_surface.config;
         let device = &app_surface.device;
 
-        let compute_shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+        let compute_shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!(
                 "../../wgsl_shader/compute.wgsl"
             ))),
         });
-        let draw_shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+        let draw_shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!(
                 "../../wgsl_shader/draw.wgsl"
@@ -131,7 +131,7 @@ impl Boids {
             fragment: Some(wgpu::FragmentState {
                 module: &draw_shader,
                 entry_point: "main_fs",
-                targets: &[config.format.into()],
+                targets: &[Some(config.format.into())],
             }),
             primitive: wgpu::PrimitiveState::default(),
             depth_stencil: None,
@@ -232,16 +232,19 @@ impl Example for Boids {
         let (frame, view) = app_surface.get_current_frame_view();
         {
             // create render pass descriptor and its color attachments
-            let color_attachments = [wgpu::RenderPassColorAttachment {
+            let color_attachments = [Some(wgpu::RenderPassColorAttachment {
                 view: &view,
                 resolve_target: None,
                 ops: wgpu::Operations {
-                    // Not clearing here in order to test wgpu's zero texture initialization on a surface texture.
-                    // Users should avoid loading uninitialized memory since this can cause additional overhead.
-                    load: wgpu::LoadOp::Clear(wgpu::Color::TRANSPARENT),
+                    load: wgpu::LoadOp::Clear(wgpu::Color {
+                        r: 0.0,
+                        g: 0.0,
+                        b: 0.0,
+                        a: 0.1,
+                    }),
                     store: true,
                 },
-            }];
+            })];
             let render_pass_descriptor = wgpu::RenderPassDescriptor {
                 label: None,
                 color_attachments: &color_attachments,
