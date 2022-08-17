@@ -56,9 +56,10 @@ pub trait SurfaceFrame {
                     .expect("Failed to acquire next swap chain texture!")
             }
         };
-        let view = frame
-            .texture
-            .create_view(&wgpu::TextureViewDescriptor::default());
+        let view = frame.texture.create_view(&wgpu::TextureViewDescriptor {
+            label: Some("frame texture view"),
+            ..Default::default()
+        });
         (frame, view)
     }
 }
@@ -87,7 +88,6 @@ async fn request_device(
             .expect("No suitable GPU adapters found on the system!");
     let adapter_info = adapter.get_info();
     println!("Using {} ({:?})", adapter_info.name, adapter_info.backend);
-
     let base_dir = std::env::var("CARGO_MANIFEST_DIR");
     let trace_path = if let Ok(base_dir) = base_dir {
         Some(std::path::PathBuf::from(&base_dir).join("WGPU_TRACE_ERROR"))

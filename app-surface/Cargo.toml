@@ -18,17 +18,17 @@ default = []
 log = "0.4"
 pollster = "0.2"
 # wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "aba7197f" }
-wgpu = { git = "https://github.com/jinleili/wgpu", rev = "3acbfc83" }
+wgpu = { git = "https://github.com/jinleili/wgpu", rev = "6e469708" }
 # wgpu = { path = "../../../forks/wgpu/wgpu" }
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
 async-executor = "1.4.1"
-winit = "0.26"
+winit = "0.27.1"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 libc = "*"
 objc = "0.2.7"
-raw-window-handle = "0.4"
+raw-window-handle = "0.5"
 
 [target.'cfg(target_os = "ios")'.dependencies]
 core-graphics = "*"
@@ -42,7 +42,7 @@ objc-foundation = "*"
 android_logger = "0.10.1"
 jni = "0.19"
 ndk-sys = "*"
-raw-window-handle = "0.4"
+raw-window-handle = "0.5"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 # The `wasm-bindgen` crate provides the bare minimum functionality needed

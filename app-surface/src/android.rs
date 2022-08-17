@@ -1,7 +1,10 @@
 use core::ffi::c_void;
 use jni::sys::jobject;
 use jni::JNIEnv;
-use raw_window_handle::{AndroidNdkHandle, HasRawWindowHandle, RawWindowHandle};
+use raw_window_handle::{
+    AndroidDisplayHandle, AndroidNdkWindowHandle, HasRawDisplayHandle, HasRawWindowHandle,
+    RawDisplayHandle, RawWindowHandle,
+};
 use std::sync::Arc;
 
 pub struct AppSurface {
@@ -19,7 +22,7 @@ impl AppSurface {
                 surface as *mut _,
             ))
         };
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::GL);
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::VULKAN);
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface(&native_window) };
         let (_adapter, device, queue) =
@@ -31,8 +34,6 @@ impl AppSurface {
             width: native_window.get_width(),
             height: native_window.get_height(),
             present_mode: wgpu::PresentMode::Fifo,
-            alpha_mode: wgpu::CompositeAlphaMode::PreMultiplied,
-            // alpha_mode: wgpu::CompositeAlphaMode::PostMultiplied,
         };
         surface.configure(&device, &config);
 
@@ -88,8 +89,14 @@ impl Drop for NativeWindow {
 
 unsafe impl HasRawWindowHandle for NativeWindow {
     fn raw_window_handle(&self) -> RawWindowHandle {
-        let mut handle = AndroidNdkHandle::empty();
+        let mut handle = AndroidNdkWindowHandle::empty();
         handle.a_native_window = self.a_native_window as *mut _ as *mut c_void;
         RawWindowHandle::AndroidNdk(handle)
+    }
+}
+
+unsafe impl HasRawDisplayHandle for NativeWindow {
+    fn raw_display_handle(&self) -> RawDisplayHandle {
+        RawDisplayHandle::Android(AndroidDisplayHandle::empty())
     }
 }

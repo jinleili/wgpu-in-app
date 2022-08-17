@@ -15,11 +15,13 @@ impl HDRImageView {
     pub fn new(app_surface: &mut AppSurface) -> Self {
         let hdr_pixel_format = wgpu::TextureFormat::Rgba16Float;
         app_surface.sdq.update_config_format(hdr_pixel_format);
-
+        log::info!("update_config_format: Rgba16Float");
         let device = &app_surface.device;
         let queue = &app_surface.queue;
+        log::info!("update_config_format: 0");
 
         let astc_data = &include_bytes!("../../assets/8x8.astc")[..];
+        log::info!("update_config_format: 00");
         let size = wgpu::Extent3d {
             width: 4096,
             height: 2048,
@@ -42,11 +44,14 @@ impl HDRImageView {
             },
             &astc_data[16..],
         );
+        log::info!("update_config_format: 01");
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor {
             label: None,
             dimension: Some(wgpu::TextureViewDimension::D2),
             ..wgpu::TextureViewDescriptor::default()
         });
+        log::info!("update_config_format: 1");
+
         let sampler = device.create_sampler(&wgpu::SamplerDescriptor {
             label: None,
             address_mode_u: wgpu::AddressMode::ClampToEdge,
@@ -99,6 +104,7 @@ impl HDRImageView {
                 "../../wgsl_shader/bufferless.wgsl"
             ))),
         });
+        log::info!("update_config_format: 2");
 
         let pipeline_vertex_buffers = [];
         let pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {

@@ -26,7 +26,6 @@ impl AppSurface {
             width: physical.width as u32,
             height: physical.height as u32,
             present_mode: wgpu::PresentMode::Fifo,
-            alpha_mode: wgpu::CompositeAlphaMode::PreMultiplied,
         };
         surface.configure(&device, &config);
         AppSurface {

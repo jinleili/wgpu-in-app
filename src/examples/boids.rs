@@ -2,6 +2,7 @@
 
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
+use bytemuck::{Pod, Zeroable};
 use rand::{
     distributions::{Distribution, Uniform},
     SeedableRng,
@@ -15,8 +16,21 @@ const NUM_PARTICLES: u32 = 1500;
 // number of single-particle calculations (invocations) in each gpu work group
 const PARTICLES_PER_GROUP: u32 = 16;
 
+#[repr(C)]
+#[derive(Clone, Copy, Pod, Zeroable)]
+struct SimParams {
+    delta_t: f32,
+    rule1_distance: f32,
+    rule2_distance: f32,
+    rule3_distance: f32,
+    rule1_scale: f32,
+    rule2_scale: f32,
+    rule3_scale: f32,
+    offset: u32,
+}
 pub struct Boids {
     particle_bind_groups: Vec<wgpu::BindGroup>,
+    dynamic_bind_group: wgpu::BindGroup,
     particle_buffers: Vec<wgpu::Buffer>,
     vertices_buffer: wgpu::Buffer,
     compute_pipeline: wgpu::ComputePipeline,
@@ -43,35 +57,62 @@ impl Boids {
             ))),
         });
 
-        // buffer for simulation parameters uniform
-        let sim_param_data = [
-            0.04f32, // deltaT
-            0.1,     // rule1Distance
-            0.025,   // rule2Distance
-            0.025,   // rule3Distance
-            0.02,    // rule1Scale
-            0.05,    // rule2Scale
-            0.005,   // rule3Scale
-        ]
-        .to_vec();
+        let param_data = SimParams {
+            delta_t: 0.04,
+            rule1_distance: 0.1,
+            rule2_distance: 0.025,
+            rule3_distance: 0.025,
+            rule1_scale: 0.02,
+            rule2_scale: 0.05,
+            rule3_scale: 0.005,
+            offset: 0u32,
+        };
 
+        let sim_param_buffer = device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: 5 * 256,
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+            mapped_at_creation: false,
+        });
+        for i in 0..5 {
+            let mut item = param_data;
+            item.offset = 64 * 5 * i;
+            app_surface.queue.write_buffer(
+                &sim_param_buffer,
+                256 * i as wgpu::BufferAddress,
+                bytemuck::bytes_of(&item),
+            );
+        }
+        let dynamic_bgl = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+            entries: &[wgpu::BindGroupLayoutEntry {
+                binding: 0,
+                visibility: wgpu::ShaderStages::COMPUTE,
+                ty: wgpu::BindingType::Buffer {
+                    ty: wgpu::BufferBindingType::Uniform,
+                    has_dynamic_offset: true,
+                    min_binding_size: wgpu::BufferSize::new((mem::size_of::<SimParams>()) as _),
+                },
+                count: None,
+            }],
+            label: None,
+        });
+        let dynamic_bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
+            layout: &&dynamic_bgl,
+            entries: &[wgpu::BindGroupEntry {
+                binding: 0,
+                resource: wgpu::BindingResource::Buffer(wgpu::BufferBinding {
+                    buffer: &sim_param_buffer,
+                    offset: 0,
+                    size: wgpu::BufferSize::new(256),
+                }),
+            }],
+            label: None,
+        });
         // create compute bind layout group and compute pipeline layout
         let bgl_desc = wgpu::BindGroupLayoutDescriptor {
             entries: &[
                 wgpu::BindGroupLayoutEntry {
                     binding: 0,
-                    visibility: wgpu::ShaderStages::COMPUTE,
-                    ty: wgpu::BindingType::Buffer {
-                        ty: wgpu::BufferBindingType::Uniform,
-                        has_dynamic_offset: false,
-                        min_binding_size: wgpu::BufferSize::new(
-                            (sim_param_data.len() * mem::size_of::<f32>()) as _,
-                        ),
-                    },
-                    count: None,
-                },
-                wgpu::BindGroupLayoutEntry {
-                    binding: 1,
                     visibility: wgpu::ShaderStages::COMPUTE,
                     ty: wgpu::BindingType::Buffer {
                         ty: wgpu::BufferBindingType::Storage { read_only: true },
@@ -81,7 +122,7 @@ impl Boids {
                     count: None,
                 },
                 wgpu::BindGroupLayoutEntry {
-                    binding: 2,
+                    binding: 1,
                     visibility: wgpu::ShaderStages::COMPUTE,
                     ty: wgpu::BindingType::Buffer {
                         ty: wgpu::BufferBindingType::Storage { read_only: false },
@@ -98,7 +139,7 @@ impl Boids {
         let compute_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("compute"),
-                bind_group_layouts: &[&compute_bind_group_layout],
+                bind_group_layouts: &[&compute_bind_group_layout, &dynamic_bgl],
                 push_constant_ranges: &[],
             });
         // create render pipeline with empty bind group layout
@@ -183,25 +224,16 @@ impl Boids {
 
         // create two bind groups, one for each buffer as the src
         // where the alternate buffer is used as the dst
-        let sim_param_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Simulation Parameter Buffer"),
-            contents: bytemuck::cast_slice(&sim_param_data),
-            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
-        });
         for i in 0..2 {
             particle_bind_groups.push(device.create_bind_group(&wgpu::BindGroupDescriptor {
                 layout: &compute_bind_group_layout,
                 entries: &[
                     wgpu::BindGroupEntry {
                         binding: 0,
-                        resource: sim_param_buffer.as_entire_binding(),
-                    },
-                    wgpu::BindGroupEntry {
-                        binding: 1,
                         resource: particle_buffers[i].as_entire_binding(),
                     },
                     wgpu::BindGroupEntry {
-                        binding: 2,
+                        binding: 1,
                         resource: particle_buffers[(i + 1) % 2].as_entire_binding(), // bind to opposite buffer
                     },
                 ],
@@ -215,6 +247,7 @@ impl Boids {
 
         Self {
             particle_bind_groups,
+            dynamic_bind_group,
             particle_buffers,
             vertices_buffer,
             compute_pipeline,
@@ -240,7 +273,7 @@ impl Example for Boids {
                         r: 0.0,
                         g: 0.0,
                         b: 0.0,
-                        a: 0.1,
+                        a: 0.5,
                     }),
                     store: true,
                 },
@@ -258,11 +291,33 @@ impl Example for Boids {
             command_encoder.push_debug_group("compute boid movement");
             {
                 // compute pass
-                let mut cpass = command_encoder
-                    .begin_compute_pass(&wgpu::ComputePassDescriptor { label: None });
+                let mut cpass = command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
+                    label: None,
+                    // ty: wgpu::ComputePassType::Concurrent,
+                });
                 cpass.set_pipeline(&self.compute_pipeline);
                 cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
-                cpass.dispatch_workgroups(self.work_group_count, 1, 1);
+                // for i in 0..5 {
+                //     cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * i]);
+                //     cpass.dispatch_workgroups(5, 1, 1);
+                // }
+                cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * 0]);
+                cpass.dispatch_workgroups(5, 1, 1);
+                // cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * 1]);
+                // cpass.dispatch_workgroups(5, 1, 1);
+            }
+            {
+                let mut cpass = command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
+                    label: None,
+                    // ty: wgpu::ComputePassType::Concurrent,
+                });
+                cpass.set_pipeline(&self.compute_pipeline);
+                cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
+
+                for i in 1..5 {
+                    cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * i]);
+                    cpass.dispatch_workgroups(5, 1, 1);
+                }
             }
             command_encoder.pop_debug_group();
 
