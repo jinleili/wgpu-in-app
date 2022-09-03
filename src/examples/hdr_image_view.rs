@@ -14,6 +14,8 @@ pub struct HDRImageView {
 impl HDRImageView {
     pub fn new(app_surface: &mut AppSurface) -> Self {
         let hdr_pixel_format = wgpu::TextureFormat::Rgba16Float;
+        // let hdr_pixel_format = wgpu::TextureFormat::Rgb10a2Unorm;
+
         app_surface.sdq.update_config_format(hdr_pixel_format);
         log::info!("update_config_format: Rgba16Float");
         let device = &app_surface.device;

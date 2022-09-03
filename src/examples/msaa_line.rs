@@ -239,7 +239,7 @@ impl Example for MSAALine {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color::TRANSPARENT),
+                        load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
                         store: true,
                     },
                 }
@@ -248,7 +248,7 @@ impl Example for MSAALine {
                     view: &self.multisampled_framebuffer,
                     resolve_target: Some(&view),
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color::TRANSPARENT),
+                        load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
                         // Storing pre-resolve MSAA data is unnecessary if it isn't used later.
                         // On tile-based GPU, avoid store can reduce your app's memory footprint.
                         store: false,

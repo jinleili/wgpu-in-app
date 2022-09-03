@@ -804,12 +804,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "inplace_it"
-version = "0.3.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "67f0347836f3f6362c1e7efdadde2b1c4b4556d211310b70631bae7eb692070b"
-
-[[package]]
 name = "instant"
 version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -990,8 +984,7 @@ dependencies = [
 [[package]]
 name = "naga"
 version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f50357e1167a3ab92d6b3c7f4bf5f7fd13fde3f4b28bf0d5ea07b5100fdb6c0"
+source = "git+https://github.com/gfx-rs/naga?rev=b209d911#b209d911681c4ef563f7d9048623667743e6248f"
 dependencies = [
  "bit-set",
  "bitflags",
@@ -1827,7 +1820,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.13.0"
-source = "git+https://github.com/jinleili/wgpu?rev=6e469708#6e469708f6741f733fe54a24826ca377b473bc65"
+source = "git+https://github.com/jinleili/wgpu?rev=5ff54710#5ff547100a1b9399f43ec90cb0fd8045fef6b02e"
 dependencies = [
  "arrayvec 0.7.2",
  "js-sys",
@@ -1847,7 +1840,7 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.13.0"
-source = "git+https://github.com/jinleili/wgpu?rev=6e469708#6e469708f6741f733fe54a24826ca377b473bc65"
+source = "git+https://github.com/jinleili/wgpu?rev=5ff54710#5ff547100a1b9399f43ec90cb0fd8045fef6b02e"
 dependencies = [
  "arrayvec 0.7.2",
  "bit-vec",
@@ -1871,7 +1864,7 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.13.0"
-source = "git+https://github.com/jinleili/wgpu?rev=6e469708#6e469708f6741f733fe54a24826ca377b473bc65"
+source = "git+https://github.com/jinleili/wgpu?rev=5ff54710#5ff547100a1b9399f43ec90cb0fd8045fef6b02e"
 dependencies = [
  "android_system_properties",
  "arrayvec 0.7.2",
@@ -1886,7 +1879,6 @@ dependencies = [
  "glow",
  "gpu-alloc",
  "gpu-descriptor",
- "inplace_it",
  "js-sys",
  "khronos-egl",
  "libloading",
@@ -1899,6 +1891,7 @@ dependencies = [
  "range-alloc",
  "raw-window-handle 0.5.0",
  "renderdoc-sys",
+ "smallvec",
  "thiserror",
  "wasm-bindgen",
  "web-sys",
@@ -1931,7 +1924,7 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "0.13.0"
-source = "git+https://github.com/jinleili/wgpu?rev=6e469708#6e469708f6741f733fe54a24826ca377b473bc65"
+source = "git+https://github.com/jinleili/wgpu?rev=5ff54710#5ff547100a1b9399f43ec90cb0fd8045fef6b02e"
 dependencies = [
  "bitflags",
 ]

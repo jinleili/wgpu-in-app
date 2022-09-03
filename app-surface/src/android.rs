@@ -25,7 +25,7 @@ impl AppSurface {
         let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::VULKAN);
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface(&native_window) };
-        let (_adapter, device, queue) =
+        let (adapter, device, queue) =
             pollster::block_on(crate::request_device(&instance, backend, &surface));
 
         let config = wgpu::SurfaceConfiguration {
@@ -34,6 +34,7 @@ impl AppSurface {
             width: native_window.get_width(),
             height: native_window.get_height(),
             present_mode: wgpu::PresentMode::Fifo,
+            alpha_mode: surface.get_supported_alpha_modes(&adapter)[0],
         };
         surface.configure(&device, &config);
 
