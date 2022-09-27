@@ -16,13 +16,9 @@ pub struct AppSurface {
 
 impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
-        let native_window = unsafe {
-            NativeWindow::new(ndk_sys::ANativeWindow_fromSurface(
-                env as *mut _,
-                surface as *mut _,
-            ))
-        };
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::VULKAN);
+        let native_window = NativeWindow::new(env, surface);
+
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::GL);
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface(&native_window) };
         let (adapter, device, queue) =
@@ -64,11 +60,13 @@ struct NativeWindow {
 }
 
 impl NativeWindow {
-    unsafe fn new(window: *mut ndk_sys::ANativeWindow) -> Self {
-        ndk_sys::ANativeWindow_acquire(window);
-        Self {
-            a_native_window: window,
-        }
+    fn new(env: *mut JNIEnv, surface: jobject) -> Self {
+        let a_native_window = unsafe {
+            // 获取与安卓端 surface 对象关联的 ANativeWindow，以便能通过 Rust 与之交互。
+            // 此函数在返回 ANativeWindow 的同时会自动将其引用计数 +1，以防止该对象在安卓端被意外释放。
+            ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface as *mut _)
+        };
+        Self { a_native_window }
     }
 
     fn get_width(&self) -> u32 {

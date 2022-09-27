@@ -37,9 +37,7 @@ fn main() {
                         let _ = std::fs::create_dir_all(&gcc_link_dir);
                         std::fs::write(gcc_link_dir.join("libgcc.a"), "INPUT(-lunwind)")
                             .expect("Failed to write");
-                        let test_dir = "/Users/lijinlei/Rust/android-ndk-rs/target/cargo-apk-temp-extra-link-libraries";
-                        // cargo.arg("-L").arg(gcc_link_dir);
-                        cargo.arg("-L").arg(test_dir);
+                        cargo.arg("-L").arg(gcc_link_dir);
                     }
 
                     if !cargo.status().unwrap().success() {

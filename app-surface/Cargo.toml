@@ -17,8 +17,8 @@ default = []
 [dependencies]
 log = "0.4"
 pollster = "0.2"
-# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "90eb399d" }
-wgpu = { git = "https://github.com/jinleili/wgpu", rev = "5ff54710" }
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "c927e810" }
+# wgpu = { git = "https://github.com/jinleili/wgpu", rev = "5ff54710" }
 # wgpu = { path = "../../../forks/wgpu/wgpu" }
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
@@ -41,6 +41,7 @@ objc-foundation = "*"
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.10.1"
 jni = "0.19"
+# 星号表示不锁定特定版本，在项目构建及运行时始终保持使用最新版本
 ndk-sys = "*"
 raw-window-handle = "0.5"
 
