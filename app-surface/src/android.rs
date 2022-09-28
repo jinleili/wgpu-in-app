@@ -18,7 +18,7 @@ impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = NativeWindow::new(env, surface);
 
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::GL);
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::VULKAN);
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface(&native_window) };
         let (adapter, device, queue) =

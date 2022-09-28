@@ -3,12 +3,16 @@ Integrate wgpu on your existing iOS | Android apps.
 
 `winit`-free mode can useful for integrating wgpu into existing apps to implement some graphics features. 
 
+#### [中文版文档](https://jinleili.github.io/learn-wgpu-zh/integration-and-debugging/)
+
 ## Screenshot
 |![wgpu on iOS](screenshot/on_ios.png)|![wgpu on Android](screenshot/on_android.png)|
 |---|---|
 
 
 ## **iOS**
+[中文版文档: 与 iOS App 集成](https://jinleili.github.io/learn-wgpu-zh/integration-and-debugging/ios/)
+
 ### Add build target
 
 Since iPhone 5 and later are 64-bit devices, `armv7s-apple-ios` and `armv7-apple-ios` are not required.
@@ -20,7 +24,7 @@ rustup target add aarch64-apple-ios
 # Add iOS simulator target
 # Intel CPU Mac
 rustup target add x86_64-apple-ios
-# M1 Mac
+# M1+ Mac
 rustup target add aarch64-apple-ios-sim
 ```
 
@@ -41,6 +45,8 @@ Then, Open `iOS/wgpu_on_iOS.xcodeproj` with Xcode, select `wgpu_phone` scheme ru
 [Sending a boxed trait over FFI](https://users.rust-lang.org/t/sending-a-boxed-trait-over-ffi/21708)
 
 ## **Android**
+[中文版文档: 与 Android App 集成](https://jinleili.github.io/learn-wgpu-zh/integration-and-debugging/android/)
+
 ### Set up Android environment
 
 Assuming your computer already has Android Studio installed, go to `Android Studio` > `Tools` > `SDK Manager` > `Android SDK` > `SDK Tools`. Check the following options for installation and click OK. 
