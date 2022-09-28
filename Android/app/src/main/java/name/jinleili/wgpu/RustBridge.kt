@@ -12,5 +12,4 @@ class RustBridge {
     external fun changeExample(rustObj: Long, idx: Int)
 
     external fun dropWgpuCanvas(rustObj: Long)
-
 }

@@ -9,9 +9,9 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet var metalV: MetalView!
     var wgpuCanvas: OpaquePointer?
+    
     lazy var displayLink: CADisplayLink = {
-        let link = CADisplayLink.init(target: self, selector: #selector(enterFrame))
-        return link
+        CADisplayLink.init(target: self, selector: #selector(enterFrame))
     }()
     
     override func viewDidLoad() {

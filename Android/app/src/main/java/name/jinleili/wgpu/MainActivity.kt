@@ -31,14 +31,12 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = colorResource(id = R.color.white)
-//                    color = colorResource(id = R.color.transparent)
                 ) {
                     SurfaceCard()
                 }
             }
         }
     }
-
 }
 
 var surfaceView: WGPUSurfaceView? = null
@@ -87,9 +85,10 @@ fun SurfaceCard() {
                 val sv = WGPUSurfaceView(context = ctx)
                 surfaceView = sv
                 sv
-            }, modifier = Modifier
+            },
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(screenWidth),
-            )
+        )
     }
 }

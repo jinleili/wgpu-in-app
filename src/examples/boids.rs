@@ -28,6 +28,7 @@ struct SimParams {
     rule3_scale: f32,
     offset: u32,
 }
+#[allow(dead_code)]
 pub struct Boids {
     particle_bind_groups: Vec<wgpu::BindGroup>,
     dynamic_bind_group: wgpu::BindGroup,
@@ -97,7 +98,7 @@ impl Boids {
             label: None,
         });
         let dynamic_bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
-            layout: &&dynamic_bgl,
+            layout: &dynamic_bgl,
             entries: &[wgpu::BindGroupEntry {
                 binding: 0,
                 resource: wgpu::BindingResource::Buffer(wgpu::BufferBinding {
@@ -293,32 +294,28 @@ impl Example for Boids {
                 // compute pass
                 let mut cpass = command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
                     label: None,
-                    // ty: wgpu::ComputePassType::Concurrent,
+                    ..Default::default()
                 });
                 cpass.set_pipeline(&self.compute_pipeline);
                 cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
-                // for i in 0..5 {
-                //     cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * i]);
-                //     cpass.dispatch_workgroups(5, 1, 1);
-                // }
-                cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * 0]);
+                cpass.set_bind_group(1, &self.dynamic_bind_group, &[0]);
                 cpass.dispatch_workgroups(5, 1, 1);
-                // cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * 1]);
-                // cpass.dispatch_workgroups(5, 1, 1);
+                cpass.set_bind_group(1, &self.dynamic_bind_group, &[256]);
+                cpass.dispatch_workgroups(5, 1, 1);
             }
-            {
-                let mut cpass = command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-                    label: None,
-                    // ty: wgpu::ComputePassType::Concurrent,
-                });
-                cpass.set_pipeline(&self.compute_pipeline);
-                cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
+            // {
+            //     let mut cpass = command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
+            //         label: None,
+            //         ty: wgpu::ComputePassType::Concurrent,
+            //     });
+            //     cpass.set_pipeline(&self.compute_pipeline);
+            //     cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
 
-                for i in 1..5 {
-                    cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * i]);
-                    cpass.dispatch_workgroups(5, 1, 1);
-                }
-            }
+            //     for i in 1..5 {
+            //         cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * i]);
+            //         cpass.dispatch_workgroups(5, 1, 1);
+            //     }
+            // }
             command_encoder.pop_debug_group();
 
             command_encoder.push_debug_group("render boids");

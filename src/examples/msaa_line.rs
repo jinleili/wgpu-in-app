@@ -84,15 +84,14 @@ impl MSAALine {
         }
 
         let mut vertex_buffer_list: Vec<wgpu::Buffer> = vec![];
-        for i in 0..list_count {
+        for item_data in vertex_data_list.iter().take(list_count) {
             let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
                 label: Some("Vertex Buffer"),
-                contents: bytemuck::cast_slice(&vertex_data_list[i]),
+                contents: bytemuck::cast_slice(item_data),
                 usage: wgpu::BufferUsages::VERTEX,
             });
             vertex_buffer_list.push(vertex_buffer);
         }
-
         let vertex_count = max as u32 * 2;
 
         let bundle = Self::create_bundle(

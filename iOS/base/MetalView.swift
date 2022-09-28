@@ -1,7 +1,7 @@
 //
 //  MetalView.swift
 //
-//  Created by grenlight on 2018/11/23.
+//  Created by LiJinlei on 2018/11/23.
 //
 
 import UIKit
@@ -27,11 +27,7 @@ class MetalView: UIView {
         layer.framebufferOnly = true
         // nativeScale is real physical pixel scale
         // https://tomisacat.xyz/tech/2017/06/17/scale-nativescale-contentsscale.html
-        layer.removeAllAnimations()
         self.contentScaleFactor = UIScreen.main.nativeScale
-        
-        // 支持 HDR
-        // opt-in EDR
     }
 }
 
