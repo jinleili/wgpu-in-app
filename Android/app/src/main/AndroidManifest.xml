@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="name.jinleili.wgpu">
+<!--    GPU apps must include android.permission.INTERNET -->
+<!--    in the app’s AndroidManifest.xml to enable API tracing and GPU metrics.-->
+    <uses-permission android:name="android.permission.INTERNET" />
+<!--    Need storage read/write permission to enable Snapshot GPU Frame Capture mode-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"

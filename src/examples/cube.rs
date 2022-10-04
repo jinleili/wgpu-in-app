@@ -359,6 +359,7 @@ impl Example for Cube {
                             b: 0.3,
                             a: 1.0,
                         }),
+                        // load: wgpu::LoadOp::Load,
                         store: true,
                     },
                 })],
