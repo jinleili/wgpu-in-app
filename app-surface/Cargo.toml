@@ -2,10 +2,10 @@
 name = "app-surface"
 authors = ["jinleili"]
 edition = "2021"
-version = "0.1.0"
+version = "0.1.1"
 
 [lib]
-crate-type = ["rlib"]
+crate-type = ["rlib", "cdylib"]
 
 [profile.release]
 strip = "all"
@@ -46,8 +46,12 @@ ndk-sys = "*"
 raw-window-handle = "0.5"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "=0.3.60", features = [
+    "Document",
+    "Window",
+    "Location"
+] }
+wasm-bindgen = "0.2.83"
 # The `wasm-bindgen` crate provides the bare minimum functionality needed
 # to interact with JavaScript.
-wasm-bindgen = "0.2.80"
-web-sys = { version = "=0.3.57", optional = true }
 wee_alloc = { version = "0.4.5", optional = true }
