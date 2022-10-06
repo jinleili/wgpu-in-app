@@ -11,8 +11,7 @@ pub struct AppSurface {
 impl AppSurface {
     pub fn new(view: winit::window::Window) -> Self {
         let scale_factor = view.scale_factor();
-        let backend =
-            wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::PRIMARY);
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::all());
         let instance = wgpu::Instance::new(backend);
         let (physical, surface) = unsafe { (view.inner_size(), instance.create_surface(&view)) };
         let (adapter, device, queue) =
