@@ -5,7 +5,6 @@ pub struct AppSurface {
     pub scale_factor: f32,
     pub sdq: crate::SurfaceDeviceQueue,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
-    pub temporary_directory: &'static str,
     pub library_directory: &'static str,
 }
 
@@ -40,7 +39,6 @@ impl AppSurface {
                 queue: Arc::new(queue),
             },
             callback_to_app: None,
-            temporary_directory: "",
             library_directory: "",
         }
     }

@@ -8,7 +8,6 @@ version = "0.1.0"
 crate-type = ["rlib"]
 
 [profile.release]
-# Rust 1.59+
 strip = "all"
 
 [features]
@@ -17,7 +16,8 @@ default = []
 [dependencies]
 log = "0.4"
 pollster = "0.2"
-wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "c927e810" }
+wgpu = "0.14"
+# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "c927e810" }
 # wgpu = { git = "https://github.com/jinleili/wgpu", rev = "5ff54710" }
 # wgpu = { path = "../../../forks/wgpu/wgpu" }
 
