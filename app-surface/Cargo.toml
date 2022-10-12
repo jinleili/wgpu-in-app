@@ -2,56 +2,50 @@
 name = "app-surface"
 authors = ["jinleili"]
 edition = "2021"
-version = "0.1.1"
+version = "0.1.3"
+rust-version = "1.64"
 
 [lib]
 crate-type = ["rlib", "cdylib"]
-
-[profile.release]
-strip = "all"
 
 [features]
 default = []
 
 [dependencies]
-log = "0.4"
-pollster = "0.2"
-wgpu = "0.14"
-# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "c927e810" }
-# wgpu = { git = "https://github.com/jinleili/wgpu", rev = "5ff54710" }
-# wgpu = { path = "../../../forks/wgpu/wgpu" }
+log.workspace = true
+pollster.workspace = true
+wgpu.workspace = true
 
 [target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
-async-executor = "1.4.1"
-winit = "0.27.1"
+async-executor.workspace = true
+winit.workspace = true
 
 [target.'cfg(target_os = "macos")'.dependencies]
-libc = "*"
-objc = "0.2.7"
-raw-window-handle = "0.5"
+libc.workspace = true
+objc.workspace = true
+raw-window-handle.workspace = true
 
 [target.'cfg(target_os = "ios")'.dependencies]
-core-graphics = "*"
-env_logger = "0.9"
-lazy_static = "1.4"
-libc = "*"
-objc = "0.2.7"
-objc-foundation = "*"
+core-graphics.workspace = true
+env_logger.workspace = true
+lazy_static.workspace = true
+libc.workspace = true
+objc.workspace = true
+objc-foundation.workspace = true
 
 [target.'cfg(target_os = "android")'.dependencies]
-android_logger = "0.10.1"
-jni = "0.19"
-# 星号表示不锁定特定版本，在项目构建及运行时始终保持使用最新版本
-ndk-sys = "*"
-raw-window-handle = "0.5"
+android_logger.workspace = true
+jni.workspace = true
+ndk-sys.workspace = true
+raw-window-handle.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-web-sys = { version = "=0.3.60", features = [
+web-sys = { workspace = true, features = [
     "Document",
     "Window",
     "Location"
 ] }
-wasm-bindgen = "0.2.83"
+wasm-bindgen.workspace = true
 # The `wasm-bindgen` crate provides the bare minimum functionality needed
 # to interact with JavaScript.
-wee_alloc = { version = "0.4.5", optional = true }
+wee_alloc = { workspace = true, optional = true }
