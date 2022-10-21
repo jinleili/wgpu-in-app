@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD0CB7D827A402180041811B /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4699426EB3079008B1C7B /* libresolv.tbd */; };
 		AD0CB7DA27A402490041811B /* libwgpu_on_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD0CB7D927A402370041811B /* libwgpu_on_app.a */; };
 		AD0CB7DB27A4036B0041811B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */; };
 		AD0CB7DC27A4036B0041811B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FF026EB1B90008A6AEE /* ViewController.swift */; };
@@ -22,7 +21,6 @@
 		AD4B1FF926EB1B91008A6AEE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AD4B1FF726EB1B91008A6AEE /* LaunchScreen.storyboard */; };
 		AD4B200126EB1D32008A6AEE /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B200026EB1D31008A6AEE /* MetalView.swift */; };
 		ADA4046D279ABF08005BF0DB /* libwgpu_on_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */; };
-		ADA4699526EB30A5008B1C7B /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ADA4699426EB3079008B1C7B /* libresolv.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,7 +28,6 @@
 		AD0CB7D327A402060041811B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD0CB7D927A402370041811B /* libwgpu_on_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_app.a; path = "../target/aarch64-apple-ios-sim/debug/libwgpu_on_app.a"; sourceTree = "<group>"; };
 		AD20D48A2863001E00E2C98C /* wgpu_phone.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wgpu_phone.entitlements; sourceTree = "<group>"; };
-		AD37233628E17F62001EF275 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS9.0.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		AD37233828E17FAF001EF275 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS9.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		AD4B1FE926EB1B90008A6AEE /* wgpu_phone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_phone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -40,13 +37,9 @@
 		AD4B1FF826EB1B91008A6AEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AD4B1FFA26EB1B91008A6AEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD4B200026EB1D31008A6AEE /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
-		AD59976927B36E6A00C1D01B /* libwgpu_example.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_example.a; path = "../../../forks/wgpu-example/target/aarch64-apple-ios/debug/libwgpu_example.a"; sourceTree = "<group>"; };
-		AD5ED90427D24621001C5EEC /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS15.2.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_app.a; path = "../target/aarch64-apple-ios/debug/libwgpu_on_app.a"; sourceTree = "<group>"; };
 		ADA4699026EB27CB008B1C7B /* libwgpu_on_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libwgpu_on_app.h; sourceTree = "<group>"; };
 		ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wgpu_test-Bridging-Header.h"; sourceTree = "<group>"; };
-		ADA4699426EB3079008B1C7B /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
-		ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_on_ios.a; path = "../target/aarch64-apple-ios/debug/libwgpu_on_ios.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +47,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD0CB7D827A402180041811B /* libresolv.tbd in Frameworks */,
 				AD0CB7DA27A402490041811B /* libwgpu_on_app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,7 +55,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADA4699526EB30A5008B1C7B /* libresolv.tbd in Frameworks */,
 				ADA4046D279ABF08005BF0DB /* libwgpu_on_app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -127,13 +118,8 @@
 			isa = PBXGroup;
 			children = (
 				AD37233828E17FAF001EF275 /* UIKit.framework */,
-				AD5ED90427D24621001C5EEC /* libresolv.tbd */,
-				AD37233628E17F62001EF275 /* libresolv.tbd */,
-				AD59976927B36E6A00C1D01B /* libwgpu_example.a */,
 				ADA4046C279ABEE7005BF0DB /* libwgpu_on_app.a */,
 				AD0CB7D927A402370041811B /* libwgpu_on_app.a */,
-				ADA4699626EB311F008B1C7B /* libwgpu_on_ios.a */,
-				ADA4699426EB3079008B1C7B /* libresolv.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -481,11 +467,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -519,11 +501,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

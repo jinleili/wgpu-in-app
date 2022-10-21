@@ -14,6 +14,7 @@ pub mod fs;
 pub struct SurfaceDeviceQueue {
     pub surface: wgpu::Surface,
     pub config: wgpu::SurfaceConfiguration,
+    pub adapter: wgpu::Adapter,
     pub device: Arc<wgpu::Device>,
     pub queue: Arc<wgpu::Queue>,
 }

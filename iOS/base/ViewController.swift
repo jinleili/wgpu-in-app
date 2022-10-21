@@ -25,8 +25,8 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         self.view.backgroundColor = .white
         if wgpuCanvas == nil {
-            let viewPointer = UnsafeMutableRawPointer(Unmanaged.passRetained(self.metalV).toOpaque())
-            let metalLayer = UnsafeMutableRawPointer(Unmanaged.passRetained(self.metalV.layer).toOpaque())
+            let viewPointer = Unmanaged.passUnretained(self.metalV).toOpaque()
+            let metalLayer = Unmanaged.passUnretained(self.metalV.layer).toOpaque()
             let maximumFrames = UIScreen.main.maximumFramesPerSecond
             
             let viewObj = ios_view_obj(view: viewPointer, metal_layer: metalLayer,maximum_frames: Int32(maximumFrames), callback_to_swift: callback_to_swift)

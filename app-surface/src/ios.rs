@@ -41,7 +41,7 @@ impl AppSurface {
         let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(wgpu::Backends::all);
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
-        let (_adapter, device, queue) =
+        let (adapter, device, queue) =
             pollster::block_on(crate::request_device(&instance, backend, &surface));
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
@@ -58,6 +58,7 @@ impl AppSurface {
             sdq: crate::SurfaceDeviceQueue {
                 surface: surface,
                 config,
+                adapter,
                 device: Arc::new(device),
                 queue: Arc::new(queue),
             },

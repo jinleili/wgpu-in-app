@@ -34,6 +34,7 @@ impl AppSurface {
             sdq: crate::SurfaceDeviceQueue {
                 surface: surface,
                 config,
+                adapter,
                 device: Arc::new(device),
                 queue: Arc::new(queue),
             },
