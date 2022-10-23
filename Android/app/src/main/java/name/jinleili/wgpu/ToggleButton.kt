@@ -46,7 +46,7 @@ fun ToggleButton(
                     .toggleable(
                         value = isSelected,
                         enabled = true,
-                        onValueChange = { selected ->
+                        onValueChange = { _ ->
 //                            if (selected) {
                                 onToggleChange(toggleState)
 //                            }
