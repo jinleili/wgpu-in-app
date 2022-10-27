@@ -90,7 +90,7 @@ async fn request_device(
     let adapter_info = adapter.get_info();
     println!("Using {} ({:?})", adapter_info.name, adapter_info.backend);
     let base_dir = std::env::var("CARGO_MANIFEST_DIR");
-    let trace_path = if let Ok(base_dir) = base_dir {
+    let _trace_path = if let Ok(base_dir) = base_dir {
         Some(std::path::PathBuf::from(&base_dir).join("WGPU_TRACE_ERROR"))
     } else {
         None
@@ -102,11 +102,7 @@ async fn request_device(
                 features: adapter.features(),
                 limits: adapter.limits(),
             },
-            if trace_path.is_some() {
-                Some(trace_path.as_ref().unwrap().as_path())
-            } else {
-                None
-            },
+            None,
         )
         .await;
     match res {

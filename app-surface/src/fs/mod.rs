@@ -1,5 +1,3 @@
-use std::env;
-use std::fs;
 use std::path::PathBuf;
 
 #[cfg_attr(target_os = "ios", path = "ios_fs.rs")]
@@ -25,6 +23,9 @@ pub fn application_root_dir() -> String {
 
 #[cfg(not(target_arch = "wasm32"))]
 pub fn application_root_dir() -> String {
+    use std::env;
+    use std::fs;
+
     match env::var("PROFILE") {
         Ok(_) => String::from(env!("CARGO_MANIFEST_DIR")),
         Err(_) => {
