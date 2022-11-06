@@ -21,8 +21,6 @@ pub fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject, idx: jint
 pub fn enterFrame(_env: *mut JNIEnv, _: JClass, obj: jlong) {
     let obj = unsafe { &mut *(obj as *mut WgpuCanvas) };
     obj.enter_frame();
-    // 将 obj 对象的内存管理权重新转交给调用方
-    Box::into_raw(Box::new(obj));
 }
 
 #[no_mangle]

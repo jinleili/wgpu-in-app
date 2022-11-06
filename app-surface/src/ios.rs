@@ -49,7 +49,7 @@ impl AppSurface {
             width: physical.0,
             height: physical.1,
             present_mode: wgpu::PresentMode::Fifo,
-            alpha_mode: wgpu::CompositeAlphaMode::Opaque,
+            alpha_mode: wgpu::CompositeAlphaMode::PostMultiplied,
         };
         surface.configure(&device, &config);
         AppSurface {

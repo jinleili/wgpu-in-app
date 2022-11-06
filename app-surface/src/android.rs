@@ -8,7 +8,7 @@ use raw_window_handle::{
 use std::sync::Arc;
 
 pub struct AppSurface {
-    native_window: NativeWindow,
+    pub native_window: NativeWindow,
     pub scale_factor: f32,
     pub sdq: crate::SurfaceDeviceQueue,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
@@ -56,7 +56,7 @@ impl AppSurface {
     }
 }
 
-struct NativeWindow {
+pub struct NativeWindow {
     a_native_window: *mut ndk_sys::ANativeWindow,
 }
 
@@ -68,6 +68,10 @@ impl NativeWindow {
             ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface as *mut _)
         };
         Self { a_native_window }
+    }
+
+    pub fn get_raw_window(&self) -> *mut ndk_sys::ANativeWindow {
+        self.a_native_window
     }
 
     fn get_width(&self) -> u32 {
