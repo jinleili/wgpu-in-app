@@ -23,6 +23,8 @@ pub struct AppSurface {
     pub sdq: crate::SurfaceDeviceQueue,
     pub maximum_frames: i32,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
+    pub temporary_directory: &'static str,
+    pub library_directory: &'static str,
 }
 
 unsafe impl Sync for AppSurface {}
@@ -38,14 +40,19 @@ impl AppSurface {
             (s.size.width as f32 * scale_factor) as u32,
             (s.size.height as f32 * scale_factor) as u32,
         );
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(wgpu::Backends::all);
+        let backend = wgpu::Backends::METAL;
         let instance = wgpu::Instance::new(backend);
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
         let (adapter, device, queue) =
             pollster::block_on(crate::request_device(&instance, backend, &surface));
+        let caps = surface.get_capabilities(&adapter);
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            format: wgpu::TextureFormat::Bgra8UnormSrgb,
+            // CAMatalLayer's pixel format default value is MTLPixelFormatBGRA8Unorm.
+            // https://developer.apple.com/documentation/quartzcore/cametallayer/1478155-pixelformat?language=objc
+            // format: wgpu::TextureFormat::Bgra8Unorm,
+            // format: surface.get_supported_formats(&adapter)[0],
+            format: caps.formats[0],
             width: physical.0,
             height: physical.1,
             present_mode: wgpu::PresentMode::Fifo,
@@ -64,6 +71,8 @@ impl AppSurface {
             },
             callback_to_app: Some(obj.callback_to_swift),
             maximum_frames: obj.maximum_frames,
+            temporary_directory: "",
+            library_directory: "",
         }
     }
 

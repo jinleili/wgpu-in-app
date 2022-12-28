@@ -4,7 +4,7 @@ import android.view.Surface
 
 class RustBridge {
     init {
-        System.loadLibrary("wgpu_on_app")
+        System.loadLibrary("wgpu_in_app")
     }
 
     external fun createWgpuCanvas(surface: Surface, idx: Int): Long

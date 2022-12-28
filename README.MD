@@ -1,41 +1,28 @@
-# wgpu on App
-Integrate wgpu on your existing iOS | Android apps. 
+# wgpu in App
+Integrate wgpu into your existing iOS | Android apps. 
 
-`winit`-free mode can useful for integrating wgpu into existing apps to implement some graphics features. 
+wgpu does not depend on any window program, so it does not provide window creation and management functions. Only when creating a window-based `Surface`, an argument that implements the [raw-window-handle](https://github.com/rust-windowing/raw-window-handle) abstract interface may be needed (*may be needed* because on iOS/macOS, instance of `Surface` can be created directly by `CAMetalLayer`). The `winit` used by the wgpu examples is a cross-platform window creation and management crate that implements the raw-window-handle abstract interface. It will take over the window management and events loop of the entire app, there is no doubt that for game apps, the combination of wgpu + winit is very suitable.
+
+However, a large number of non-game apps also need to use graphics APIs (such as charts, image filters, etc.). These apps may require a large number of system components, as well as the ability to freely control various input devices (e.g., stylus, motion sensors). So, it would be very useful to integrate wgpu into these apps without using third-party window management libraries.
 
 #### [中文版文档](https://jinleili.github.io/learn-wgpu-zh/integration-and-debugging/)
 
 ## Screenshot
-|![wgpu on iOS](screenshot/on_ios.png)|![wgpu on Android](screenshot/on_android.png)|
+|![wgpu in iOS](screenshot/on_ios.png)|![wgpu in Android](screenshot/on_android.png)|
 |---|---|
 
-
 ## **iOS**
-[中文版文档: 与 iOS App 集成](https://jinleili.github.io/learn-wgpu-zh/integration-and-debugging/ios/)
-
-### Add build target
-
-Since iPhone 5 and later are 64-bit devices, `armv7s-apple-ios` and `armv7-apple-ios` are not required.
 
 ```sh
 # Add iOS device target
+# Since iPhone 5 and later are 64-bit devices, `armv7s-apple-ios` and `armv7-apple-ios` are not required.
 rustup target add aarch64-apple-ios 
 
-# Add iOS simulator target
-# Intel CPU Mac
-rustup target add x86_64-apple-ios
-# M1+ Mac
-rustup target add aarch64-apple-ios-sim
+# Build for iOS device
+sh ./ios_lib_build.sh 
 ```
 
-### Build and run
-Build for iOS device and simulator
-```sh
-# Use Metal backend
-cargo build --target aarch64-apple-ios && cargo build --target <aarch64-apple-ios-sim or x86_64-apple-ios>
-```
-
-Then, Open `iOS/wgpu_on_iOS.xcodeproj` with Xcode, select `wgpu_phone` scheme run on iOS device, `wgpu_simulator` scheme run on simulator. 
+Then, Open `iOS/wgpu_in_iOS_App.xcodeproj` with Xcode an run on iOS device and/or M1+ Mac (Designed for iPad). 
 
 ### About Rust and Swift Interaction
 [Passing Primitive Data Between Rust and iOS](https://bignerdranch.com/blog/building-an-ios-app-in-rust-part-2-passing-primitive-data-between-rust-and-ios/)
@@ -45,7 +32,6 @@ Then, Open `iOS/wgpu_on_iOS.xcodeproj` with Xcode, select `wgpu_phone` scheme ru
 [Sending a boxed trait over FFI](https://users.rust-lang.org/t/sending-a-boxed-trait-over-ffi/21708)
 
 ## **Android**
-[中文版文档: 与 Android App 集成](https://jinleili.github.io/learn-wgpu-zh/integration-and-debugging/android/)
 
 ### Set up Android environment
 
@@ -63,13 +49,6 @@ export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 export NDK_HOME=$ANDROID_SDK_ROOT/ndk/23.1.7779620
 ```
 
-
-### Add build targets
-
-Since simulator and virtual devices only support GLES, `x86_64-linux-android` and `i686-linux-android` targets are not necessary
-```sh
-rustup target add aarch64-linux-android armv7-linux-androideabi
-```
 ### Install cargo so subcommand
 ```sh
 # from crates.io
@@ -80,15 +59,12 @@ cargo install --path cargo-so
 
 ### Build
 ```sh
-cd wgpu-on-app
-# currently, multi-target build only useable on the nightly channel
-cargo so b --lib --target aarch64-linux-android --release
-cargo so b --lib --target armv7-linux-androideabi --release
+# Add build targets
+# Since simulator and virtual devices only support GLES, `x86_64-linux-android` and `i686-linux-android` targets are not necessary
+rustup target add aarch64-linux-android armv7-linux-androideabi
 
-# copy .so files to android project jniLibs folder
-cd ../
-cp target/aarch64-linux-android/release/libwgpu_on_app.so android/app/libs/arm64-v8a/libwgpu_on_app.so
-cp target/armv7-linux-androideabi/release/libwgpu_on_app.so android/app/libs/armeabi-v7a/libwgpu_on_app.so
+# Build
+sh ./android_lib_build.sh 
 ```
 
 ## **Desktop**

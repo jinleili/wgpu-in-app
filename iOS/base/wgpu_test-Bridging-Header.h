@@ -7,6 +7,6 @@
 #ifndef wgpu_test_Bridging_Header_h
 #define wgpu_test_Bridging_Header_h
 
-#import "libwgpu_on_app.h"
+#import "libwgpu_in_app.h"
 
 #endif /* wgpu_test_Bridging_Header_h */

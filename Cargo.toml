@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
-members = ["wgpu-on-app", "app-surface", "cargo-so"]
-default-members = ["wgpu-on-app"]
+members = ["wgpu-in-app", "app-surface", "cargo-so"]
+default-members = ["wgpu-in-app"]
 
 [workspace.dependencies]
 bytemuck = { version = "1.9.1", features = ["derive"] }
@@ -11,10 +11,18 @@ log = "0.4"
 noise = { version = "0.7", default-features = false }
 pollster = "0.2"
 rand = { version = "0.7.2" }
-wgpu = "0.14"
-# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "c927e810" }
+# wgpu = "0.14"
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "6147c918" }
+hal = { git = "https://github.com/gfx-rs/wgpu", package = "wgpu-hal", rev = "6147c918" }
+
 # wgpu = { git = "https://github.com/jinleili/wgpu", rev = "5ff54710" }
+
 # wgpu = { path = "../../forks/wgpu/wgpu" }
+# hal = { package = "wgpu-hal", path = "../../forks/wgpu/wgpu-hal" }
+
+# wgpu = { path = "../../forks/wgpu-i509VCB/wgpu" }
+# hal = { package = "wgpu-hal", path = "../../forks/wgpu-i509VCB/wgpu-hal" }
+
 async-executor = "1.0"
 winit = "0.27.1"
 raw-window-handle = "0.5"
@@ -32,6 +40,7 @@ android_logger = "0.10.1"
 jni = "0.19"
 jni_fn = "0.1"
 ndk-sys = "*"
+ash = "0.37"
 
 # wasm target
 web-sys = "0.3.60"

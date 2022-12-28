@@ -66,7 +66,7 @@ fn main() {
             for target in build_targets {
                 let triple = target.rust_triple();
                 // setting ar, linker value
-                let mut cargo = cargo_ndk(&ndk, target, 24, cmd.target_dir()).unwrap();
+                let mut cargo = cargo_ndk(&ndk, target, 26, cmd.target_dir()).unwrap();
                 cargo.arg("rustc");
                 if cmd.target().is_none() {
                     cargo.arg("--target").arg(triple);

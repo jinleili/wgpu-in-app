@@ -22,7 +22,6 @@ class MetalView: UIView {
         guard let layer = self.layer as? CAMetalLayer else {
             return
         }
-        layer.pixelFormat = .rgba16Float
         layer.presentsWithTransaction = false
         layer.framebufferOnly = true
         // nativeScale is real physical pixel scale

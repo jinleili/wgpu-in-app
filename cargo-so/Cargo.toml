@@ -2,7 +2,7 @@
 name = "cargo-so"
 authors = ["jinleili"]
 description = "Helps cargo build Android .so lib files"
-repository = "https://github.com/jinleili/wgpu-on-app"
+repository = "https://github.com/jinleili/wgpu-in-app"
 readme = "./README.MD"
 keywords = ["android", "so", "ndk", "jni"]
 license = "MIT OR Apache-2.0"
