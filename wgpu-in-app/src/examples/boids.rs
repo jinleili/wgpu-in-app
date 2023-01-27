@@ -44,7 +44,6 @@ impl Boids {
     pub fn new(app_surface: &AppSurface) -> Self {
         let config = &app_surface.config;
         let device = &app_surface.device;
-        log::info!("boids 0");
 
         let compute_shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,

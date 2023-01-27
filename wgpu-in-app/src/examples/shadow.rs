@@ -204,6 +204,7 @@ impl Shadow {
             format: Self::DEPTH_FORMAT,
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             label: None,
+            view_formats: &[],
         });
 
         depth_texture.create_view(&wgpu::TextureViewDescriptor::default())
@@ -383,6 +384,7 @@ impl Shadow {
             format: Self::SHADOW_FORMAT,
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::TEXTURE_BINDING,
             label: None,
+            view_formats: &[],
         });
         let shadow_view = shadow_texture.create_view(&wgpu::TextureViewDescriptor::default());
 

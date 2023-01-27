@@ -21,8 +21,12 @@ impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = NativeWindow::new(env, surface);
 
-        let backend = wgpu::Backends::VULKAN;
-        let instance = wgpu::Instance::new(backend);
+        // let backend = wgpu::Backends::VULKAN;
+        let backend = wgpu::Backends::PRIMARY;
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+            backends: backend,
+            ..Default::default()
+        });
         if let Some(instance) = unsafe { instance.as_hal::<hal::api::Vulkan>() } {
             // VK_VERSION_1_1
             if instance.shared_instance().driver_api_version() < 4198400 {
@@ -49,6 +53,7 @@ impl AppSurface {
             height: native_window.get_height(),
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode: caps.alpha_modes[0],
+            view_formats: vec![],
         };
         surface.configure(&device, &config);
 

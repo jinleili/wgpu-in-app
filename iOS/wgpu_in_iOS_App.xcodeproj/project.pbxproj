@@ -321,7 +321,7 @@
 				CODE_SIGN_ENTITLEMENTS = wgpu_phone/wgpu_phone.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = PLF2KH8XL4;
+				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_phone/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
@@ -355,7 +355,7 @@
 				CODE_SIGN_ENTITLEMENTS = wgpu_phone/wgpu_phone.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = PLF2KH8XL4;
+				DEVELOPMENT_TEAM = P3HQ9GDFCW;
 				INFOPLIST_FILE = wgpu_phone/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;

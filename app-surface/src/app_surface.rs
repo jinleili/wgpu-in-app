@@ -13,8 +13,12 @@ pub struct AppSurface {
 impl AppSurface {
     pub async fn new(view: winit::window::Window) -> Self {
         let scale_factor = view.scale_factor();
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::all());
-        let instance = wgpu::Instance::new(backend);
+        let backend =
+            wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::PRIMARY);
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+            backends: backend,
+            ..Default::default()
+        });
         let physical = view.inner_size();
         let surface = unsafe { instance.create_surface(&view).unwrap() };
         let (adapter, device, queue) = crate::request_device(&instance, backend, &surface).await;
@@ -41,6 +45,7 @@ impl AppSurface {
             height: physical.height as u32,
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode,
+            view_formats: vec![],
         };
         surface.configure(&device, &config);
 

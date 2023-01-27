@@ -41,6 +41,7 @@ impl HDRImageView {
                 },
                 usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
                 label: None,
+                view_formats: &[],
             },
             &astc_data[16..],
         );

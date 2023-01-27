@@ -41,7 +41,10 @@ impl AppSurface {
             (s.size.height as f32 * scale_factor) as u32,
         );
         let backend = wgpu::Backends::METAL;
-        let instance = wgpu::Instance::new(backend);
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+            backends: backend,
+            ..Default::default()
+        });
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
         let (adapter, device, queue) =
             pollster::block_on(crate::request_device(&instance, backend, &surface));
@@ -57,6 +60,7 @@ impl AppSurface {
             height: physical.1,
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode: wgpu::CompositeAlphaMode::PostMultiplied,
+            view_formats: vec![],
         };
         surface.configure(&device, &config);
         AppSurface {

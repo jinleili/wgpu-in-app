@@ -194,6 +194,7 @@ impl MSAALine {
             format: config.format,
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             label: None,
+            view_formats: &[],
         };
 
         device
