@@ -5,7 +5,7 @@ mod touch;
 pub use touch::*;
 
 #[cfg_attr(target_os = "ios", path = "ios.rs")]
-#[cfg_attr(target_os = "android", path = "android/mod.rs")]
+#[cfg_attr(target_os = "android", path = "android.rs")]
 mod app_surface;
 pub use app_surface::*;
 

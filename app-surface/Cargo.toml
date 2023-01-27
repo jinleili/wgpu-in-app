@@ -38,7 +38,7 @@ android_logger.workspace = true
 jni.workspace = true
 ndk-sys.workspace = true
 raw-window-handle.workspace = true
-hal = { workspace = true, features = ["renderdoc", "vulkan"] }
+# hal = { workspace = true, features = ["renderdoc", "vulkan"] }
 ash.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

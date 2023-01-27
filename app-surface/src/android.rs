@@ -7,8 +7,6 @@ use raw_window_handle::{
 };
 use std::sync::Arc;
 
-mod vk_extension;
-
 pub struct AppSurface {
     pub native_window: NativeWindow,
     pub scale_factor: f32,
@@ -21,27 +19,14 @@ impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = NativeWindow::new(env, surface);
 
-        // let backend = wgpu::Backends::VULKAN;
-        let backend = wgpu::Backends::PRIMARY;
+        let backend = wgpu::Backends::VULKAN;
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends: backend,
             ..Default::default()
         });
-        if let Some(instance) = unsafe { instance.as_hal::<hal::api::Vulkan>() } {
-            // VK_VERSION_1_1
-            if instance.shared_instance().driver_api_version() < 4198400 {
-                panic!("Vulkan 1.1 is required.")
-            }
-        }
         let surface = unsafe { instance.create_surface(&native_window).unwrap() };
         let (adapter, device, queue) =
-            pollster::block_on(vk_extension::request_device(&instance, backend, &surface));
-
-        // let backend = wgpu::Backends::GL;
-        // let instance = wgpu::Instance::new(backend);
-        // let surface = unsafe { instance.create_surface(&native_window).unwrap() };
-        // let (adapter, device, queue) =
-        //     pollster::block_on(crate::request_device(&instance, backend, &surface));
+            pollster::block_on(crate::request_device(&instance, backend, &surface));
 
         let caps = surface.get_capabilities(&adapter);
 
