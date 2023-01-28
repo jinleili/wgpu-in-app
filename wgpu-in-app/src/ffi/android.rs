@@ -10,6 +10,7 @@ use log::{info, Level};
 #[no_mangle]
 #[jni_fn("name.jinleili.wgpu.RustBridge")]
 pub fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject, idx: jint) -> jlong {
+    log_panics::init();
     android_logger::init_once(Config::default().with_min_level(Level::Info));
     let canvas = WgpuCanvas::new(AppSurface::new(env as *mut _, surface), idx as i32);
     info!("WgpuCanvas created!");

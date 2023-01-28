@@ -26,7 +26,7 @@ fn main() {
     let window = builder.build(&events_loop).unwrap();
 
     let app_view = pollster::block_on(AppSurface::new(window));
-    let mut canvas = WgpuCanvas::new(app_view, 3);
+    let mut canvas = WgpuCanvas::new(app_view, 0);
 
     let mut last_update_inst = Instant::now();
     let target_frametime = Duration::from_secs_f64(1.0 / 60.0);
