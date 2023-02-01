@@ -13,11 +13,11 @@ pub struct AppSurface {
 impl AppSurface {
     pub async fn new(view: winit::window::Window) -> Self {
         let scale_factor = view.scale_factor();
-        let backend =
-            wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::PRIMARY);
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::all());
+        let dx12_shader_compiler = wgpu::util::dx12_shader_compiler_from_env().unwrap_or_default();
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends: backend,
-            ..Default::default()
+            dx12_shader_compiler,
         });
         let physical = view.inner_size();
         let surface = unsafe { instance.create_surface(&view).unwrap() };
@@ -40,7 +40,7 @@ impl AppSurface {
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            format: caps.formats[0],
+            format: caps.formats[0].add_srgb_suffix(),
             width: physical.width as u32,
             height: physical.height as u32,
             present_mode: wgpu::PresentMode::Fifo,
