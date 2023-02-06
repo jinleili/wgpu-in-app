@@ -10,8 +10,8 @@ android {
         applicationId "name.jinleili.wgpu"
 //        Android 7.1.1, API 25
 //        Android 9.0, API 28
-        minSdk 27
-        targetSdk 32
+        minSdk 28
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -54,6 +54,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'name.jinleili.wgpu'
 }
 
 dependencies {
