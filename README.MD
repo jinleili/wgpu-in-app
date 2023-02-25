@@ -19,7 +19,7 @@ However, a large number of non-game apps also need to use graphics APIs (such as
 rustup target add aarch64-apple-ios 
 
 # Build for iOS device
-sh ./ios_lib_build.sh 
+sh ./ios_lib_build.sh --release
 ```
 
 Then, Open `iOS/wgpu_in_iOS_App.xcodeproj` with Xcode an run on iOS device and/or M1+ Mac (Designed for iPad). 
@@ -64,7 +64,7 @@ cargo install --path cargo-so
 rustup target add aarch64-linux-android armv7-linux-androideabi
 
 # Build
-sh ./android_lib_build.sh 
+sh ./android_lib_build.sh --release
 ```
 
 ## **Desktop**

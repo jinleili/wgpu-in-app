@@ -53,10 +53,14 @@ fn main() {
                 spawner.run_until_stalled();
             }
             Event::WindowEvent {
-                event: WindowEvent::Resized(_size),
+                event: WindowEvent::Resized(size),
                 ..
             } => {
-                canvas.resize();
+                if size.width == 0 || size.height == 0 {
+                    println!("Window minimized!");
+                } else {
+                    canvas.resize();
+                }
             }
             Event::WindowEvent { event, .. } => match event {
                 WindowEvent::KeyboardInput {
