@@ -25,4 +25,8 @@ case ${RELEASE_MODE} in
     *) : ${LIB_FOLDER:=debug} ;;
 esac
 
-cp target/${TARGET}/debug/libwgpu_in_app.a iOS/libs/${LIB_FOLDER}/libwgpu_in_app.a
+if [ ! -d "iOS/libs/${LIB_FOLDER}/" ]; then
+  mkdir -p "iOS/libs/${LIB_FOLDER}"
+fi
+
+cp target/${TARGET}/${LIB_FOLDER}/libwgpu_in_app.a iOS/libs/${LIB_FOLDER}/libwgpu_in_app.a
