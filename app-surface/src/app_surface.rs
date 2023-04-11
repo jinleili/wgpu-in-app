@@ -13,14 +13,22 @@ pub struct AppSurface {
 impl AppSurface {
     pub async fn new(view: winit::window::Window) -> Self {
         let scale_factor = view.scale_factor();
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or_else(|| wgpu::Backends::all());
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or(wgpu::Backends::PRIMARY);
         let dx12_shader_compiler = wgpu::util::dx12_shader_compiler_from_env().unwrap_or_default();
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends: backend,
             dx12_shader_compiler,
         });
         let physical = view.inner_size();
-        let surface = unsafe { instance.create_surface(&view).unwrap() };
+        let surface = unsafe {
+            let surface = instance.create_surface(&view);
+            match surface {
+                Ok(surface) => surface,
+                Err(e) => {
+                    panic!("Failed to create surface: {:?}", e);
+                }
+            }
+        };
         let (adapter, device, queue) = crate::request_device(&instance, backend, &surface).await;
         let caps = surface.get_capabilities(&adapter);
 
@@ -41,8 +49,8 @@ impl AppSurface {
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: caps.formats[0].add_srgb_suffix(),
-            width: physical.width as u32,
-            height: physical.height as u32,
+            width: physical.width,
+            height: physical.height,
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode,
             view_formats: vec![],
@@ -54,7 +62,7 @@ impl AppSurface {
             scale_factor: scale_factor as f32,
             maximum_frames: 60,
             sdq: crate::SurfaceDeviceQueue {
-                surface: surface,
+                surface,
                 config,
                 adapter,
                 device: Arc::new(device),
@@ -68,6 +76,6 @@ impl AppSurface {
 
     pub fn get_view_size(&self) -> (u32, u32) {
         let physical = self.view.inner_size();
-        (physical.width as u32, physical.height as u32)
+        (physical.width, physical.height)
     }
 }

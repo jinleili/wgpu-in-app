@@ -12,7 +12,7 @@ use log::{info, Level};
 pub fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject, idx: jint) -> jlong {
     log_panics::init();
     android_logger::init_once(Config::default().with_min_level(Level::Info));
-    let canvas = WgpuCanvas::new(AppSurface::new(env as *mut _, surface), idx as i32);
+    let canvas = WgpuCanvas::new(AppSurface::new(env as *mut _, surface), idx);
     info!("WgpuCanvas created!");
     Box::into_raw(Box::new(canvas)) as jlong
 }

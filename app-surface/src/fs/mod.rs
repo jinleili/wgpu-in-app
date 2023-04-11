@@ -8,7 +8,7 @@ pub use file_sys::FileSystem;
 
 pub fn get_texture_file_path(name: &str) -> PathBuf {
     let base_dir = application_root_dir();
-    let f = FileSystem::new(&&base_dir);
+    let f = FileSystem::new(&base_dir);
     f.get_texture_file_path(name)
 }
 

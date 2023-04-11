@@ -46,7 +46,7 @@ impl AppSurface {
             native_window,
             scale_factor: 1.0,
             sdq: crate::SurfaceDeviceQueue {
-                surface: surface,
+                surface,
                 config,
                 adapter,
                 device: Arc::new(device),

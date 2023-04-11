@@ -11,9 +11,9 @@ log = "0.4"
 noise = { version = "0.7", default-features = false }
 pollster = "0.2"
 rand = { version = "0.7.2" }
-wgpu = "0.15"
-# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "6147c918" }
-hal = { git = "https://github.com/gfx-rs/wgpu", package = "wgpu-hal", version = "0.15" }
+# wgpu = "0.15"
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "cfc038ae" }
+hal = { git = "https://github.com/gfx-rs/wgpu", package = "wgpu-hal", rev = "cfc038ae" }
 
 # wgpu = { path = "../../forks/wgpu/wgpu" }
 # hal = { package = "wgpu-hal", path = "../../forks/wgpu/wgpu-hal" }

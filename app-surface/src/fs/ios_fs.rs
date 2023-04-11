@@ -43,7 +43,7 @@ impl<'a> FileSystem<'a> {
     }
 
     fn get_spirv_file_path(name: &str, suffix: &str) -> String {
-        let mut p = name.to_string().replace("/", "_");
+        let mut p = name.to_string().replace('/', "_");
         p = get_bundle_url().to_string() + "/shader-spirv/" + &p;
         p += &format!("_{suffix}.spv");
 

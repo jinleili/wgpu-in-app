@@ -14,11 +14,7 @@ impl Position {
     }
 
     pub fn is_equal_zero(&self) -> bool {
-        if self.x == 0.0 && self.y == 0.0 {
-            true
-        } else {
-            false
-        }
+        self.x == 0.0 && self.y == 0.0
     }
 
     // 加减乘除运算
@@ -74,8 +70,7 @@ impl Position {
 
     pub fn slope_ridian(&self, last: &Position) -> f32 {
         // atan2 求出的θ取值范围是[-PI, PI]
-        let radian = (self.y - last.y).atan2(self.x - last.x);
-        radian
+        (self.y - last.y).atan2(self.x - last.x)
     }
 
     pub fn cross_multiply(&self, other: &Position) -> f32 {

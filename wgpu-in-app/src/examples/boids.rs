@@ -227,7 +227,7 @@ impl Boids {
         for i in 0..2 {
             particle_buffers.push(
                 device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                    label: Some(&format!("Particle Buffer {}", i)),
+                    label: Some(&format!("Particle Buffer {i}")),
                     contents: bytemuck::cast_slice(&initial_particle_data),
                     usage: wgpu::BufferUsages::VERTEX
                         | wgpu::BufferUsages::STORAGE
@@ -305,10 +305,8 @@ impl Example for Boids {
             command_encoder.push_debug_group("compute boid movement");
             {
                 // compute pass
-                let mut cpass = command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-                    label: None,
-                    ..Default::default()
-                });
+                let mut cpass = command_encoder
+                    .begin_compute_pass(&wgpu::ComputePassDescriptor { label: None });
                 cpass.set_pipeline(&self.compute_pipeline);
                 cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
                 for i in 0..5 {

@@ -95,7 +95,7 @@ impl<F: Future<Output = Option<wgpu::Error>>> Future for ErrorFuture<F> {
         let inner = unsafe { self.map_unchecked_mut(|me| &mut me.inner) };
         inner.poll(cx).map(|error| {
             if let Some(e) = error {
-                panic!("Rendering {}", e);
+                panic!("Rendering {e}");
             }
         })
     }
@@ -187,7 +187,7 @@ impl Cube {
             &texels,
             wgpu::ImageDataLayout {
                 offset: 0,
-                bytes_per_row: Some(std::num::NonZeroU32::new(size).unwrap()),
+                bytes_per_row: Some(size),
                 rows_per_image: None,
             },
             texture_extent,

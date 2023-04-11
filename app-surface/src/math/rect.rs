@@ -106,14 +106,10 @@ impl Rect {
         let x_right = self.center_x();
         let y_top = self.center_y();
         let y_bottom = -self.center_y();
-        if ortho_point.x >= x_left
+        
+        ortho_point.x >= x_left
             && ortho_point.x <= x_right
             && ortho_point.y >= y_bottom
             && ortho_point.y <= y_top
-        {
-            true
-        } else {
-            false
-        }
     }
 }

@@ -62,7 +62,7 @@ pub trait SurfaceFrame {
         let frame = match surface.get_current_texture() {
             Ok(frame) => frame,
             Err(_) => {
-                surface.configure(&device, &config);
+                surface.configure(device, config);
                 surface
                     .get_current_texture()
                     .expect("Failed to acquire next swap chain texture!")
@@ -135,7 +135,7 @@ async fn request_device(
         .await;
     match res {
         Err(err) => {
-            panic!("request_device failed: {:?}", err);
+            panic!("request_device failed: {err:?}");
         }
         Ok(tuple) => (adapter, tuple.0, tuple.1),
     }

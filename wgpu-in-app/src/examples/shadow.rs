@@ -3,7 +3,7 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 
-use std::{borrow::Cow, iter, mem, num::NonZeroU32, ops::Range, rc::Rc};
+use std::{borrow::Cow, iter, mem, ops::Range, rc::Rc};
 
 use bytemuck::{Pod, Zeroable};
 use wgpu::util::DeviceExt;
@@ -398,7 +398,7 @@ impl Shadow {
                     base_mip_level: 0,
                     mip_level_count: None,
                     base_array_layer: i as u32,
-                    array_layer_count: NonZeroU32::new(1),
+                    array_layer_count: Some(1),
                 }))
             })
             .collect::<Vec<_>>();

@@ -46,7 +46,8 @@ fn main() {
                     last_update_inst = Instant::now();
                 } else {
                     *control_flow = ControlFlow::WaitUntil(
-                        Instant::now() + target_frametime - time_since_last_frame,
+                        Instant::now()
+                            + target_frametime.checked_sub(time_since_last_frame).unwrap(),
                     );
                 }
 
