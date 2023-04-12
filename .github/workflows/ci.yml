@@ -1,0 +1,48 @@
+on: [push, pull_request]
+
+name: CI
+
+env:
+  CARGO_INCREMENTAL: false
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: full
+  MSRV: 1.64
+
+jobs:
+  check-msrv:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Windows
+          - name: Windows x86_64
+            os: windows-2022
+            target: x86_64-pc-windows-msvc
+
+          # MacOS
+          - name: MacOS x86_64
+            os: macos-12
+            target: x86_64-apple-darwin
+
+          # Linux
+          - name: Linux x86_64
+            os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+
+    name: Clippy ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install MSRV toolchain
+        run: |
+          rustup toolchain install ${{ env.MSRV }} --no-self-update --profile=minimal --component clippy --target ${{ matrix.target }}
+          rustup default ${{ env.MSRV }}
+
+      - name: check native
+        shell: bash
+        run: |
+          set -e
+          cargo clippy --target ${{ matrix.target }}

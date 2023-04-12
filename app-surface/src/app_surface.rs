@@ -25,7 +25,7 @@ impl AppSurface {
             match surface {
                 Ok(surface) => surface,
                 Err(e) => {
-                    panic!("Failed to create surface: {:?}", e);
+                    panic!("Failed to create surface: {e:?}");
                 }
             }
         };

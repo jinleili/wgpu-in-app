@@ -29,7 +29,7 @@ pub fn enterFrame(_env: *mut JNIEnv, _: JClass, obj: jlong) {
 pub fn changeExample(_env: *mut JNIEnv, _: JClass, obj: jlong, idx: jint) {
     // 获取到指针指代的 Rust 对象的可变借用
     let obj = unsafe { &mut *(obj as *mut WgpuCanvas) };
-    obj.change_example(idx as i32);
+    obj.change_example(idx);
 }
 
 #[no_mangle]

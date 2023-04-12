@@ -1,4 +1,8 @@
 # wgpu in App
+![Minimum Rust Version](https://img.shields.io/badge/min%20rust-1.64-green.svg)
+[![Build Status](https://github.com/jinleili/wgpu-in-app/workflows/CI/badge.svg?branch=master)](https://github.com/jinleili/wgpu-in-app/actions)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jinleili/wgpu-in-app/blob/master/LICENSE.MIT)
+
 Integrate wgpu into your existing iOS | Android apps. 
 
 wgpu does not depend on any window program, so it does not provide window creation and management functions. Only when creating a window-based `Surface`, an argument that implements the [raw-window-handle](https://github.com/rust-windowing/raw-window-handle) abstract interface may be needed (*may be needed* because on iOS/macOS, instance of `Surface` can be created directly by `CAMetalLayer`). The `winit` used by the wgpu examples is a cross-platform window creation and management crate that implements the raw-window-handle abstract interface. It will take over the window management and events loop of the entire app, there is no doubt that for game apps, the combination of wgpu + winit is very suitable.
