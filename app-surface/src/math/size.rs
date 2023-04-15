@@ -35,7 +35,10 @@ impl Size<f32> {
 
 impl From<[u32; 2]> for Size<u32> {
     fn from(vs: [u32; 2]) -> Self {
-        Size { width: vs[0], height: vs[1] }
+        Size {
+            width: vs[0],
+            height: vs[1],
+        }
     }
 }
 
@@ -47,7 +50,10 @@ impl From<Size<u32>> for [u32; 2] {
 
 impl From<(u32, u32)> for Size<u32> {
     fn from(data: (u32, u32)) -> Self {
-        Size { width: data.0, height: data.1 }
+        Size {
+            width: data.0,
+            height: data.1,
+        }
     }
 }
 
@@ -58,18 +64,27 @@ impl From<Size<u32>> for (u32, u32) {
 }
 impl From<wgpu::Extent3d> for Size<f32> {
     fn from(data: wgpu::Extent3d) -> Self {
-        Size { width: data.width as f32, height: data.height as f32 }
+        Size {
+            width: data.width as f32,
+            height: data.height as f32,
+        }
     }
 }
 impl From<wgpu::Extent3d> for Size<u32> {
     fn from(data: wgpu::Extent3d) -> Self {
-        Size { width: data.width, height: data.height }
+        Size {
+            width: data.width,
+            height: data.height,
+        }
     }
 }
 
 impl From<[f32; 2]> for Size<f32> {
     fn from(vs: [f32; 2]) -> Self {
-        Size { width: vs[0], height: vs[1] }
+        Size {
+            width: vs[0],
+            height: vs[1],
+        }
     }
 }
 
@@ -81,7 +96,10 @@ impl From<Size<f32>> for [f32; 2] {
 
 impl From<(f32, f32)> for Size<f32> {
     fn from(data: (f32, f32)) -> Self {
-        Size { width: data.0, height: data.1 }
+        Size {
+            width: data.0,
+            height: data.1,
+        }
     }
 }
 
@@ -93,18 +111,27 @@ impl From<Size<f32>> for (f32, f32) {
 
 impl From<super::Position> for Size<f32> {
     fn from(data: super::Position) -> Self {
-        Size { width: data.x, height: data.y }
+        Size {
+            width: data.x,
+            height: data.y,
+        }
     }
 }
 
 impl From<&wgpu::SurfaceConfiguration> for Size<f32> {
     fn from(data: &wgpu::SurfaceConfiguration) -> Self {
-        Size { width: data.width as f32, height: data.height as f32 }
+        Size {
+            width: data.width as f32,
+            height: data.height as f32,
+        }
     }
 }
 
 impl From<&wgpu::SurfaceConfiguration> for Size<u32> {
     fn from(data: &wgpu::SurfaceConfiguration) -> Self {
-        Size { width: data.width, height: data.height }
+        Size {
+            width: data.width,
+            height: data.height,
+        }
     }
 }

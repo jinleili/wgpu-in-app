@@ -70,6 +70,11 @@ pub trait SurfaceFrame {
         };
         let view = frame.texture.create_view(&wgpu::TextureViewDescriptor {
             label: Some("frame texture view"),
+            format: if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
+                Some(config.format.add_srgb_suffix())
+            } else {
+                None
+            },
             ..Default::default()
         });
         (frame, view)

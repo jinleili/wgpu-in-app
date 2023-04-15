@@ -10,6 +10,7 @@ crate-type = ["rlib"]
 
 [features]
 default = []
+webgl = ["wgpu/webgl"]
 
 [dependencies]
 log.workspace = true

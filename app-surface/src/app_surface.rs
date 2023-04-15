@@ -13,7 +13,12 @@ pub struct AppSurface {
 impl AppSurface {
     pub async fn new(view: winit::window::Window) -> Self {
         let scale_factor = view.scale_factor();
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or(wgpu::Backends::PRIMARY);
+        let default_backends = if cfg!(feature = "webgl") {
+            wgpu::Backends::all()
+        } else {
+            wgpu::Backends::PRIMARY
+        };
+        let backend = wgpu::util::backend_bits_from_env().unwrap_or(default_backends);
         let dx12_shader_compiler = wgpu::util::dx12_shader_compiler_from_env().unwrap_or_default();
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends: backend,
@@ -45,12 +50,16 @@ impl AppSurface {
         } else {
             modes[0]
         };
-        let format = if cfg!(target_arch = "wasm32") {
+        let (format, view_formats) = if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
             // Chrome WebGPU doesn't support sRGB:
             // unsupported swap chain format "xxxx8unorm-srgb"
-            caps.formats[0].remove_srgb_suffix()
+            let format = caps.formats[0].remove_srgb_suffix();
+            (
+                format,
+                vec![format.add_srgb_suffix(), format.remove_srgb_suffix()],
+            )
         } else {
-            caps.formats[0].add_srgb_suffix()
+            (caps.formats[0].add_srgb_suffix(), vec![])
         };
 
         let config = wgpu::SurfaceConfiguration {
@@ -60,7 +69,7 @@ impl AppSurface {
             height: physical.height,
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode,
-            view_formats: vec![format.add_srgb_suffix(), format.remove_srgb_suffix()],
+            view_formats,
         };
         surface.configure(&device, &config);
 
