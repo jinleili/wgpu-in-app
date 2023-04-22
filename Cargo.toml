@@ -18,7 +18,7 @@ hal = { git = "https://github.com/gfx-rs/wgpu", package = "wgpu-hal", version = 
 # hal = { package = "wgpu-hal", path = "../../forks/wgpu/wgpu-hal" }
 
 async-executor = "1.0"
-winit = "0.28"
+winit = "0.27.1"
 raw-window-handle = "0.5"
 env_logger = "0.9"
 
