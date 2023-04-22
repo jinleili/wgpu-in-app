@@ -50,17 +50,15 @@ impl AppSurface {
         } else {
             modes[0]
         };
-        let (format, view_formats) = if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
+        let prefered = caps.formats[0];
+        let format = if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
             // Chrome WebGPU doesn't support sRGB:
             // unsupported swap chain format "xxxx8unorm-srgb"
-            let format = caps.formats[0].remove_srgb_suffix();
-            (
-                format,
-                vec![format.add_srgb_suffix(), format.remove_srgb_suffix()],
-            )
+            prefered.remove_srgb_suffix()
         } else {
-            (caps.formats[0].add_srgb_suffix(), vec![])
+            prefered
         };
+        let view_formats = vec![format.add_srgb_suffix(), format.remove_srgb_suffix()];
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,

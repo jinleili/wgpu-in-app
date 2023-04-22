@@ -698,7 +698,7 @@ impl Example for Water {
             label: Some("Main Command Encoder"),
         });
 
-        let (frame, view) = app_surface.get_current_frame_view();
+        let (frame, view) = app_surface.get_current_frame_view(None);
         // First pass: render the reflection.
         {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {

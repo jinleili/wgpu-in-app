@@ -344,7 +344,7 @@ impl Example for Cube {
         let device = &app_surface.device;
         let queue = &app_surface.queue;
         device.push_error_scope(wgpu::ErrorFilter::Validation);
-        let (frame, view) = app_surface.get_current_frame_view();
+        let (frame, view) = app_surface.get_current_frame_view(None);
         let mut encoder =
             device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
         {

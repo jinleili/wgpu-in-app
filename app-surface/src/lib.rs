@@ -29,6 +29,7 @@ pub struct SurfaceDeviceQueue {
 impl SurfaceDeviceQueue {
     pub fn update_config_format(&mut self, format: wgpu::TextureFormat) {
         self.config.format = format;
+        self.config.view_formats = vec![format.add_srgb_suffix(), format.remove_srgb_suffix()];
         self.surface.configure(&self.device, &self.config);
     }
 }
@@ -50,7 +51,10 @@ pub trait SurfaceFrame {
         unimplemented!()
     }
     fn enter_frame(&mut self) {}
-    fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+    fn get_current_frame_view(
+        &self,
+        _view_format: Option<wgpu::TextureFormat>,
+    ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
         unimplemented!()
     }
     fn create_current_frame_view(
@@ -58,6 +62,7 @@ pub trait SurfaceFrame {
         device: &wgpu::Device,
         surface: &wgpu::Surface,
         config: &wgpu::SurfaceConfiguration,
+        view_format: Option<wgpu::TextureFormat>,
     ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
         let frame = match surface.get_current_texture() {
             Ok(frame) => frame,
@@ -70,10 +75,11 @@ pub trait SurfaceFrame {
         };
         let view = frame.texture.create_view(&wgpu::TextureViewDescriptor {
             label: Some("frame texture view"),
-            format: if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
+            format: if view_format.is_none() {
+                // frame buffer's view format prefer to use sRGB.
                 Some(config.format.add_srgb_suffix())
             } else {
-                None
+                view_format
             },
             ..Default::default()
         });
@@ -105,8 +111,11 @@ impl SurfaceFrame for AppSurface {
         )
     }
 
-    fn get_current_frame_view(&self) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
-        self.create_current_frame_view(&self.device, &self.surface, &self.config)
+    fn get_current_frame_view(
+        &self,
+        view_format: Option<wgpu::TextureFormat>,
+    ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+        self.create_current_frame_view(&self.device, &self.surface, &self.config, view_format)
     }
 }
 
