@@ -14,14 +14,14 @@ fi
 
 # copy .so files to jniLibs folder
 cd ../
-ARM64="android/app/libs/arm64-v8a"
-ARMv7a="android/app/libs/armeabi-v7a"
+ARM64="Android/app/libs/arm64-v8a"
+ARMv7a="Android/app/libs/armeabi-v7a"
 
 if [ ! -d "$ARM64" ]; then
-    mkdir "$ARM64"
+    mkdir -p "$ARM64"
 fi
 if [ ! -d "$ARMv7a" ]; then
-    mkdir "$ARMv7a"
+    mkdir -p "$ARMv7a"
 fi
 
 cp target/aarch64-linux-android/${LIB_FOLDER}/libwgpu_in_app.so "${ARM64}/libwgpu_in_app.so"
