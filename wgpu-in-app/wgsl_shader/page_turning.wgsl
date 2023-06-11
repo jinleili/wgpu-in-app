@@ -1,7 +1,7 @@
 
 
 struct MVPMatUniform {  
-    mvp: mat4x4<f32>,
+    mvp: mat4x4f,
 };
 
 
@@ -9,8 +9,8 @@ struct TurningUniform {
     // 开始卷动的半径
     radius: f32,
     angle: f32,
-    np: vec2<f32>,
-    n: vec2<f32>,
+    np: vec2f,
+    n: vec2f,
     alpha: f32,
     instance_index: i32,
 };
@@ -22,10 +22,10 @@ let PI: f32 = 3.14159265358979;
 let PI_2: f32 = 1.57079632675;
 
 struct VertexOutput {
-    @builtin(position) position: vec4<f32>;
-    @location(0) paper_uv: vec2<f32>;
-    @location(1) brush_uv: vec2<f32>;
-    @location(2) verCoord: vec3<f32>;
+    @builtin(position) position: vec4f;
+    @location(0) paper_uv: vec2f;
+    @location(1) brush_uv: vec2f;
+    @location(2) verCoord: vec3f;
     // 卷起的高度
     @location(3) roll_height: f32;
     @location(4) instance_index: u32;
@@ -34,9 +34,9 @@ struct VertexOutput {
 @vertex
 fn vs_main(
     @builtin(instance_index) instance_index: u32,
-    @location(0) position: vec3<f32>,
-    @location(1) paper_texcoord: vec2<f32>,
-    @location(2) tex_coord: vec2<f32>,
+    @location(0) position: vec3f,
+    @location(1) paper_texcoord: vec2f,
+    @location(2) tex_coord: vec2f,
 ) -> VertexOutput {
 
     var result: VertexOutput;
@@ -45,20 +45,20 @@ fn vs_main(
     result.instance_index = instance_index;
 
     // 从 np 位置到 position 的矢量
-    let v: vec2<f32> = position.xy - params.np;
+    let v: vec2f = position.xy - params.np;
     // v 在单位矢量 n 上的投影长度
     let l: f32 = dot(v, params.n);
     if (instance_index == 0u) {
         result.verCoord = position;
         result.roll_height = 0.0;
         // 将底下的 paper z-index 放低一些, 避免 z fighting
-        result.position = mvp_mat.mvp * vec4<f32>(position.xy, position.z - 0.00001, 1.0);
+        result.position = mvp_mat.mvp * vec4f(position.xy, position.z - 0.00001, 1.0);
     } else {
         // 投影长度值为正，表示 position 是需要被卷起的点
         if (l > 0.0) {
             // 半圆周长
             let half_circle: f32 = PI * params.radius;
-            var new_position: vec3<f32> = position.xyz;
+            var new_position: vec3f = position.xyz;
 
             // position 卷起后与之前的位置差
             var d = 0.0;
@@ -80,11 +80,11 @@ fn vs_main(
             new_position.x -= cos(params.angle) * d;
             result.roll_height = new_position.z;
             result.verCoord = new_position;
-            result.position = mvp_mat.mvp * vec4<f32>(new_position, 1.0);
+            result.position = mvp_mat.mvp * vec4f(new_position, 1.0);
         } else {
             result.verCoord = position;
             result.roll_height = 0.0;
-            result.position = mvp_mat.mvp * vec4<f32>(position, 1.0);
+            result.position = mvp_mat.mvp * vec4f(position, 1.0);
         }
     }
     return result;
@@ -98,15 +98,15 @@ let whiteWeight: f32 = 0.25;
 let texWeight: f32 = 0.75;
 
 @fragment
-fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
+fn fs_main(vertex: VertexOutput) -> @location(0) vec4f {
     // 使用内置的 gl_InstanceIndex 实例索引来区分绘制，第一个实例只绘制背景纸，有翻页效果的第二个实例需要带上笔墨效果
     // let tex = select(front_texture, bg_texture, vertex.instance_index == 0u);
-        // var tex_color: vec4<f32> = textureSample(bg_texture, tex_sampler, vertex.paper_uv);
+        // var tex_color: vec4f = textureSample(bg_texture, tex_sampler, vertex.paper_uv);
     if (params.instance_index == 0) {
         return textureSample(bg_texture, tex_sampler, vertex.paper_uv);
     } else {
-        var tex_color: vec4<f32> = textureSample(front_texture, tex_sampler, vertex.paper_uv);
-        var rgb_color: vec3<f32> = vec3<f32>(0.0);
+        var tex_color: vec4f = textureSample(front_texture, tex_sampler, vertex.paper_uv);
+        var rgb_color: vec3f = vec3f(0.0);
         if (vertex.instance_index == 1u) {
             let diameter = params.radius * 2.0;
             if (vertex.roll_height > 0.0) {
@@ -122,7 +122,7 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
                 }
             } 
         }
-        return vec4<f32>(rgb_color, 1.0);
+        return vec4f(rgb_color, 1.0);
     }
     
 }

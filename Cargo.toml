@@ -6,7 +6,7 @@ default-members = ["wgpu-in-app"]
 [workspace.dependencies]
 bytemuck = { version = "1.9.1", features = ["derive"] }
 cgmath = "0.18"
-glam = "0.20.5"
+glam = "0.22"
 log = "0.4"
 noise = { version = "0.7", default-features = false }
 pollster = "0.2"

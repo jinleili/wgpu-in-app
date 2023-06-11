@@ -1,6 +1,6 @@
 struct Particle {
-  pos : vec2<f32>,
-  vel : vec2<f32>,
+  pos : vec2f,
+  vel : vec2f,
 };
 
 struct SimParams {
@@ -29,12 +29,12 @@ fn main(@builtin(global_invocation_id) global_invocation_id: vec3<u32>) {
     return;
   }
 
-  var vPos : vec2<f32> = particlesSrc[index].pos;
-  var vVel : vec2<f32> = particlesSrc[index].vel;
+  var vPos : vec2f = particlesSrc[index].pos;
+  var vVel : vec2f = particlesSrc[index].vel;
 
-  var cMass : vec2<f32> = vec2<f32>(0.0, 0.0);
-  var cVel : vec2<f32> = vec2<f32>(0.0, 0.0);
-  var colVel : vec2<f32> = vec2<f32>(0.0, 0.0);
+  var cMass : vec2f = vec2f(0.0, 0.0);
+  var cVel : vec2f = vec2f(0.0, 0.0);
+  var colVel : vec2f = vec2f(0.0, 0.0);
   var cMassCount : i32 = 0;
   var cVelCount : i32 = 0;
 

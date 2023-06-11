@@ -1,5 +1,5 @@
 struct Globals {
-    view_proj: mat4x4<f32>,
+    view_proj: mat4x4f,
     num_lights: vec4<u32>,
 };
 
@@ -8,8 +8,8 @@ struct Globals {
 var<uniform> u_globals: Globals;
 
 struct Entity {
-    world: mat4x4<f32>,
-    color: vec4<f32>,
+    world: mat4x4f,
+    color: vec4f,
 };
 
 @group(1)
@@ -17,14 +17,14 @@ struct Entity {
 var<uniform> u_entity: Entity;
 
 @vertex
-fn vs_bake(@location(0) position: vec4<i32>) -> @builtin(position) vec4<f32> {
-    return u_globals.view_proj * u_entity.world * vec4<f32>(position);
+fn vs_bake(@location(0) position: vec4<i32>) -> @builtin(position) vec4f {
+    return u_globals.view_proj * u_entity.world * vec4f(position);
 }
 
 struct VertexOutput {
-    @builtin(position) proj_position: vec4<f32>,
-    @location(0) world_normal: vec3<f32>,
-    @location(1) world_position: vec4<f32>
+    @builtin(position) proj_position: vec4f,
+    @location(0) world_normal: vec3f,
+    @location(1) world_position: vec4f
 };
 
 @vertex
@@ -33,9 +33,9 @@ fn vs_main(
     @location(1) normal: vec4<i32>,
 ) -> VertexOutput {
     let w = u_entity.world;
-    let world_pos = u_entity.world * vec4<f32>(position);
+    let world_pos = u_entity.world * vec4f(position);
     var result: VertexOutput;
-    result.world_normal = mat3x3<f32>(w.x.xyz, w.y.xyz, w.z.xyz) * vec3<f32>(normal.xyz);
+    result.world_normal = mat3x3f(w.x.xyz, w.y.xyz, w.z.xyz) * vec3f(normal.xyz);
     result.world_position = world_pos;
     result.proj_position = u_globals.view_proj * world_pos;
     return result;
@@ -44,9 +44,9 @@ fn vs_main(
 // fragment shader
 
 struct Light {
-    proj: mat4x4<f32>,
-    pos: vec4<f32>,
-    color: vec4<f32>,
+    proj: mat4x4f,
+    pos: vec4f,
+    color: vec4f,
 };
 
 @group(0)
@@ -62,27 +62,27 @@ var t_shadow: texture_depth_2d_array;
 @binding(3)
 var sampler_shadow: sampler_comparison;
 
-fn fetch_shadow(light_id: u32, homogeneous_coords: vec4<f32>) -> f32 {
+fn fetch_shadow(light_id: u32, homogeneous_coords: vec4f) -> f32 {
     if (homogeneous_coords.w <= 0.0) {
         return 1.0;
     }
     // compensate for the Y-flip difference between the NDC and texture coordinates
-    let flip_correction = vec2<f32>(0.5, -0.5);
+    let flip_correction = vec2f(0.5, -0.5);
     // compute texture coordinates for shadow lookup
     let proj_correction = 1.0 / homogeneous_coords.w;
-    let light_local = homogeneous_coords.xy * flip_correction * proj_correction + vec2<f32>(0.5, 0.5);
+    let light_local = homogeneous_coords.xy * flip_correction * proj_correction + vec2f(0.5, 0.5);
     // do the lookup, using HW PCF and comparison
     return textureSampleCompareLevel(t_shadow, sampler_shadow, light_local, i32(light_id), homogeneous_coords.z * proj_correction);
 }
 
-const c_ambient: vec3<f32> = vec3<f32>(0.05, 0.05, 0.05);
+const c_ambient: vec3f = vec3f(0.05, 0.05, 0.05);
 const c_max_lights: u32 = 10u;
 
 @fragment
-fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
+fn fs_main(vertex: VertexOutput) -> @location(0) vec4f {
     let normal = normalize(vertex.world_normal);
     // accumulate color
-    var color: vec3<f32> = c_ambient;
+    var color: vec3f = c_ambient;
     for(var i = 0u; i < min(u_globals.num_lights.x, c_max_lights); i += 1u) {
         let light = s_lights[i];
         // project into the light space
@@ -94,14 +94,14 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
         color += shadow * diffuse * light.color.xyz;
     }
     // multiply the light by material color
-    return vec4<f32>(color, 1.0) * u_entity.color;
+    return vec4f(color, 1.0) * u_entity.color;
 }
 
 // The fragment entrypoint used when storage buffers are not available for the lights
 @fragment
-fn fs_main_without_storage(vertex: VertexOutput) -> @location(0) vec4<f32> {
+fn fs_main_without_storage(vertex: VertexOutput) -> @location(0) vec4f {
     let normal = normalize(vertex.world_normal);
-    var color: vec3<f32> = c_ambient;
+    var color: vec3f = c_ambient;
     for(var i = 0u; i < min(u_globals.num_lights.x, c_max_lights); i += 1u) {
         // This line is the only difference from the entrypoint above. It uses the lights
         // uniform instead of the lights storage buffer
@@ -111,5 +111,5 @@ fn fs_main_without_storage(vertex: VertexOutput) -> @location(0) vec4<f32> {
         let diffuse = max(0.0, dot(normal, light_dir));
         color += shadow * diffuse * light.color.xyz;
     }
-    return vec4<f32>(color, 1.0) * u_entity.color;
+    return vec4f(color, 1.0) * u_entity.color;
 }
