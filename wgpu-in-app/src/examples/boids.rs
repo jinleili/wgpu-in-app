@@ -31,7 +31,6 @@ struct SimParams {
 #[allow(dead_code)]
 pub struct Boids {
     particle_bind_groups: Vec<wgpu::BindGroup>,
-    dynamic_bind_group: wgpu::BindGroup,
     particle_buffers: Vec<wgpu::Buffer>,
     vertices_buffer: wgpu::Buffer,
     compute_pipeline: wgpu::ComputePipeline,
@@ -57,104 +56,71 @@ impl Boids {
                 "../../wgsl_shader/draw.wgsl"
             ))),
         });
-        log::info!("boids 1");
-        let param_data = SimParams {
-            delta_t: 0.04,
-            rule1_distance: 0.1,
-            rule2_distance: 0.025,
-            rule3_distance: 0.025,
-            rule1_scale: 0.02,
-            rule2_scale: 0.05,
-            rule3_scale: 0.005,
-            offset: 0u32,
-        };
 
-        let sim_param_buffer = device.create_buffer(&wgpu::BufferDescriptor {
-            label: None,
-            size: 5 * 256,
+        // buffer for simulation parameters uniform
+        let sim_param_data = [
+            0.04f32, // deltaT
+            0.1,     // rule1Distance
+            0.025,   // rule2Distance
+            0.025,   // rule3Distance
+            0.02,    // rule1Scale
+            0.05,    // rule2Scale
+            0.005,   // rule3Scale
+        ]
+        .to_vec();
+        let sim_param_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Simulation Parameter Buffer"),
+            contents: bytemuck::cast_slice(&sim_param_data),
             usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
-            mapped_at_creation: false,
         });
-        log::info!("boids 1 0");
-
-        for i in 0..5 {
-            let mut item = param_data;
-            item.offset = 64 * 5 * i;
-            log::info!("boids write_buffer 0");
-
-            app_surface.queue.write_buffer(
-                &sim_param_buffer,
-                256 * i as wgpu::BufferAddress,
-                bytemuck::bytes_of(&item),
-            );
-            log::info!("boids write_buffer 1 {}", i);
-        }
-        log::info!("boids 2");
-
-        let dynamic_bgl = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
-            entries: &[wgpu::BindGroupLayoutEntry {
-                binding: 0,
-                visibility: wgpu::ShaderStages::COMPUTE,
-                ty: wgpu::BindingType::Buffer {
-                    ty: wgpu::BufferBindingType::Uniform,
-                    has_dynamic_offset: true,
-                    min_binding_size: wgpu::BufferSize::new((mem::size_of::<SimParams>()) as _),
-                },
-                count: None,
-            }],
-            label: None,
-        });
-        let dynamic_bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
-            layout: &dynamic_bgl,
-            entries: &[wgpu::BindGroupEntry {
-                binding: 0,
-                resource: wgpu::BindingResource::Buffer(wgpu::BufferBinding {
-                    buffer: &sim_param_buffer,
-                    offset: 0,
-                    size: wgpu::BufferSize::new(256),
-                }),
-            }],
-            label: None,
-        });
-        log::info!("boids 3");
 
         // create compute bind layout group and compute pipeline layout
-        let bgl_desc = wgpu::BindGroupLayoutDescriptor {
-            entries: &[
-                wgpu::BindGroupLayoutEntry {
-                    binding: 0,
-                    visibility: wgpu::ShaderStages::COMPUTE,
-                    ty: wgpu::BindingType::Buffer {
-                        ty: wgpu::BufferBindingType::Storage { read_only: true },
-                        has_dynamic_offset: false,
-                        min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
+        let compute_bind_group_layout =
+            device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+                entries: &[
+                    wgpu::BindGroupLayoutEntry {
+                        binding: 0,
+                        visibility: wgpu::ShaderStages::COMPUTE,
+                        ty: wgpu::BindingType::Buffer {
+                            ty: wgpu::BufferBindingType::Uniform,
+                            has_dynamic_offset: false,
+                            min_binding_size: wgpu::BufferSize::new(
+                                (sim_param_data.len() * mem::size_of::<f32>()) as _,
+                            ),
+                        },
+                        count: None,
                     },
-                    count: None,
-                },
-                wgpu::BindGroupLayoutEntry {
-                    binding: 1,
-                    visibility: wgpu::ShaderStages::COMPUTE,
-                    ty: wgpu::BindingType::Buffer {
-                        ty: wgpu::BufferBindingType::Storage { read_only: false },
-                        has_dynamic_offset: false,
-                        min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
+                    wgpu::BindGroupLayoutEntry {
+                        binding: 1,
+                        visibility: wgpu::ShaderStages::COMPUTE,
+                        ty: wgpu::BindingType::Buffer {
+                            ty: wgpu::BufferBindingType::Storage { read_only: true },
+                            has_dynamic_offset: false,
+                            min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
+                        },
+                        count: None,
                     },
-                    count: None,
-                },
-            ],
-            label: None,
-        };
-        let compute_bind_group_layout = device.create_bind_group_layout(&bgl_desc);
-
+                    wgpu::BindGroupLayoutEntry {
+                        binding: 2,
+                        visibility: wgpu::ShaderStages::COMPUTE,
+                        ty: wgpu::BindingType::Buffer {
+                            ty: wgpu::BufferBindingType::Storage { read_only: false },
+                            has_dynamic_offset: false,
+                            min_binding_size: wgpu::BufferSize::new((NUM_PARTICLES * 16) as _),
+                        },
+                        count: None,
+                    },
+                ],
+                label: None,
+            });
         let compute_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("compute"),
-                bind_group_layouts: &[&compute_bind_group_layout, &dynamic_bgl],
+                bind_group_layouts: &[&compute_bind_group_layout],
                 push_constant_ranges: &[],
             });
-        // create render pipeline with empty bind group layout
-        log::info!("boids 4");
 
+        // create render pipeline with empty bind group layout
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("render"),
@@ -190,7 +156,6 @@ impl Boids {
             multisample: wgpu::MultisampleState::default(),
             multiview: None,
         });
-        log::info!("boids 5");
 
         // create compute pipeline
         let compute_pipeline = device.create_compute_pipeline(&wgpu::ComputePipelineDescriptor {
@@ -199,7 +164,6 @@ impl Boids {
             module: &compute_shader,
             entry_point: "main",
         });
-        log::info!("boids 6");
 
         // buffer for the three 2d triangle vertices of each instance
         let vertex_buffer_data = [-0.01f32, -0.02, 0.01, -0.02, 0.00, 0.02];
@@ -244,10 +208,14 @@ impl Boids {
                 entries: &[
                     wgpu::BindGroupEntry {
                         binding: 0,
-                        resource: particle_buffers[i].as_entire_binding(),
+                        resource: sim_param_buffer.as_entire_binding(),
                     },
                     wgpu::BindGroupEntry {
                         binding: 1,
+                        resource: particle_buffers[i].as_entire_binding(),
+                    },
+                    wgpu::BindGroupEntry {
+                        binding: 2,
                         resource: particle_buffers[(i + 1) % 2].as_entire_binding(), // bind to opposite buffer
                     },
                 ],
@@ -261,7 +229,6 @@ impl Boids {
 
         Self {
             particle_bind_groups,
-            dynamic_bind_group,
             particle_buffers,
             vertices_buffer,
             compute_pipeline,
@@ -309,24 +276,8 @@ impl Example for Boids {
                     .begin_compute_pass(&wgpu::ComputePassDescriptor { label: None });
                 cpass.set_pipeline(&self.compute_pipeline);
                 cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
-                for i in 0..5 {
-                    cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * i]);
-                    cpass.dispatch_workgroups(5, 1, 1);
-                }
+                cpass.dispatch_workgroups(self.work_group_count, 1, 1);
             }
-            // {
-            //     let mut cpass = command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-            //         label: None,
-            //         ty: wgpu::ComputePassType::Concurrent,
-            //     });
-            //     cpass.set_pipeline(&self.compute_pipeline);
-            //     cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
-
-            // for i in 1..5 {
-            //     cpass.set_bind_group(1, &self.dynamic_bind_group, &[256 * i]);
-            //     cpass.dispatch_workgroups(5, 1, 1);
-            // }
-            // }
             command_encoder.pop_debug_group();
 
             command_encoder.push_debug_group("render boids");
@@ -347,7 +298,6 @@ impl Example for Boids {
 
             // done
             queue.submit(Some(command_encoder.finish()));
-            queue.submit(None);
         }
         frame.present();
         // update frame count

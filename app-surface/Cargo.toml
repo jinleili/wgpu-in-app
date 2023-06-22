@@ -49,6 +49,3 @@ web-sys = { workspace = true, features = [
     "Location"
 ] }
 wasm-bindgen.workspace = true
-# The `wasm-bindgen` crate provides the bare minimum functionality needed
-# to interact with JavaScript.
-wee_alloc = { workspace = true, optional = true }

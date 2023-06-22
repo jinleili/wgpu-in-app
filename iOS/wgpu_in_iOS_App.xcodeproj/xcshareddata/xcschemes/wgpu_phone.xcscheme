@@ -64,17 +64,17 @@
          <EnvironmentVariable
             key = "RUST_BACKTRACE"
             value = "full"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "METAL_DEVICE_WRAPPER_TYPE"
             value = "1"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "gfx_backend_metal"
             value = "debug"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
