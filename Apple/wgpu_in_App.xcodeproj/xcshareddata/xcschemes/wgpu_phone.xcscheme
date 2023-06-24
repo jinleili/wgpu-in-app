@@ -17,7 +17,7 @@
                BlueprintIdentifier = "AD4B1FE826EB1B90008A6AEE"
                BuildableName = "wgpu_phone.app"
                BlueprintName = "wgpu_phone"
-               ReferencedContainer = "container:wgpu_in_iOS_App.xcodeproj">
+               ReferencedContainer = "container:wgpu_in_App.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "AD4B1FE826EB1B90008A6AEE"
             BuildableName = "wgpu_phone.app"
             BlueprintName = "wgpu_phone"
-            ReferencedContainer = "container:wgpu_in_iOS_App.xcodeproj">
+            ReferencedContainer = "container:wgpu_in_App.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -74,7 +74,7 @@
          <EnvironmentVariable
             key = "gfx_backend_metal"
             value = "debug"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>

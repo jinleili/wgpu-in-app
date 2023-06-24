@@ -2178,7 +2178,7 @@ dependencies = [
 [[package]]
 name = "wgpu"
 version = "0.16.0"
-source = "git+https://github.com/jinleili/wgpu?branch=visionOS#92bb4162b0b7bdc9fb44372bcaba5617d7d0fce7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=757245cd#757245cdfc97e4d4dce110ef1bb333787a6c25bd"
 dependencies = [
  "arrayvec 0.7.4",
  "cfg-if",
@@ -2201,7 +2201,7 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "0.16.0"
-source = "git+https://github.com/jinleili/wgpu?branch=visionOS#92bb4162b0b7bdc9fb44372bcaba5617d7d0fce7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=757245cd#757245cdfc97e4d4dce110ef1bb333787a6c25bd"
 dependencies = [
  "arrayvec 0.7.4",
  "bit-vec",
@@ -2223,7 +2223,7 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "0.16.0"
-source = "git+https://github.com/jinleili/wgpu?branch=visionOS#92bb4162b0b7bdc9fb44372bcaba5617d7d0fce7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=757245cd#757245cdfc97e4d4dce110ef1bb333787a6c25bd"
 dependencies = [
  "android_system_properties",
  "arrayvec 0.7.4",
@@ -2291,7 +2291,7 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "0.16.0"
-source = "git+https://github.com/jinleili/wgpu?branch=visionOS#92bb4162b0b7bdc9fb44372bcaba5617d7d0fce7"
+source = "git+https://github.com/gfx-rs/wgpu?rev=757245cd#757245cdfc97e4d4dce110ef1bb333787a6c25bd"
 dependencies = [
  "bitflags 2.3.2",
  "js-sys",

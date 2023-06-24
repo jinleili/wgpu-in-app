@@ -16,3 +16,5 @@ target/
 JetpackCompose/
 iOS/libs/debug/*
 iOS/libs/release/*
+Apple/libs/debug/*
+Apple/libs/release/*

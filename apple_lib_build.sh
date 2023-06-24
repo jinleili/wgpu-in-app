@@ -14,7 +14,7 @@ fi
 
 cargo build --target ${TARGET} ${RELEASE_MODE}
 
-# Copy .a file to iOS project
+# Copy .a file to iOS/ipadOS/visionOS project
 # 
 # Why copy?
 # On Xcode 14.1, when xxx..dylib file exists in the library search path, Xcode will try to reference it and report an error:
@@ -25,8 +25,8 @@ case ${RELEASE_MODE} in
     *) : ${LIB_FOLDER:=debug} ;;
 esac
 
-if [ ! -d "iOS/libs/${LIB_FOLDER}/" ]; then
-  mkdir -p "iOS/libs/${LIB_FOLDER}"
+if [ ! -d "Apple/libs/${LIB_FOLDER}/" ]; then
+  mkdir -p "Apple/libs/${LIB_FOLDER}"
 fi
 
-cp target/${TARGET}/${LIB_FOLDER}/libwgpu_in_app.a iOS/libs/${LIB_FOLDER}/libwgpu_in_app.a
+cp target/${TARGET}/${LIB_FOLDER}/libwgpu_in_app.a Apple/libs/${LIB_FOLDER}/libwgpu_in_app.a

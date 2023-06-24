@@ -132,7 +132,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_in_iOS_App" */;
+			buildConfigurationList = AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_in_App" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -387,7 +387,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_in_iOS_App" */ = {
+		AD4B1FE426EB1B90008A6AEE /* Build configuration list for PBXProject "wgpu_in_App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AD4B1FFB26EB1B91008A6AEE /* Debug */,

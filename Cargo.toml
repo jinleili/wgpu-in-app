@@ -12,9 +12,9 @@ noise = { version = "0.7", default-features = false }
 pollster = "0.2"
 rand = { version = "0.7.2" }
 # wgpu = "0.16"
-# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "45efae31" }
+wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "757245cd" }
 # wgpu = { path = "../../forks/wgpu/wgpu" }
-wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
+# wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
 
 async-executor = "1.0"
 winit = "0.27.1"
