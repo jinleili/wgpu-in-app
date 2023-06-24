@@ -17,7 +17,7 @@ However, a large number of non-game apps also need to use graphics APIs (such as
 | ![wgpu in iOS](screenshot/on_ios.png) | ![wgpu in Android](screenshot/on_android.png) |
 | ------------------------------------- | --------------------------------------------- |
 
-<video src="screenshot/on_visionOS.mp4" autoplay loop></video>
+https://github.com/jinleili/wgpu-in-app/assets/1001342/9209b81b-f336-4322-986e-70dd9bb155c3
 
 ## **iOS | iPadOS | visionOS**
 
