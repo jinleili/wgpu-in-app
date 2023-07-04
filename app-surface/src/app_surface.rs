@@ -58,7 +58,14 @@ impl AppSurface {
         } else {
             prefered
         };
-        let view_formats = vec![format.add_srgb_suffix(), format.remove_srgb_suffix()];
+        let view_formats = if cfg!(feature = "webgl") {
+            // panicked at 'Error in Surface::configure: Validation Error
+            // Caused by:
+            // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
+            vec![]
+        } else {
+            vec![format.add_srgb_suffix(), format.remove_srgb_suffix()]
+        };
 
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
