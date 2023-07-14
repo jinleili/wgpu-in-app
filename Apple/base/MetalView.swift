@@ -22,6 +22,7 @@ class MetalView: UIView {
         guard let layer = self.layer as? CAMetalLayer else {
             return
         }
+        // https://developer.apple.com/documentation/quartzcore/cametallayer/1478157-presentswithtransaction/
         layer.presentsWithTransaction = false
         layer.framebufferOnly = true
         // nativeScale is real physical pixel scale

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Stop subsequent execution when encountering any errors
+set -e
+
 RELEASE_MODE=${1}
 LIB_FOLDER="debug"
 
