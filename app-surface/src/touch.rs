@@ -18,7 +18,7 @@ pub enum TouchPhase {
 #[derive(Copy, Clone, Debug)]
 pub struct Touch {
     pub phase: TouchPhase,
-    pub position: crate::math::Position,
+    pub position: glam::Vec2,
     // The angle of the stylus: Apple Pencil
     pub stylus_angle: Option<StylusAngle<f32>>,
     pub pressure: f32,
@@ -29,19 +29,19 @@ pub struct Touch {
 }
 
 impl Touch {
-    pub fn touch_start(position: crate::math::Position) -> Self {
+    pub fn touch_start(position: glam::Vec2) -> Self {
         Self::new(position, TouchPhase::Started)
     }
 
-    pub fn touch_move(position: crate::math::Position) -> Self {
+    pub fn touch_move(position: glam::Vec2) -> Self {
         Self::new(position, TouchPhase::Moved)
     }
 
-    pub fn touch_end(position: crate::math::Position) -> Self {
+    pub fn touch_end(position: glam::Vec2) -> Self {
         Self::new(position, TouchPhase::Ended)
     }
 
-    fn new(position: crate::math::Position, phase: TouchPhase) -> Self {
+    fn new(position: glam::Vec2, phase: TouchPhase) -> Self {
         Touch {
             position,
             phase,

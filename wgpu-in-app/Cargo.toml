@@ -19,7 +19,6 @@ package = "app-surface"
 
 [dependencies]
 bytemuck.workspace = true
-cgmath.workspace = true
 glam.workspace = true
 log.workspace = true
 noise.workspace = true

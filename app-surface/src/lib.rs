@@ -1,6 +1,5 @@
 use std::{ops::Deref, sync::Arc};
 
-pub mod math;
 mod touch;
 pub use touch::*;
 
@@ -8,8 +7,6 @@ pub use touch::*;
 #[cfg_attr(target_os = "android", path = "android.rs")]
 mod app_surface;
 pub use app_surface::*;
-
-pub mod fs;
 
 #[repr(C)]
 #[derive(Debug)]

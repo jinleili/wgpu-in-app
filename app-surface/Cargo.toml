@@ -14,6 +14,7 @@ webgl = ["wgpu/webgl"]
 
 [dependencies]
 log.workspace = true
+glam.workspace = true
 pollster.workspace = true
 wgpu.workspace = true
 
@@ -29,10 +30,8 @@ raw-window-handle.workspace = true
 [target.'cfg(target_os = "ios")'.dependencies]
 core-graphics.workspace = true
 env_logger.workspace = true
-lazy_static.workspace = true
 libc.workspace = true
 objc.workspace = true
-objc-foundation.workspace = true
 
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger.workspace = true

@@ -4,12 +4,11 @@ members = ["wgpu-in-app", "app-surface", "cargo-so"]
 default-members = ["wgpu-in-app"]
 
 [workspace.dependencies]
-bytemuck = { version = "1.9.1", features = ["derive"] }
-cgmath = "0.18"
-glam = "0.22"
+bytemuck = { version = "1.13", features = ["derive"] }
+glam = "0.24"
 log = "0.4"
-noise = { version = "0.7", default-features = false }
-pollster = "0.2"
+noise = { version = "0.8", default-features = false }
+pollster = "0.3"
 rand = { version = "0.7.2" }
 # wgpu = "0.16"
 wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "757245cd" }
@@ -25,20 +24,18 @@ env_logger = "0.9"
 libc = "*"
 objc = "*"
 core-graphics = "*"
-objc-foundation = "*"
-lazy_static = "1.4"
 
 # android target
-android_logger = "0.10.1"
-jni = "0.19"
+android_logger = "0.13"
+jni = "0.21"
 jni_fn = "0.1"
 ndk-sys = "*"
 ash = "0.37.3"
 
 # wasm target
-web-sys = "0.3.61"
-wasm-bindgen = "0.2.83"
-js-sys = "0.3.63"
+web-sys = "0.3.64"
+wasm-bindgen = "0.2.87"
+js-sys = "0.3.64"
 wasm-bindgen-futures = "0.4.34"
 # parking_lot 0.12 switches from `winapi` to `windows`; permit either
 parking_lot = ">=0.11,<0.13"

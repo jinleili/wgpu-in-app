@@ -3,7 +3,10 @@ use app_surface::{AppSurface, IOSViewObj};
 
 #[no_mangle]
 pub fn create_wgpu_canvas(ios_obj: IOSViewObj) -> *mut libc::c_void {
-    println!("create_wgpu_canvas, maximum frames: {}", ios_obj.maximum_frames);
+    println!(
+        "create_wgpu_canvas, maximum frames: {}",
+        ios_obj.maximum_frames
+    );
     let obj = WgpuCanvas::new(AppSurface::new(ios_obj), 0_i32);
     // 使用 Box 对 Rust 对象进行装箱操作。
     // 我们无法将 Rust 对象直接传递给外部语言，通过装箱来传递此对象的胖指针

@@ -5,13 +5,13 @@ use jni::objects::JClass;
 use jni::sys::{jint, jlong, jobject};
 use jni::JNIEnv;
 use jni_fn::jni_fn;
-use log::{info, Level};
+use log::{info, LevelFilter};
 
 #[no_mangle]
 #[jni_fn("name.jinleili.wgpu.RustBridge")]
 pub fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject, idx: jint) -> jlong {
     log_panics::init();
-    android_logger::init_once(Config::default().with_min_level(Level::Info));
+    android_logger::init_once(Config::default().with_max_level(LevelFilter::Error));
     let canvas = WgpuCanvas::new(AppSurface::new(env as *mut _, surface), idx);
     info!("WgpuCanvas created!");
     Box::into_raw(Box::new(canvas)) as jlong
