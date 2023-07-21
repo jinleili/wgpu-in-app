@@ -21,15 +21,15 @@ raw-window-handle = "0.5"
 env_logger = "0.9"
 
 # macOS, iOS
-libc = "*"
-objc = "*"
-core-graphics = "*"
+libc = "0.2.147"
+objc = "0.2.7"
+core-graphics = "0.23.1"
 
 # android target
 android_logger = "0.13"
 jni = "0.21"
 jni_fn = "0.1"
-ndk-sys = "*"
+ndk-sys = "0.4.1+23.1.7779620"
 ash = "0.37.3"
 
 # wasm target
