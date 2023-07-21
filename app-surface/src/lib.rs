@@ -122,10 +122,9 @@ async fn request_device(
     backend: wgpu::Backends,
     surface: &wgpu::Surface,
 ) -> (wgpu::Adapter, wgpu::Device, wgpu::Queue) {
-    let adapter =
-        wgpu::util::initialize_adapter_from_env_or_default(instance, backend, Some(surface))
-            .await
-            .expect("No suitable GPU adapters found on the system!");
+    let adapter = wgpu::util::initialize_adapter_from_env_or_default(instance, Some(surface))
+        .await
+        .expect("No suitable GPU adapters found on the system!");
     let adapter_info = adapter.get_info();
     println!("Using {} ({:?})", adapter_info.name, adapter_info.backend);
     let base_dir = std::env::var("CARGO_MANIFEST_DIR");

@@ -2,7 +2,7 @@
 name = "app-surface"
 authors = ["jinleili"]
 edition = "2021"
-version = "0.2.1"
+version = "0.3.0"
 rust-version = "1.64"
 
 [lib]
