@@ -18,11 +18,10 @@ impl AppSurface {
         } else {
             wgpu::Backends::PRIMARY
         };
-        let backend = wgpu::util::backend_bits_from_env().unwrap_or(default_backends);
-        let dx12_shader_compiler = wgpu::util::dx12_shader_compiler_from_env().unwrap_or_default();
+        let backends = wgpu::util::backend_bits_from_env().unwrap_or(default_backends);
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
-            backends: backend,
-            dx12_shader_compiler,
+            backends,
+            ..Default::default()
         });
         let physical = view.inner_size();
         let surface = unsafe {
@@ -34,7 +33,8 @@ impl AppSurface {
                 }
             }
         };
-        let (adapter, device, queue) = crate::request_device(&instance, backend, &surface).await;
+
+        let (adapter, device, queue) = crate::request_device(&instance, &surface).await;
         let caps = surface.get_capabilities(&adapter);
 
         let modes = caps.alpha_modes;

@@ -18,15 +18,14 @@ pub struct AppSurface {
 impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = NativeWindow::new(env, surface);
-
-        let backend = wgpu::Backends::VULKAN;
+        let backends = wgpu::Backends::VULKAN;
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
-            backends: backend,
+            backends,
             ..Default::default()
         });
         let surface = unsafe { instance.create_surface(&native_window).unwrap() };
         let (adapter, device, queue) =
-            pollster::block_on(crate::request_device(&instance, backend, &surface));
+            pollster::block_on(crate::request_device(&instance, &surface));
 
         let caps = surface.get_capabilities(&adapter);
 

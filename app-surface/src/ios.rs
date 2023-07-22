@@ -40,14 +40,14 @@ impl AppSurface {
             (s.size.width as f32 * scale_factor) as u32,
             (s.size.height as f32 * scale_factor) as u32,
         );
-        let backend = wgpu::Backends::METAL;
+        let backends = wgpu::Backends::METAL;
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
-            backends: backend,
+            backends,
             ..Default::default()
         });
         let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
         let (adapter, device, queue) =
-            pollster::block_on(crate::request_device(&instance, backend, &surface));
+            pollster::block_on(crate::request_device(&instance, &surface));
         let caps = surface.get_capabilities(&adapter);
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,

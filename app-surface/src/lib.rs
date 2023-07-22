@@ -1,4 +1,5 @@
 use std::{ops::Deref, sync::Arc};
+use wgpu::{Instance, Surface};
 
 mod touch;
 pub use touch::*;
@@ -118,11 +119,16 @@ impl SurfaceFrame for AppSurface {
 
 #[allow(unused)]
 async fn request_device(
-    instance: &wgpu::Instance,
-    backend: wgpu::Backends,
-    surface: &wgpu::Surface,
+    instance: &Instance,
+    surface: &Surface,
 ) -> (wgpu::Adapter, wgpu::Device, wgpu::Queue) {
-    let adapter = wgpu::util::initialize_adapter_from_env_or_default(instance, Some(surface))
+    let adapter = instance
+        .request_adapter(&wgpu::RequestAdapterOptions {
+            power_preference: wgpu::util::power_preference_from_env()
+                .unwrap_or(wgpu::PowerPreference::HighPerformance),
+            force_fallback_adapter: false,
+            compatible_surface: Some(surface),
+        })
         .await
         .expect("No suitable GPU adapters found on the system!");
     let adapter_info = adapter.get_info();
