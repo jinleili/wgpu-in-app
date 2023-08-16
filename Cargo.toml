@@ -16,7 +16,7 @@ wgpu = "0.17"
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
 
 async-executor = "1.0"
-winit = "0.27.5"
+winit = "0.28"
 raw-window-handle = "0.5"
 env_logger = "0.10"
 
