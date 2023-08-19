@@ -1,7 +1,7 @@
 # cargo so
 
 Tool for compile Rust package to Android `.so` lib files. 
-Code modified from [cargo-apk](https://github.com/rust-windowing/android-ndk-rs/tree/master/cargo-apk)
+Code modified from [cargo-apk](https://github.com/rust-mobile/cargo-apk)
 
 ## Installation
 

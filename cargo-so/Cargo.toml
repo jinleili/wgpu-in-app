@@ -7,9 +7,9 @@ readme = "./README.MD"
 keywords = ["android", "so", "ndk", "jni"]
 license = "MIT OR Apache-2.0"
 edition = "2021"
-version = "0.1.3"
+version = "0.2.0"
 
 [dependencies]
-cargo-subcommand = "0.8.0"
-clap = "3.2.22"
-ndk-build = "0.8.0"
+cargo-subcommand = "0.11"
+clap = { version = "4", features = ["derive"] }
+ndk-build = "0.9.0"

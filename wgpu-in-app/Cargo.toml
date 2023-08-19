@@ -26,7 +26,7 @@ pollster.workspace = true
 rand.workspace = true
 wgpu.workspace = true
 
-[target.'cfg(any(not(target_os = "ios"), not(target_os = "android")))'.dependencies]
+[target.'cfg(any(target_os = "macos", target_os = "windows", target_os = "linux"))'.dependencies]
 async-executor.workspace = true
 winit.workspace = true
 
