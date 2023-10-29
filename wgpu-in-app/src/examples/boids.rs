@@ -256,13 +256,14 @@ impl Example for Boids {
                         b: 0.0,
                         a: 0.8,
                     }),
-                    store: true,
+                    store: wgpu::StoreOp::Store,
                 },
             })];
             let render_pass_descriptor = wgpu::RenderPassDescriptor {
                 label: None,
                 color_attachments: &color_attachments,
                 depth_stencil_attachment: None,
+                ..Default::default()
             };
 
             // get command encoder
@@ -273,7 +274,7 @@ impl Example for Boids {
             {
                 // compute pass
                 let mut cpass = command_encoder
-                    .begin_compute_pass(&wgpu::ComputePassDescriptor { label: None });
+                    .begin_compute_pass(&wgpu::ComputePassDescriptor::default());
                 cpass.set_pipeline(&self.compute_pipeline);
                 cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
                 cpass.dispatch_workgroups(self.work_group_count, 1, 1);

@@ -260,7 +260,7 @@ impl Example for MSAALine {
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
-                        store: true,
+                        store: wgpu::StoreOp::Store,
                     },
                 }
             } else {
@@ -271,7 +271,7 @@ impl Example for MSAALine {
                         load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
                         // Storing pre-resolve MSAA data is unnecessary if it isn't used later.
                         // On tile-based GPU, avoid store can reduce your app's memory footprint.
-                        store: false,
+                        store: wgpu::StoreOp::Store,
                     },
                 }
             };
@@ -280,7 +280,7 @@ impl Example for MSAALine {
                 .begin_render_pass(&wgpu::RenderPassDescriptor {
                     label: None,
                     color_attachments: &[Some(rpass_color_attachment)],
-                    depth_stencil_attachment: None,
+                    ..Default::default()
                 })
                 .execute_bundles(iter::once(&self.bundle));
         }

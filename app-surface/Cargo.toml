@@ -3,10 +3,18 @@ name = "app-surface"
 authors = ["jinleili"]
 description = "Integrate wgpu into your existing iOS and Android apps."
 edition = "2021"
-version = "0.3.3"
-rust-version = "1.64"
+version = "0.3.4"
+rust-version = "1.65"
 repository = "https://github.com/jinleili/wgpu-in-app"
-keywords = ["android", "ios", "app", "wgpu"]
+keywords = [
+    "app-surface",
+    "android",
+    "SurfaceView",
+    "ios",
+    "CAMetalLayer",
+    "app",
+    "wgpu",
+]
 license = "MIT"
 
 [lib]

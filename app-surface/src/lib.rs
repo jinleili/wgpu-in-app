@@ -27,7 +27,11 @@ pub struct SurfaceDeviceQueue {
 impl SurfaceDeviceQueue {
     pub fn update_config_format(&mut self, format: wgpu::TextureFormat) {
         self.config.format = format;
-        self.config.view_formats = vec![format.add_srgb_suffix(), format.remove_srgb_suffix()];
+        if cfg!(feature = "webgl") {
+            // webgl 后端不支持 view_formats
+        } else {
+            self.config.view_formats = vec![format.add_srgb_suffix(), format.remove_srgb_suffix()];
+        }
         self.surface.configure(&self.device, &self.config);
     }
 }

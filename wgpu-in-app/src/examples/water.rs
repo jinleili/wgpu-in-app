@@ -708,7 +708,7 @@ impl Example for Water {
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(back_color),
-                        store: true,
+                        store: wgpu::StoreOp::Store,
                     },
                 })],
                 // We still need to use the depth buffer here
@@ -717,10 +717,11 @@ impl Example for Water {
                     view: &self.depth_buffer,
                     depth_ops: Some(wgpu::Operations {
                         load: wgpu::LoadOp::Clear(1.0),
-                        store: true,
+                        store: wgpu::StoreOp::Store,
                     }),
                     stencil_ops: None,
                 }),
+                ..Default::default()
             });
             rpass.set_pipeline(&self.terrain_pipeline);
             rpass.set_bind_group(0, &self.terrain_flipped_bind_group, &[]);
@@ -737,17 +738,18 @@ impl Example for Water {
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(back_color),
-                        store: true,
+                        store: wgpu::StoreOp::Store,
                     },
                 })],
                 depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
                     view: &self.depth_buffer,
                     depth_ops: Some(wgpu::Operations {
                         load: wgpu::LoadOp::Clear(1.0),
-                        store: true,
+                        store: wgpu::StoreOp::Store,
                     }),
                     stencil_ops: None,
                 }),
+                ..Default::default()
             });
             rpass.set_pipeline(&self.terrain_pipeline);
             rpass.set_bind_group(0, &self.terrain_normal_bind_group, &[]);
@@ -764,7 +766,7 @@ impl Example for Water {
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Load,
-                        store: true,
+                        store: wgpu::StoreOp::Store,
                     },
                 })],
                 depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
@@ -772,6 +774,7 @@ impl Example for Water {
                     depth_ops: None,
                     stencil_ops: None,
                 }),
+                ..Default::default()
             });
 
             rpass.set_pipeline(&self.water_pipeline);
