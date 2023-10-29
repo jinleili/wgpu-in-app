@@ -6,15 +6,7 @@ edition = "2021"
 version = "0.3.4"
 rust-version = "1.65"
 repository = "https://github.com/jinleili/wgpu-in-app"
-keywords = [
-    "app-surface",
-    "android",
-    "SurfaceView",
-    "ios",
-    "CAMetalLayer",
-    "app",
-    "wgpu",
-]
+keywords = ["android", "SurfaceView", "ios", "app", "wgpu"]
 license = "MIT"
 
 [lib]
