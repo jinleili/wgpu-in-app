@@ -14,7 +14,7 @@ impl AppSurface {
     pub async fn new(view: winit::window::Window) -> Self {
         let scale_factor = view.scale_factor();
         let default_backends = if cfg!(feature = "webgl") {
-            wgpu::Backends::all()
+            wgpu::Backends::GL
         } else {
             wgpu::Backends::PRIMARY
         };
@@ -25,6 +25,12 @@ impl AppSurface {
         });
         let physical = view.inner_size();
         let surface = unsafe {
+            #[cfg(target_arch = "wasm32")]
+            let surface = {
+                use winit::platform::web::WindowExtWebSys;
+                instance.create_surface_from_canvas(view.canvas())
+            };
+            #[cfg(not(target_arch = "wasm32"))]
             let surface = instance.create_surface(&view);
             match surface {
                 Ok(surface) => surface,
