@@ -17,7 +17,7 @@ pub struct ViewSize {
 }
 
 pub struct SurfaceDeviceQueue {
-    pub surface: wgpu::Surface,
+    pub surface: wgpu::Surface<'static>,
     pub config: wgpu::SurfaceConfiguration,
     pub adapter: wgpu::Adapter,
     pub device: Arc<wgpu::Device>,
@@ -47,6 +47,8 @@ pub trait SurfaceFrame {
     fn view_size(&self) -> ViewSize;
     // After App view's size or orientation changed, need to resize surface.
     fn resize_surface(&mut self);
+    #[cfg(target_arch = "wasm32")]
+    fn resize_surface_by_size(&mut self, size: (u32, u32));
     fn pintch(&mut self, _touch: Touch, _scale: f32) {}
     fn touch(&mut self, _touch: Touch) {}
     fn normalize_touch_point(&self, _touch_point_x: f32, _touch_point_y: f32) -> (f32, f32) {
@@ -105,6 +107,13 @@ impl SurfaceFrame for AppSurface {
         self.surface.configure(&self.device, &self.config);
     }
 
+    #[cfg(target_arch = "wasm32")]
+    fn resize_surface_by_size(&mut self, size: (u32, u32)) {
+        self.sdq.config.width = size.0;
+        self.sdq.config.height = size.1;
+        self.surface.configure(&self.device, &self.config);
+    }
+
     fn normalize_touch_point(&self, touch_point_x: f32, touch_point_y: f32) -> (f32, f32) {
         let size = self.get_view_size();
         (
@@ -124,7 +133,7 @@ impl SurfaceFrame for AppSurface {
 #[allow(unused)]
 async fn request_device(
     instance: &Instance,
-    surface: &Surface,
+    surface: &Surface<'static>,
 ) -> (wgpu::Adapter, wgpu::Device, wgpu::Queue) {
     let adapter = instance
         .request_adapter(&wgpu::RequestAdapterOptions {
@@ -147,8 +156,8 @@ async fn request_device(
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
-                features: adapter.features(),
-                limits: adapter.limits(),
+                required_features: adapter.features(),
+                required_limits: adapter.limits(),
             },
             None,
         )

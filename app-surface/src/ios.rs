@@ -45,7 +45,13 @@ impl AppSurface {
             backends,
             ..Default::default()
         });
-        let surface = unsafe { instance.create_surface_from_core_animation_layer(obj.metal_layer) };
+        let surface = unsafe {
+            instance
+                .create_surface_unsafe(wgpu::SurfaceTargetUnsafe::CoreAnimationLayer(
+                    obj.metal_layer,
+                ))
+                .expect("Surface creation failed")
+        };
         let (adapter, device, queue) =
             pollster::block_on(crate::request_device(&instance, &surface));
         let caps = surface.get_capabilities(&adapter);

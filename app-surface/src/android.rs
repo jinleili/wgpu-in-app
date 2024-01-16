@@ -101,14 +101,15 @@ impl Drop for NativeWindow {
 
 unsafe impl HasRawWindowHandle for NativeWindow {
     fn raw_window_handle(&self) -> RawWindowHandle {
-        let mut handle = AndroidNdkWindowHandle::empty();
-        handle.a_native_window = self.a_native_window as *mut _ as *mut c_void;
+        let mut handle = AndroidNdkWindowHandle::new(NonNull::new(
+            self.a_native_window as *mut _ as *mut c_void,
+        ));
         RawWindowHandle::AndroidNdk(handle)
     }
 }
 
 unsafe impl HasRawDisplayHandle for NativeWindow {
     fn raw_display_handle(&self) -> RawDisplayHandle {
-        RawDisplayHandle::Android(AndroidDisplayHandle::empty())
+        RawDisplayHandle::Android(AndroidDisplayHandle::new())
     }
 }

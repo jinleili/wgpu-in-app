@@ -43,6 +43,7 @@ impl HDRImageView {
                 label: None,
                 view_formats: &[],
             },
+            wgpu::util::TextureDataOrder::MipMajor,
             &astc_data[16..],
         );
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor {
@@ -105,9 +106,15 @@ impl HDRImageView {
         });
 
         let pipeline_vertex_buffers = [];
+        let render_pipeline_layout =
+            device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+                label: Some("render"),
+                bind_group_layouts: &[&bind_group_layout],
+                push_constant_ranges: &[],
+            });
         let pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
             label: Some("bufferless pipeline"),
-            layout: None,
+            layout: Some(&render_pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &shader_module,
                 entry_point: "vs_main",

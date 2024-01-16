@@ -17,6 +17,7 @@ default = []
 webgl = ["wgpu/webgl"]
 
 [dependencies]
+cfg-if.workspace = true
 log.workspace = true
 glam.workspace = true
 pollster.workspace = true

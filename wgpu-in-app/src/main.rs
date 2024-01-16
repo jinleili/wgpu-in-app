@@ -8,12 +8,14 @@ fn main() {}
 ))]
 fn main() {
     use app_surface::AppSurface;
-    use std::time::{Duration, Instant};
     use wgpu_in_app::WgpuCanvas;
-    use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
-    use winit::event_loop::{ControlFlow, EventLoop};
+    use winit::{
+        event::{ElementState, Event, KeyEvent, WindowEvent},
+        event_loop::EventLoop,
+        keyboard::{Key, KeyCode, NamedKey, PhysicalKey},
+    };
 
-    let events_loop = EventLoop::new();
+    let events_loop = EventLoop::new().unwrap();
     let size = winit::dpi::Size::Logical(winit::dpi::LogicalSize {
         width: 1200.0,
         height: 800.0,
@@ -28,100 +30,47 @@ fn main() {
     let app_view = pollster::block_on(AppSurface::new(window));
     let mut canvas = WgpuCanvas::new(app_view, 0);
 
-    let mut last_update_inst = Instant::now();
-    let target_frametime = Duration::from_secs_f64(1.0 / 60.0);
-    let spawner = Spawner::new();
-
-    events_loop.run(move |event, _, control_flow| {
-        *control_flow = if cfg!(feature = "metal-auto-capture") {
-            ControlFlow::Exit
-        } else {
-            ControlFlow::Poll
-        };
-        match event {
-            Event::RedrawEventsCleared => {
-                let time_since_last_frame = last_update_inst.elapsed();
-                if time_since_last_frame >= target_frametime {
-                    canvas.app_surface.view.request_redraw();
-                    last_update_inst = Instant::now();
-                } else {
-                    *control_flow = ControlFlow::WaitUntil(
-                        Instant::now()
-                            + target_frametime.checked_sub(time_since_last_frame).unwrap(),
-                    );
-                }
-
-                spawner.run_until_stalled();
-            }
-            Event::WindowEvent {
-                event: WindowEvent::Resized(size),
-                ..
-            } => {
-                if size.width == 0 || size.height == 0 {
-                    println!("Window minimized!");
-                } else {
-                    canvas.resize();
-                }
-            }
-            Event::WindowEvent { event, .. } => match event {
+    let _ = events_loop.run(move |event, elwt| {
+        if let Event::WindowEvent { event, .. } = event {
+            match event {
                 WindowEvent::KeyboardInput {
-                    input:
-                        KeyboardInput {
-                            virtual_keycode: Some(VirtualKeyCode::Escape),
-                            state: ElementState::Pressed,
+                    event:
+                        KeyEvent {
+                            logical_key: Key::Named(NamedKey::Escape),
                             ..
                         },
                     ..
                 }
-                | WindowEvent::CloseRequested => {
-                    *control_flow = winit::event_loop::ControlFlow::Exit;
+                | WindowEvent::CloseRequested => elwt.exit(),
+                WindowEvent::Resized(size) => {
+                    if size.width == 0 || size.height == 0 {
+                        println!("Window minimized!");
+                    } else {
+                        canvas.resize();
+                    }
                 }
                 WindowEvent::KeyboardInput {
-                    input:
-                        KeyboardInput {
-                            virtual_keycode: Some(key),
+                    event:
+                        KeyEvent {
+                            physical_key: PhysicalKey::Code(key),
                             state: ElementState::Pressed,
                             ..
                         },
                     ..
                 } => match key {
-                    VirtualKeyCode::Key1 => canvas.change_example(1),
-                    VirtualKeyCode::Key2 => canvas.change_example(2),
-                    VirtualKeyCode::Key3 => canvas.change_example(3),
-                    VirtualKeyCode::Key4 => canvas.change_example(4),
-                    VirtualKeyCode::Key5 => canvas.change_example(5),
-
+                    KeyCode::Digit1 => canvas.change_example(1),
+                    KeyCode::Digit2 => canvas.change_example(2),
+                    KeyCode::Digit3 => canvas.change_example(3),
+                    KeyCode::Digit4 => canvas.change_example(4),
+                    KeyCode::Digit5 => canvas.change_example(5),
                     _ => canvas.change_example(0),
                 },
-                _ => {}
-            },
-            Event::RedrawRequested(_) => {
-                canvas.enter_frame();
+                WindowEvent::RedrawRequested => {
+                    canvas.enter_frame();
+                    canvas.app_surface.view.as_ref().unwrap().request_redraw();
+                }
+                _ => (),
             }
-            _ => (),
         }
     });
-}
-
-#[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
-pub struct Spawner<'a> {
-    executor: async_executor::LocalExecutor<'a>,
-}
-
-#[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
-impl<'a> Spawner<'a> {
-    fn new() -> Self {
-        Self {
-            executor: async_executor::LocalExecutor::new(),
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn spawn_local(&self, future: impl std::future::Future<Output = ()> + 'a) {
-        self.executor.spawn(future).detach();
-    }
-
-    fn run_until_stalled(&self) {
-        while self.executor.try_tick() {}
-    }
 }

@@ -170,5 +170,3 @@ web-sys = { workspace = true, features = [
 wasm-bindgen.workspace = true
 js-sys.workspace = true
 wasm-bindgen-futures.workspace = true
-# parking_lot 0.12 switches from `winapi` to `windows`; permit either
-parking_lot.workspace = true

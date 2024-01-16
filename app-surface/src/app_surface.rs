@@ -1,7 +1,9 @@
 use std::sync::Arc;
+use winit::window::Window;
 
 pub struct AppSurface {
-    pub view: winit::window::Window,
+    pub view: Option<Arc<Window>>,
+    pub is_offscreen_canvas: bool,
     pub scale_factor: f32,
     pub maximum_frames: i32,
     pub sdq: crate::SurfaceDeviceQueue,
@@ -10,9 +12,57 @@ pub struct AppSurface {
     pub library_directory: &'static str,
 }
 
+#[derive(Default)]
+struct ViewSetting {
+    view: Option<Window>,
+    scale_factor: f32,
+    physical_size: (u32, u32),
+    #[cfg(target_arch = "wasm32")]
+    offscreen_canvas: Option<web_sys::OffscreenCanvas>,
+}
+
 impl AppSurface {
-    pub async fn new(view: winit::window::Window) -> Self {
-        let scale_factor = view.scale_factor();
+    #[allow(clippy::needless_update)]
+    pub async fn new(view: Window) -> Self {
+        let scale_factor = view.scale_factor() as f32;
+        let physical_size = view.inner_size();
+        let view_setting = ViewSetting {
+            scale_factor,
+            physical_size: (physical_size.width, physical_size.height),
+            view: Some(view),
+            ..Default::default()
+        };
+
+        Self::create(view_setting).await
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    pub async fn from_offscreen_canvas(
+        offscreen_canvas: web_sys::OffscreenCanvas,
+        scale_factor: f32,
+        physical_size: (u32, u32),
+    ) -> Self {
+        let view_setting = ViewSetting {
+            scale_factor,
+            physical_size,
+            offscreen_canvas: Some(offscreen_canvas),
+            ..Default::default()
+        };
+        Self::create(view_setting).await
+    }
+
+    #[allow(unused_variables)]
+    async fn create(view_setting: ViewSetting) -> Self {
+        let view = Arc::new(view_setting.view.unwrap());
+        #[cfg(not(target_arch = "wasm32"))]
+        let is_offscreen_canvas = false;
+        #[cfg(target_arch = "wasm32")]
+        let is_offscreen_canvas = if view_setting.offscreen_canvas.is_some() {
+            true
+        } else {
+            false
+        };
+        let scale_factor = view_setting.scale_factor;
         let default_backends = if cfg!(feature = "webgl") {
             wgpu::Backends::GL
         } else {
@@ -23,20 +73,27 @@ impl AppSurface {
             backends,
             ..Default::default()
         });
-        let physical = view.inner_size();
-        let surface = unsafe {
-            #[cfg(target_arch = "wasm32")]
-            let surface = {
-                use winit::platform::web::WindowExtWebSys;
-                instance.create_surface_from_canvas(view.canvas())
-            };
-            #[cfg(not(target_arch = "wasm32"))]
-            let surface = instance.create_surface(&view);
-            match surface {
-                Ok(surface) => surface,
-                Err(e) => {
-                    panic!("Failed to create surface: {e:?}");
-                }
+        cfg_if::cfg_if! {
+            if #[cfg(target_arch = "wasm32")] {
+                let surface = if is_offscreen_canvas {
+                    // let offscreen = canvas.transfer_control_to_offscreen().unwrap();
+                    instance.create_surface_from_offscreen_canvas(
+                        view_setting.offscreen_canvas.unwrap(),
+                    )
+                } else {
+                    use winit::platform::web::WindowExtWebSys;
+                    let canvas: web_sys::HtmlCanvasElement =
+                        view.as_ref().canvas().unwrap();
+                    instance.create_surface_from_canvas(canvas)
+                };
+            } else {
+                let surface = instance.create_surface(view.clone());
+            }
+        }
+        let surface = match surface {
+            Ok(surface) => surface,
+            Err(e) => {
+                panic!("Failed to create surface: {e:?}");
             }
         };
 
@@ -73,11 +130,12 @@ impl AppSurface {
             vec![format.add_srgb_suffix(), format.remove_srgb_suffix()]
         };
 
+        let physical = view_setting.physical_size;
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format,
-            width: physical.width,
-            height: physical.height,
+            width: physical.0,
+            height: physical.1,
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode,
             view_formats,
@@ -85,8 +143,9 @@ impl AppSurface {
         surface.configure(&device, &config);
 
         AppSurface {
-            view,
-            scale_factor: scale_factor as f32,
+            view: Some(view),
+            is_offscreen_canvas,
+            scale_factor,
             maximum_frames: 60,
             sdq: crate::SurfaceDeviceQueue {
                 surface,
@@ -102,7 +161,11 @@ impl AppSurface {
     }
 
     pub fn get_view_size(&self) -> (u32, u32) {
-        let physical = self.view.inner_size();
-        (physical.width, physical.height)
+        if self.is_offscreen_canvas {
+            panic!("Offscreen canvas cannot provide any DOM interfaces.");
+        } else {
+            let physical = self.view.as_ref().unwrap().inner_size();
+            (physical.width, physical.height)
+        }
     }
 }
