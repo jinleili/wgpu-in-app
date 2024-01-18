@@ -2,13 +2,13 @@ use core::ffi::c_void;
 use jni::sys::jobject;
 use jni::JNIEnv;
 use raw_window_handle::{
-    AndroidDisplayHandle, AndroidNdkWindowHandle, HasRawDisplayHandle, HasRawWindowHandle,
-    RawDisplayHandle, RawWindowHandle,
+    AndroidDisplayHandle, AndroidNdkWindowHandle, DisplayHandle, HandleError, HasDisplayHandle,
+    HasWindowHandle, RawDisplayHandle, RawWindowHandle, WindowHandle,
 };
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 pub struct AppSurface {
-    pub native_window: NativeWindow,
+    pub native_window: Arc<NativeWindow>,
     pub scale_factor: f32,
     pub sdq: crate::SurfaceDeviceQueue,
     pub instance: wgpu::Instance,
@@ -17,13 +17,16 @@ pub struct AppSurface {
 
 impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
-        let native_window = NativeWindow::new(env, surface);
+        let native_window = Arc::new(NativeWindow::new(env, surface));
         let backends = wgpu::Backends::VULKAN;
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends,
             ..Default::default()
         });
-        let surface = unsafe { instance.create_surface(&native_window).unwrap() };
+        let handle: Box<dyn wgpu::WindowHandle> = Box::new(native_window.clone());
+        let surface = instance
+            .create_surface(wgpu::SurfaceTarget::Window(handle))
+            .unwrap();
         let (adapter, device, queue) =
             pollster::block_on(crate::request_device(&instance, &surface));
 
@@ -38,6 +41,7 @@ impl AppSurface {
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode: caps.alpha_modes[0],
             view_formats: vec![],
+            desired_maximum_frame_latency: 2,
         };
         surface.configure(&device, &config);
 
@@ -65,7 +69,7 @@ impl AppSurface {
 }
 
 pub struct NativeWindow {
-    a_native_window: *mut ndk_sys::ANativeWindow,
+    a_native_window: Arc<Mutex<*mut ndk_sys::ANativeWindow>>,
 }
 
 impl NativeWindow {
@@ -75,41 +79,56 @@ impl NativeWindow {
             // 此函数在返回 ANativeWindow 的同时会自动将其引用计数 +1，以防止该对象在安卓端被意外释放。
             ndk_sys::ANativeWindow_fromSurface(env as *mut _, surface as *mut _)
         };
-        Self { a_native_window }
+        Self {
+            a_native_window: Arc::new(Mutex::new(a_native_window)),
+        }
     }
 
     pub fn get_raw_window(&self) -> *mut ndk_sys::ANativeWindow {
-        self.a_native_window
+        let a_native_window = self.a_native_window.lock().unwrap();
+        *a_native_window
     }
 
     fn get_width(&self) -> u32 {
-        unsafe { ndk_sys::ANativeWindow_getWidth(self.a_native_window) as u32 }
+        unsafe { ndk_sys::ANativeWindow_getWidth(*self.a_native_window.lock().unwrap()) as u32 }
     }
 
     fn get_height(&self) -> u32 {
-        unsafe { ndk_sys::ANativeWindow_getHeight(self.a_native_window) as u32 }
+        unsafe { ndk_sys::ANativeWindow_getHeight(*self.a_native_window.lock().unwrap()) as u32 }
     }
 }
 
 impl Drop for NativeWindow {
     fn drop(&mut self) {
         unsafe {
-            ndk_sys::ANativeWindow_release(self.a_native_window);
+            ndk_sys::ANativeWindow_release(*self.a_native_window.lock().unwrap());
         }
     }
 }
 
-unsafe impl HasRawWindowHandle for NativeWindow {
-    fn raw_window_handle(&self) -> RawWindowHandle {
-        let mut handle = AndroidNdkWindowHandle::new(NonNull::new(
-            self.a_native_window as *mut _ as *mut c_void,
-        ));
-        RawWindowHandle::AndroidNdk(handle)
+impl HasWindowHandle for NativeWindow {
+    fn window_handle(&self) -> Result<WindowHandle, HandleError> {
+        unsafe {
+            let a_native_window = self.a_native_window.lock().unwrap();
+            let handle = AndroidNdkWindowHandle::new(
+                std::ptr::NonNull::new(*a_native_window as *mut _ as *mut c_void).unwrap(),
+            );
+            Ok(WindowHandle::borrow_raw(RawWindowHandle::AndroidNdk(
+                handle,
+            )))
+        }
     }
 }
 
-unsafe impl HasRawDisplayHandle for NativeWindow {
-    fn raw_display_handle(&self) -> RawDisplayHandle {
-        RawDisplayHandle::Android(AndroidDisplayHandle::new())
+impl HasDisplayHandle for NativeWindow {
+    fn display_handle(&self) -> Result<DisplayHandle<'_>, HandleError> {
+        unsafe {
+            Ok(DisplayHandle::borrow_raw(RawDisplayHandle::Android(
+                AndroidDisplayHandle::new(),
+            )))
+        }
     }
 }
+
+unsafe impl Send for NativeWindow {}
+unsafe impl Sync for NativeWindow {}

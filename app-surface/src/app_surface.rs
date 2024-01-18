@@ -77,14 +77,14 @@ impl AppSurface {
             if #[cfg(target_arch = "wasm32")] {
                 let surface = if is_offscreen_canvas {
                     // let offscreen = canvas.transfer_control_to_offscreen().unwrap();
-                    instance.create_surface_from_offscreen_canvas(
-                        view_setting.offscreen_canvas.unwrap(),
+                    instance.create_surface(
+                        wgpu::SurfaceTarget::OffscreenCanvas(view_setting.offscreen_canvas.unwrap())
                     )
                 } else {
                     use winit::platform::web::WindowExtWebSys;
                     let canvas: web_sys::HtmlCanvasElement =
                         view.as_ref().canvas().unwrap();
-                    instance.create_surface_from_canvas(canvas)
+                    instance.create_surface(wgpu::SurfaceTarget::Canvas(canvas))
                 };
             } else {
                 let surface = instance.create_surface(view.clone());
@@ -139,6 +139,7 @@ impl AppSurface {
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode,
             view_formats,
+            desired_maximum_frame_latency: 2,
         };
         surface.configure(&device, &config);
 

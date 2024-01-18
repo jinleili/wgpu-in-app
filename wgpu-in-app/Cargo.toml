@@ -1,7 +1,7 @@
 [package]
 name = "wgpu-in-app"
 authors = ["jinleili"]
-version = "0.2.3"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.65"
 
@@ -165,7 +165,7 @@ web-sys = { workspace = true, features = [
     "OffscreenCanvas",
     "ImageBitmap",
     "ImageBitmapRenderingContext",
-    "Window"
+    "Window",
 ] }
 wasm-bindgen.workspace = true
 js-sys.workspace = true

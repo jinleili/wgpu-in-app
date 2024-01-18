@@ -11,13 +11,10 @@ log = "0.4"
 noise = { version = "0.8", default-features = false }
 pollster = "0.3"
 rand = "0.7.2"
-# wgpu = "0.18"
-wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "445fa6019b47079c9d336881dbee1c3be3ed4c38" }
-# wgpu = { path = "../../forks/wgpu/wgpu" }
+wgpu = "0.19"
+# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "445fa6019b47079c9d336881dbee1c3be3ed4c38" }
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
-
 async-executor = "1.6"
-# winit = "0.28.7"
 winit = { version = "0.29.10" }
 raw-window-handle = "0.6"
 env_logger = "0.10"
