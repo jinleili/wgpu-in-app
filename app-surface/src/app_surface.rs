@@ -25,7 +25,9 @@ impl AppSurface {
     #[allow(clippy::needless_update)]
     pub async fn new(view: Window) -> Self {
         let scale_factor = view.scale_factor() as f32;
-        let physical_size = view.inner_size();
+        let mut physical_size = view.inner_size();
+        physical_size.width = physical_size.width.max(1);
+        physical_size.height = physical_size.height.max(1);
         let view_setting = ViewSetting {
             scale_factor,
             physical_size: (physical_size.width, physical_size.height),
@@ -34,6 +36,10 @@ impl AppSurface {
         };
 
         Self::create(view_setting).await
+    }
+
+    pub fn get_view(&self) -> &Window {
+        return self.view.as_ref().unwrap();
     }
 
     #[cfg(target_arch = "wasm32")]
@@ -81,10 +87,11 @@ impl AppSurface {
                         wgpu::SurfaceTarget::OffscreenCanvas(view_setting.offscreen_canvas.unwrap())
                     )
                 } else {
-                    use winit::platform::web::WindowExtWebSys;
-                    let canvas: web_sys::HtmlCanvasElement =
-                        view.as_ref().canvas().unwrap();
-                    instance.create_surface(wgpu::SurfaceTarget::Canvas(canvas))
+                    // use winit::platform::web::WindowExtWebSys;
+                    // let canvas: web_sys::HtmlCanvasElement =
+                    //     view.as_ref().canvas().unwrap();
+                    // instance.create_surface(wgpu::SurfaceTarget::Canvas(canvas))
+                    instance.create_surface(view.clone())
                 };
             } else {
                 let surface = instance.create_surface(view.clone());
@@ -165,8 +172,8 @@ impl AppSurface {
         if self.is_offscreen_canvas {
             panic!("Offscreen canvas cannot provide any DOM interfaces.");
         } else {
-            let physical = self.view.as_ref().unwrap().inner_size();
-            (physical.width, physical.height)
+            let physical = self.get_view().inner_size();
+            (physical.width.max(1), physical.height.max(1))
         }
     }
 }

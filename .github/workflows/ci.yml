@@ -6,7 +6,7 @@ env:
   CARGO_INCREMENTAL: false
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: full
-  MSRV: 1.70
+  MSRV: 1.71
 
 jobs:
   check-msrv:

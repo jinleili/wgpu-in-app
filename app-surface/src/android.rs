@@ -32,7 +32,6 @@ impl AppSurface {
 
         let caps = surface.get_capabilities(&adapter);
 
-        log::info!("adapter.limits(): {:?}", adapter.limits());
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: wgpu::TextureFormat::Rgba8UnormSrgb,
