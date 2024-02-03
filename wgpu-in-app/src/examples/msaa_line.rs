@@ -39,8 +39,10 @@ pub struct MSAALine {
 impl MSAALine {
     pub fn new(app_surface: &mut AppSurface) -> Self {
         // Only srgb format can show real MSAA effect on metal backend.
-        let msaa_format = app_surface.config.format.add_srgb_suffix();
-        app_surface.sdq.update_config_format(msaa_format);
+        if app_surface.adapter.get_info().backend == wgpu::Backend::Metal {
+            let msaa_format = app_surface.config.format.add_srgb_suffix();
+            app_surface.sdq.update_config_format(msaa_format);
+        }
 
         let config = &app_surface.config;
         let device = &app_surface.device;
