@@ -1,6 +1,6 @@
 # wgpu in App
 
-![Minimum Rust Version](https://img.shields.io/badge/min%20rust-1.71-green.svg)
+![Minimum Rust Version](https://img.shields.io/badge/min%20rust-1.76-green.svg)
 [![Build Status](https://github.com/jinleili/wgpu-in-app/workflows/CI/badge.svg?branch=master)](https://github.com/jinleili/wgpu-in-app/actions)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jinleili/wgpu-in-app/blob/master/LICENSE.MIT)
 

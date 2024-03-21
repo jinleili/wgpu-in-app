@@ -155,7 +155,7 @@ dependencies = [
 
 [[package]]
 name = "app-surface"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "android_logger",
  "ash",
@@ -2120,9 +2120,9 @@ dependencies = [
 
 [[package]]
 name = "wgpu"
-version = "0.19.0"
+version = "0.19.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0b71d2ded29e2161db50ab731d6cb42c037bd7ab94864a98fa66ff36b4721a8"
+checksum = "a4b1213b52478a7631d6e387543ed8f642bc02c578ef4e3b49aca2a29a7df0cb"
 dependencies = [
  "arrayvec",
  "cfg-if",
