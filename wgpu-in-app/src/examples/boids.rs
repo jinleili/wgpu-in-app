@@ -133,6 +133,7 @@ impl Boids {
             vertex: wgpu::VertexState {
                 module: &draw_shader,
                 entry_point: "main_vs",
+                compilation_options: Default::default(),
                 buffers: &[
                     wgpu::VertexBufferLayout {
                         array_stride: 4 * 4,
@@ -149,6 +150,7 @@ impl Boids {
             fragment: Some(wgpu::FragmentState {
                 module: &draw_shader,
                 entry_point: "main_fs",
+                compilation_options: Default::default(),
                 targets: &[Some(config.format.into())],
             }),
             primitive: wgpu::PrimitiveState::default(),
@@ -163,6 +165,7 @@ impl Boids {
             layout: Some(&compute_pipeline_layout),
             module: &compute_shader,
             entry_point: "main",
+            compilation_options: Default::default(),
         });
 
         // buffer for the three 2d triangle vertices of each instance
@@ -273,8 +276,8 @@ impl Example for Boids {
             command_encoder.push_debug_group("compute boid movement");
             {
                 // compute pass
-                let mut cpass = command_encoder
-                    .begin_compute_pass(&wgpu::ComputePassDescriptor::default());
+                let mut cpass =
+                    command_encoder.begin_compute_pass(&wgpu::ComputePassDescriptor::default());
                 cpass.set_pipeline(&self.compute_pipeline);
                 cpass.set_bind_group(0, &self.particle_bind_groups[self.frame_num % 2], &[]);
                 cpass.dispatch_workgroups(self.work_group_count, 1, 1);

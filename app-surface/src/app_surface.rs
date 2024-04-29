@@ -79,6 +79,8 @@ impl AppSurface {
             backends,
             ..Default::default()
         });
+        println!("{backends:?}, {instance:?}, {:?}", view_setting.physical_size,);
+
         cfg_if::cfg_if! {
             if #[cfg(target_arch = "wasm32")] {
                 let surface = if is_offscreen_canvas {

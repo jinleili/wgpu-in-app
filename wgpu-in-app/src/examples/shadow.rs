@@ -499,6 +499,7 @@ impl Shadow {
                 vertex: wgpu::VertexState {
                     module: &shader,
                     entry_point: "vs_bake",
+                    compilation_options: Default::default(),
                     buffers: &[vb_desc.clone()],
                 },
                 fragment: None,
@@ -627,11 +628,13 @@ impl Shadow {
                 vertex: wgpu::VertexState {
                     module: &shader,
                     entry_point: "vs_main",
+                    compilation_options: Default::default(),
                     buffers: &[vb_desc],
                 },
                 fragment: Some(wgpu::FragmentState {
                     module: &shader,
                     entry_point: "fs_main",
+                    compilation_options: Default::default(),
                     targets: &[Some(config.format.into())],
                 }),
                 primitive: wgpu::PrimitiveState {
