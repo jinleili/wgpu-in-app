@@ -1,5 +1,12 @@
 use crate::examples::*;
 use app_surface::{AppSurface, SurfaceFrame};
+#[cfg(target_os = "macos")]
+use objc::{
+    class, msg_send,
+    runtime::{Object, BOOL, YES},
+    sel, sel_impl,
+};
+use wgpu::rwh::{HasWindowHandle, RawWindowHandle};
 
 pub struct WgpuCanvas {
     pub app_surface: AppSurface,
@@ -9,8 +16,29 @@ pub struct WgpuCanvas {
 #[allow(dead_code)]
 impl WgpuCanvas {
     pub fn new(app_surface: AppSurface, idx: i32) -> Self {
+        let mut app_surface = app_surface;
+        #[cfg(target_os = "macos")]
+        {
+            if let Some(v) = app_surface.view.as_mut() {
+                match v.window_handle().unwrap().as_raw() {
+                    RawWindowHandle::AppKit(handle) => {
+                        let view = handle.ns_view.as_ptr() as *mut Object;
+                        let class = class!(CAMetalLayer);
+                        unsafe {
+                            let metal_layer: *mut Object = msg_send![view, layer];
+                            let is_metal_layer: BOOL = msg_send![metal_layer, isKindOfClass: class];
+                            if is_metal_layer == YES {
+                                let () = msg_send![metal_layer, setPresentsWithTransaction: YES];
+                            }
+                        }
+                    }
+                    _ => (),
+                }
+            }
+        }
         let example = Box::new(Empty::new(&app_surface));
         log::info!("example created");
+
         let mut instance = WgpuCanvas {
             app_surface,
             example,
