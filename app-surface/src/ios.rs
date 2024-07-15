@@ -32,7 +32,7 @@ unsafe impl Sync for AppSurface {}
 impl AppSurface {
     pub fn new(obj: IOSViewObj) -> Self {
         // hook up rust logging
-        env_logger::init();
+        _ = env_logger::try_init();
 
         let scale_factor = get_scale_factor(obj.view);
         let s: CGRect = unsafe { msg_send![obj.view, frame] };
