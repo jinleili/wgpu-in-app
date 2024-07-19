@@ -264,6 +264,7 @@ impl Cube {
             depth_stencil: None,
             multisample: wgpu::MultisampleState::default(),
             multiview: None,
+            cache: None,
         });
 
         let pipeline_wire = if device
@@ -305,6 +306,7 @@ impl Cube {
                 depth_stencil: None,
                 multisample: wgpu::MultisampleState::default(),
                 multiview: None,
+                cache: None,
             });
             Some(pipeline_wire)
         } else {

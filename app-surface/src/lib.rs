@@ -159,6 +159,7 @@ async fn request_device(
                 label: None,
                 required_features: adapter.features(),
                 required_limits: adapter.limits(),
+                memory_hints: wgpu::MemoryHints::Performance,
             },
             None,
         )

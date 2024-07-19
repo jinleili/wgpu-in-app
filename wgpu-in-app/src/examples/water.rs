@@ -399,6 +399,7 @@ impl Water {
             // No multisampling is used.
             multisample: wgpu::MultisampleState::default(),
             multiview: None,
+            cache: None,
         });
 
         // Same idea as the water pipeline.
@@ -435,6 +436,7 @@ impl Water {
             }),
             multisample: wgpu::MultisampleState::default(),
             multiview: None,
+            cache: None,
         });
 
         Self {

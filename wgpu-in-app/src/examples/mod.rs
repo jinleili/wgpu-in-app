@@ -1,5 +1,6 @@
 use app_surface::AppSurface;
 
+#[allow(dead_code)]
 pub trait Example {
     fn resize(&mut self, _app_surface: &AppSurface) {}
     fn enter_frame(&mut self, app_surface: &AppSurface);

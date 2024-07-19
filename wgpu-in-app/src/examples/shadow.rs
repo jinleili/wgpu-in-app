@@ -525,6 +525,7 @@ impl Shadow {
                 }),
                 multisample: wgpu::MultisampleState::default(),
                 multiview: None,
+                cache: None,
             });
 
             Pass {
@@ -651,6 +652,7 @@ impl Shadow {
                 }),
                 multisample: wgpu::MultisampleState::default(),
                 multiview: None,
+                cache: None,
             });
 
             Pass {

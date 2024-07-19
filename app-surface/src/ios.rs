@@ -97,19 +97,19 @@ impl AppSurface {
 }
 
 fn get_scale_factor(obj: *mut Object) -> f32 {
-    let mut scale_factor: CGFloat = 1.0;
+    let mut _scale_factor: CGFloat = 1.0;
     #[cfg(target_os = "macos")]
     unsafe {
         let window: *mut Object = msg_send![obj, window];
         if !window.is_null() {
-            scale_factor = msg_send![window, backingScaleFactor];
+            _scale_factor = msg_send![window, backingScaleFactor];
         }
     };
 
     #[cfg(target_os = "ios")]
     {
-        scale_factor = unsafe { msg_send![obj, contentScaleFactor] };
+        _scale_factor = unsafe { msg_send![obj, contentScaleFactor] };
     }
 
-    scale_factor as f32
+    _scale_factor as f32
 }
