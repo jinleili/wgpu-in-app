@@ -18,9 +18,9 @@ pub struct ViewSize {
 }
 
 pub struct SurfaceDeviceQueue {
-    pub surface: wgpu::Surface<'static>,
+    pub surface: Arc<wgpu::Surface<'static>>,
     pub config: wgpu::SurfaceConfiguration,
-    pub adapter: wgpu::Adapter,
+    pub adapter: Arc<wgpu::Adapter>,
     pub device: Arc<wgpu::Device>,
     pub queue: Arc<wgpu::Queue>,
 }

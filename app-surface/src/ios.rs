@@ -74,9 +74,9 @@ impl AppSurface {
             view: obj.view,
             scale_factor,
             sdq: crate::SurfaceDeviceQueue {
-                surface,
+                surface: Arc::new(surface),
                 config,
-                adapter,
+                adapter: Arc::new(adapter),
                 device: Arc::new(device),
                 queue: Arc::new(queue),
             },

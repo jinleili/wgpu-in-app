@@ -6,6 +6,7 @@ pub struct AppSurface {
     pub is_offscreen_canvas: bool,
     pub scale_factor: f32,
     pub maximum_frames: i32,
+    pub instance: Arc<wgpu::Instance>,
     pub sdq: crate::SurfaceDeviceQueue,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
     pub temporary_directory: &'static str,
@@ -14,7 +15,7 @@ pub struct AppSurface {
 
 #[derive(Default)]
 struct ViewSetting {
-    view: Option<Window>,
+    view: Option<Arc<Window>>,
     scale_factor: f32,
     physical_size: (u32, u32),
     #[cfg(target_arch = "wasm32")]
@@ -23,7 +24,7 @@ struct ViewSetting {
 
 impl AppSurface {
     #[allow(clippy::needless_update)]
-    pub async fn new(view: Window) -> Self {
+    pub async fn new(view: Arc<Window>) -> Self {
         let scale_factor = view.scale_factor() as f32;
         let mut physical_size = view.inner_size();
         physical_size.width = physical_size.width.max(1);
@@ -59,7 +60,7 @@ impl AppSurface {
 
     #[allow(unused_variables)]
     async fn create(view_setting: ViewSetting) -> Self {
-        let view = Arc::new(view_setting.view.unwrap());
+        let view = view_setting.view.unwrap();
         #[cfg(not(target_arch = "wasm32"))]
         let is_offscreen_canvas = false;
         #[cfg(target_arch = "wasm32")]
@@ -74,6 +75,7 @@ impl AppSurface {
         } else {
             wgpu::Backends::PRIMARY
         };
+        log::info!("{:?}", default_backends);
         let backends = wgpu::util::backend_bits_from_env().unwrap_or(default_backends);
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends,
@@ -156,10 +158,11 @@ impl AppSurface {
             is_offscreen_canvas,
             scale_factor,
             maximum_frames: 60,
+            instance: Arc::new(instance),
             sdq: crate::SurfaceDeviceQueue {
-                surface,
+                surface: Arc::new(surface),
                 config,
-                adapter,
+                adapter: Arc::new(adapter),
                 device: Arc::new(device),
                 queue: Arc::new(queue),
             },
@@ -176,5 +179,13 @@ impl AppSurface {
             let physical = self.get_view().inner_size();
             (physical.width.max(1), physical.height.max(1))
         }
+    }
+
+    pub fn request_redraw(&self) {
+        self.view.as_ref().unwrap().request_redraw();
+    }
+
+    pub fn pre_present_notify(&self) {
+        self.view.as_ref().unwrap().pre_present_notify();
     }
 }
