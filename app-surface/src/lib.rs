@@ -6,7 +6,7 @@ pub use touch::*;
 
 #[cfg_attr(target_os = "ios", path = "ios.rs")]
 #[cfg_attr(target_os = "android", path = "android.rs")]
-#[cfg_attr(target_os = "macos", path = "ios.rs")]
+#[cfg_attr(all(target_os = "macos", not(feature = "winit")), path = "ios.rs")]
 mod app_surface;
 pub use app_surface::*;
 

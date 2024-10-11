@@ -16,6 +16,7 @@ crate-type = ["rlib"]
 default = []
 webgl = ["wgpu/webgl"]
 mac_catalyst = []
+winit = []
 
 [dependencies]
 cfg-if.workspace = true
