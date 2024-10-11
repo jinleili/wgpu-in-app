@@ -155,7 +155,7 @@ dependencies = [
  "android_logger",
  "ash",
  "cfg-if",
- "core-graphics",
+ "core_graphics_min",
  "env_logger",
  "glam",
  "jni",
@@ -519,6 +519,12 @@ dependencies = [
  "core-foundation",
  "libc",
 ]
+
+[[package]]
+name = "core_graphics_min"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c67771e9bf8c471ad2088590bee0c2d2f351df4271d55298e78b5c715e7fcddc"
 
 [[package]]
 name = "crossbeam-utils"

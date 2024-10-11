@@ -1,4 +1,4 @@
-use core_graphics::{base::CGFloat, geometry::CGRect};
+use core_graphics_min::{CGFloat, CGRect};
 use libc::c_void;
 use objc::{runtime::Object, *};
 use std::marker::Sync;
