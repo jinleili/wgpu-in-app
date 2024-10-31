@@ -2,7 +2,6 @@
 
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
-use bytemuck::{Pod, Zeroable};
 use rand::{
     distributions::{Distribution, Uniform},
     SeedableRng,
@@ -16,18 +15,6 @@ const NUM_PARTICLES: u32 = 1500;
 // number of single-particle calculations (invocations) in each gpu work group
 const PARTICLES_PER_GROUP: u32 = 16;
 
-#[repr(C)]
-#[derive(Clone, Copy, Pod, Zeroable)]
-struct SimParams {
-    delta_t: f32,
-    rule1_distance: f32,
-    rule2_distance: f32,
-    rule3_distance: f32,
-    rule1_scale: f32,
-    rule2_scale: f32,
-    rule3_scale: f32,
-    offset: u32,
-}
 #[allow(dead_code)]
 pub struct Boids {
     particle_bind_groups: Vec<wgpu::BindGroup>,

@@ -3,9 +3,9 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 use bytemuck::{Pod, Zeroable};
+use std::mem::size_of;
 use std::{future::Future, pin::Pin, task};
 use wgpu::util::DeviceExt;
-
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
 struct Vertex {

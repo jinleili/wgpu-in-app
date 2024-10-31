@@ -14,6 +14,8 @@ use winit::{
 };
 
 pub fn run() -> Result<(), impl std::error::Error> {
+    crate::init_logger();
+
     let events_loop = EventLoop::new().unwrap();
     let mut app = WgpuApp::default();
     events_loop.run_app(&mut app)

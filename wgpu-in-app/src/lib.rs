@@ -15,27 +15,7 @@ pub mod desktop;
 // Initialize logging in platform dependant ways.
 fn init_logger() {
     cfg_if::cfg_if! {
-        if #[cfg(target_arch = "wasm32")] {
-            // As we don't have an environment to pull logging level from, we use the query string.
-            let query_string = web_sys::window().unwrap().location().search().unwrap();
-            let query_level: Option<log::LevelFilter> = parse_url_query_string(&query_string, "RUST_LOG")
-                .and_then(|x| x.parse().ok());
-
-            // We keep wgpu at Error level, as it's very noisy.
-            let base_level = query_level.unwrap_or(log::LevelFilter::Info);
-            let wgpu_level = query_level.unwrap_or(log::LevelFilter::Error);
-
-            // On web, we use fern, as console_log doesn't have filtering on a per-module level.
-            fern::Dispatch::new()
-                .level(base_level)
-                .level_for("wgpu_core", wgpu_level)
-                .level_for("wgpu_hal", wgpu_level)
-                .level_for("naga", wgpu_level)
-                .chain(fern::Output::call(console_log::log))
-                .apply()
-                .unwrap();
-            std::panic::set_hook(Box::new(console_error_panic_hook::hook));
-        } else if #[cfg(target_os = "android")] {
+        if #[cfg(target_os = "android")] {
             // 添加 Android 平台的日志初始化
             android_logger::init_once(
                 android_logger::Config::default()
