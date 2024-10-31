@@ -4,9 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +18,7 @@ fun ToggleButton(
     toggleStates: List<String>,
     onToggleChange: (String) -> Unit
 ) {
-    val selectedTint = MaterialTheme.colors.primary
+    val selectedTint = MaterialTheme.colorScheme.primary
     val unselectedTint = Color.Unspecified
     Row(
         modifier = Modifier
@@ -31,7 +31,7 @@ fun ToggleButton(
             val textColor = if (isSelected) Color.White else Color.Unspecified
 
             if (index != 0) {
-                Divider(
+                VerticalDivider(
                     color = Color(0x55666666),
                     modifier = Modifier
                         .fillMaxHeight()
