@@ -111,8 +111,8 @@ impl SurfaceFrame for AppSurface {
 
     #[cfg(target_arch = "wasm32")]
     fn resize_surface_by_size(&mut self, size: (u32, u32)) {
-        self.sdq.config.width = size.0;
-        self.sdq.config.height = size.1;
+        self.ctx.config.width = size.0;
+        self.ctx.config.height = size.1;
         self.surface.configure(&self.device, &self.config);
     }
 
