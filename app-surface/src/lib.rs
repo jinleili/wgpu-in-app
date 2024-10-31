@@ -17,7 +17,8 @@ pub struct ViewSize {
     pub height: u32,
 }
 
-pub struct SurfaceDeviceQueue {
+pub struct IASDQContext {
+    pub instance: Arc<wgpu::Instance>,
     pub surface: Arc<wgpu::Surface<'static>>,
     pub config: wgpu::SurfaceConfiguration,
     pub adapter: Arc<wgpu::Adapter>,
@@ -25,7 +26,7 @@ pub struct SurfaceDeviceQueue {
     pub queue: Arc<wgpu::Queue>,
 }
 
-impl SurfaceDeviceQueue {
+impl IASDQContext {
     pub fn update_config_format(&mut self, format: wgpu::TextureFormat) {
         self.config.format = format;
         if cfg!(feature = "webgl") {
@@ -38,9 +39,9 @@ impl SurfaceDeviceQueue {
 }
 
 impl Deref for AppSurface {
-    type Target = SurfaceDeviceQueue;
+    type Target = IASDQContext;
     fn deref(&self) -> &Self::Target {
-        &self.sdq
+        &self.ctx
     }
 }
 
@@ -103,8 +104,8 @@ impl SurfaceFrame for AppSurface {
 
     fn resize_surface(&mut self) {
         let size = self.get_view_size();
-        self.sdq.config.width = size.0;
-        self.sdq.config.height = size.1;
+        self.ctx.config.width = size.0;
+        self.ctx.config.height = size.1;
         self.surface.configure(&self.device, &self.config);
     }
 
@@ -131,7 +132,57 @@ impl SurfaceFrame for AppSurface {
     }
 }
 
-#[allow(unused)]
+async fn create_iasdq_context(
+    instance: Instance,
+    surface: Surface<'static>,
+    physical_size: (u32, u32),
+) -> IASDQContext {
+    let (adapter, device, queue) = crate::request_device(&instance, &surface).await;
+
+    let caps = surface.get_capabilities(&adapter);
+    let prefered = caps.formats[0];
+
+    let format = if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
+        // Chrome WebGPU doesn't support sRGB:
+        // unsupported swap chain format "xxxx8unorm-srgb"
+        prefered.remove_srgb_suffix()
+    } else {
+        prefered
+    };
+    let view_formats = if cfg!(feature = "webgl") {
+        // panicked at 'Error in Surface::configure: Validation Error
+        // Caused by:
+        // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
+        vec![]
+    } else {
+        if format.is_srgb() {
+            // HarmonyOS 不支持 view_formats 格式
+            // format 的值与 view_formats 的值一致时，configure 内部会自动忽略 view_formats 的值
+            vec![format]
+        } else {
+            vec![format.add_srgb_suffix()]
+        }
+    };
+
+    let mut config = surface
+        .get_default_config(&adapter, physical_size.0, physical_size.1)
+        .expect("Surface isn't supported by the adapter.");
+
+    config.view_formats = view_formats;
+    config.format = format;
+
+    surface.configure(&device, &config);
+
+    IASDQContext {
+        instance: Arc::new(instance),
+        surface: Arc::new(surface),
+        config,
+        adapter: Arc::new(adapter),
+        device: Arc::new(device),
+        queue: Arc::new(queue),
+    }
+}
+
 async fn request_device(
     instance: &Instance,
     surface: &Surface<'static>,
@@ -145,14 +196,17 @@ async fn request_device(
         })
         .await
         .expect("No suitable GPU adapters found on the system!");
+
     let adapter_info = adapter.get_info();
     println!("Using {} ({:?})", adapter_info.name, adapter_info.backend);
+
     let base_dir = std::env::var("CARGO_MANIFEST_DIR");
     let _trace_path = if let Ok(base_dir) = base_dir {
         Some(std::path::PathBuf::from(&base_dir).join("WGPU_TRACE_ERROR"))
     } else {
         None
     };
+
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {
@@ -164,6 +218,7 @@ async fn request_device(
             None,
         )
         .await;
+
     match res {
         Err(err) => {
             panic!("request_device failed: {err:?}");

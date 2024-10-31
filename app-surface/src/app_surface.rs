@@ -6,8 +6,7 @@ pub struct AppSurface {
     pub is_offscreen_canvas: bool,
     pub scale_factor: f32,
     pub maximum_frames: i32,
-    pub instance: Arc<wgpu::Instance>,
-    pub sdq: crate::SurfaceDeviceQueue,
+    pub ctx: crate::IASDQContext,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
     pub temporary_directory: &'static str,
     pub library_directory: &'static str,
@@ -107,65 +106,14 @@ impl AppSurface {
             }
         };
 
-        let (adapter, device, queue) = crate::request_device(&instance, &surface).await;
-        let caps = surface.get_capabilities(&adapter);
-
-        let modes = caps.alpha_modes;
-        let alpha_mode = if modes.contains(&wgpu::CompositeAlphaMode::PreMultiplied) {
-            // wasm can only support this alpha mode
-            wgpu::CompositeAlphaMode::PreMultiplied
-        } else if modes.contains(&wgpu::CompositeAlphaMode::PostMultiplied) {
-            // Metal alpha mode
-            wgpu::CompositeAlphaMode::PostMultiplied
-        } else if modes.contains(&wgpu::CompositeAlphaMode::Inherit) {
-            // Vulkan on Android
-            wgpu::CompositeAlphaMode::Inherit
-        } else {
-            modes[0]
-        };
-        let prefered = caps.formats[0];
-        let format = if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
-            // Chrome WebGPU doesn't support sRGB:
-            // unsupported swap chain format "xxxx8unorm-srgb"
-            prefered.remove_srgb_suffix()
-        } else {
-            prefered
-        };
-        let view_formats = if cfg!(feature = "webgl") {
-            // panicked at 'Error in Surface::configure: Validation Error
-            // Caused by:
-            // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
-            vec![]
-        } else {
-            vec![format.add_srgb_suffix(), format.remove_srgb_suffix()]
-        };
-
-        let physical = view_setting.physical_size;
-        let config = wgpu::SurfaceConfiguration {
-            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            format,
-            width: physical.0,
-            height: physical.1,
-            present_mode: wgpu::PresentMode::Fifo,
-            alpha_mode,
-            view_formats,
-            desired_maximum_frame_latency: 2,
-        };
-        surface.configure(&device, &config);
+        let ctx = crate::create_iasdq_context(instance, surface, view_setting.physical_size).await;
 
         AppSurface {
             view: Some(view),
             is_offscreen_canvas,
             scale_factor,
             maximum_frames: 60,
-            instance: Arc::new(instance),
-            sdq: crate::SurfaceDeviceQueue {
-                surface: Arc::new(surface),
-                config,
-                adapter: Arc::new(adapter),
-                device: Arc::new(device),
-                queue: Arc::new(queue),
-            },
+            ctx,
             callback_to_app: None,
             temporary_directory: "",
             library_directory: "",

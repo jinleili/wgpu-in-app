@@ -16,7 +16,7 @@ impl HDRImageView {
         let hdr_pixel_format = wgpu::TextureFormat::Rgba16Float;
         // let hdr_pixel_format = wgpu::TextureFormat::Rgb10a2Unorm;
 
-        app_surface.sdq.update_config_format(hdr_pixel_format);
+        app_surface.ctx.update_config_format(hdr_pixel_format);
         log::info!("update_config_format: Rgba16Float");
         let device = &app_surface.device;
         let queue = &app_surface.queue;
@@ -117,13 +117,13 @@ impl HDRImageView {
             layout: Some(&render_pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &shader_module,
-                entry_point: "vs_main",
+                entry_point: Some("vs_main"),
                 compilation_options: Default::default(),
                 buffers: &pipeline_vertex_buffers,
             },
             fragment: Some(wgpu::FragmentState {
                 module: &shader_module,
-                entry_point: "fs_main",
+                entry_point: Some("fs_main"),
                 compilation_options: Default::default(),
                 targets: &[Some(wgpu::ColorTargetState {
                     format: hdr_pixel_format,

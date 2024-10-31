@@ -1,15 +1,15 @@
 use std::thread;
 
+use crate::WgpuCanvas;
 use app_surface::AppSurface;
 use std::sync::Arc;
 use std::time;
-use crate::WgpuCanvas;
 
 use winit::{
     application::ApplicationHandler,
     event::{ElementState, KeyEvent, StartCause, WindowEvent},
     event_loop::{ActiveEventLoop, ControlFlow, EventLoop},
-    keyboard::{Key, KeyCode, NamedKey, PhysicalKey},
+    keyboard::{KeyCode, PhysicalKey},
     window::{Window, WindowId},
 };
 

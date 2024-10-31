@@ -336,7 +336,7 @@ impl Water {
             // Vertex shader and input buffers
             vertex: wgpu::VertexState {
                 module: &water_module,
-                entry_point: "vs_main",
+                entry_point: Some("vs_main"),
                 compilation_options: Default::default(),
                 // Layout of our vertices. This should match the structs
                 // which are uploaded to the GPU. This should also be
@@ -352,7 +352,7 @@ impl Water {
             // Fragment shader and output targets
             fragment: Some(wgpu::FragmentState {
                 module: &water_module,
-                entry_point: "fs_main",
+                entry_point: Some("fs_main"),
                 compilation_options: Default::default(),
                 // Describes how the colour will be interpolated
                 // and assigned to the output attachment.
@@ -408,7 +408,7 @@ impl Water {
             layout: Some(&terrain_pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &terrain_module,
-                entry_point: "vs_main",
+                entry_point: Some("vs_main"),
                 compilation_options: Default::default(),
                 buffers: &[wgpu::VertexBufferLayout {
                     array_stride: terrain_vertex_size as wgpu::BufferAddress,
@@ -418,7 +418,7 @@ impl Water {
             },
             fragment: Some(wgpu::FragmentState {
                 module: &terrain_module,
-                entry_point: "fs_main",
+                entry_point: Some("fs_main"),
                 compilation_options: Default::default(),
                 targets: &[Some(config.format.into())],
             }),

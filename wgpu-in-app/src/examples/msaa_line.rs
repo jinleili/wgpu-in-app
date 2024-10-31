@@ -41,7 +41,7 @@ impl MSAALine {
         // Only srgb format can show real MSAA effect on metal backend.
         if app_surface.adapter.get_info().backend == wgpu::Backend::Metal {
             let msaa_format = app_surface.config.format.add_srgb_suffix();
-            app_surface.sdq.update_config_format(msaa_format);
+            app_surface.ctx.update_config_format(msaa_format);
         }
 
         let config = &app_surface.config;
@@ -152,7 +152,7 @@ impl MSAALine {
             layout: Some(pipeline_layout),
             vertex: wgpu::VertexState {
                 module: shader,
-                entry_point: "vs_main",
+                entry_point: Some("vs_main"),
                 compilation_options: Default::default(),
                 buffers: &[wgpu::VertexBufferLayout {
                     array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
@@ -162,7 +162,7 @@ impl MSAALine {
             },
             fragment: Some(wgpu::FragmentState {
                 module: shader,
-                entry_point: "fs_main",
+                entry_point: Some("fs_main"),
                 compilation_options: Default::default(),
                 targets: &[Some(config.format.add_srgb_suffix().into())],
             }),

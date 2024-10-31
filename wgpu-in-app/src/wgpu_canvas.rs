@@ -10,7 +10,7 @@ pub struct WgpuCanvas {
 impl WgpuCanvas {
     pub fn new(app_surface: AppSurface, idx: i32) -> Self {
         let example = Box::new(Empty::new(&app_surface));
-        log::info!("example created");
+
         let mut instance = WgpuCanvas {
             app_surface,
             example,

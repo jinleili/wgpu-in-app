@@ -3,7 +3,7 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 use bytemuck::{Pod, Zeroable};
-use std::{borrow::Cow, future::Future, mem, pin::Pin, task};
+use std::{future::Future, pin::Pin, task};
 use wgpu::util::DeviceExt;
 
 #[repr(C)]
@@ -114,9 +114,10 @@ pub struct Cube {
 impl Cube {
     pub fn new(app_surface: &AppSurface) -> Self {
         let config = &app_surface.config;
+        let queue = &app_surface.queue;
         let device = &app_surface.device;
         // Create the vertex and index buffers
-        let vertex_size = mem::size_of::<Vertex>();
+        let vertex_size = size_of::<Vertex>();
         let (vertex_data, index_data) = create_vertices();
 
         let vertex_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
@@ -182,7 +183,7 @@ impl Cube {
             view_formats: &[],
         });
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor::default());
-        app_surface.queue.write_texture(
+        queue.write_texture(
             texture.as_image_copy(),
             &texels,
             wgpu::ImageDataLayout {
@@ -218,12 +219,8 @@ impl Cube {
             label: None,
         });
 
-        let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
-            label: None,
-            source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!(
-                "../../wgsl_shader/cube.wgsl"
-            ))),
-        });
+        let shader =
+            device.create_shader_module(wgpu::include_wgsl!("../../wgsl_shader/cube.wgsl"));
 
         let vertex_buffers = [wgpu::VertexBufferLayout {
             array_stride: vertex_size as wgpu::BufferAddress,
@@ -247,15 +244,15 @@ impl Cube {
             layout: Some(&pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &shader,
-                entry_point: "vs_main",
+                entry_point: Some("vs_main"),
                 compilation_options: Default::default(),
                 buffers: &vertex_buffers,
             },
             fragment: Some(wgpu::FragmentState {
                 module: &shader,
-                entry_point: "fs_main",
+                entry_point: Some("fs_main"),
                 compilation_options: Default::default(),
-                targets: &[Some(config.format.into())],
+                targets: &[Some(config.view_formats[0].into())],
             }),
             primitive: wgpu::PrimitiveState {
                 cull_mode: Some(wgpu::Face::Back),
@@ -276,16 +273,16 @@ impl Cube {
                 layout: Some(&pipeline_layout),
                 vertex: wgpu::VertexState {
                     module: &shader,
-                    entry_point: "vs_main",
+                    entry_point: Some("vs_main"),
                     compilation_options: Default::default(),
                     buffers: &vertex_buffers,
                 },
                 fragment: Some(wgpu::FragmentState {
                     module: &shader,
-                    entry_point: "fs_wire",
+                    entry_point: Some("fs_wire"),
                     compilation_options: Default::default(),
                     targets: &[Some(wgpu::ColorTargetState {
-                        format: config.format,
+                        format: config.view_formats[0],
                         blend: Some(wgpu::BlendState {
                             color: wgpu::BlendComponent {
                                 operation: wgpu::BlendOperation::Add,
@@ -312,7 +309,6 @@ impl Cube {
         } else {
             None
         };
-
         // Done
         Self {
             vertex_buf,

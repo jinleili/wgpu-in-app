@@ -10,8 +10,7 @@ use std::sync::{Arc, Mutex};
 pub struct AppSurface {
     pub native_window: Arc<NativeWindow>,
     pub scale_factor: f32,
-    pub sdq: crate::SurfaceDeviceQueue,
-    pub instance: wgpu::Instance,
+    pub ctx: crate::IASDQContext,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
 }
 
@@ -23,38 +22,22 @@ impl AppSurface {
             backends,
             ..Default::default()
         });
+
         let handle: Box<dyn wgpu::WindowHandle> = Box::new(native_window.clone());
         let surface = instance
             .create_surface(wgpu::SurfaceTarget::Window(handle))
             .unwrap();
-        let (adapter, device, queue) =
-            pollster::block_on(crate::request_device(&instance, &surface));
 
-        let caps = surface.get_capabilities(&adapter);
-
-        let config = wgpu::SurfaceConfiguration {
-            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            format: wgpu::TextureFormat::Rgba8UnormSrgb,
-            width: native_window.get_width(),
-            height: native_window.get_height(),
-            present_mode: wgpu::PresentMode::Fifo,
-            alpha_mode: caps.alpha_modes[0],
-            view_formats: vec![],
-            desired_maximum_frame_latency: 2,
-        };
-        surface.configure(&device, &config);
+        let ctx = pollster::block_on(crate::create_iasdq_context(
+            instance,
+            surface,
+            (native_window.get_width(), native_window.get_height()),
+        ));
 
         Self {
             native_window,
             scale_factor: 1.0,
-            sdq: crate::SurfaceDeviceQueue {
-                surface: Arc::new(surface),
-                config,
-                adapter: Arc::new(adapter),
-                device: Arc::new(device),
-                queue: Arc::new(queue),
-            },
-            instance,
+            ctx,
             callback_to_app: None,
         }
     }

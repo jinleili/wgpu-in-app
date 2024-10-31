@@ -20,7 +20,7 @@ pub struct IOSViewObj {
 pub struct AppSurface {
     pub view: *mut Object,
     pub scale_factor: f32,
-    pub sdq: crate::SurfaceDeviceQueue,
+    pub ctx: crate::IASDQContext,
     pub maximum_frames: i32,
     pub callback_to_app: Option<extern "C" fn(arg: i32)>,
     pub temporary_directory: &'static str,
@@ -52,34 +52,13 @@ impl AppSurface {
                 ))
                 .expect("Surface creation failed")
         };
-        let (adapter, device, queue) =
-            pollster::block_on(crate::request_device(&instance, &surface));
-        let caps = surface.get_capabilities(&adapter);
-        let config = wgpu::SurfaceConfiguration {
-            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            // CAMatalLayer's pixel format default value is MTLPixelFormatBGRA8Unorm.
-            // https://developer.apple.com/documentation/quartzcore/cametallayer/1478155-pixelformat?language=objc
-            // format: wgpu::TextureFormat::Bgra8Unorm,
-            // format: surface.get_supported_formats(&adapter)[0],
-            format: caps.formats[0],
-            width: physical.0,
-            height: physical.1,
-            present_mode: wgpu::PresentMode::Fifo,
-            alpha_mode: wgpu::CompositeAlphaMode::PostMultiplied,
-            view_formats: vec![],
-            desired_maximum_frame_latency: 2,
-        };
-        surface.configure(&device, &config);
+
+        let ctx = pollster::block_on(crate::create_iasdq_context(instance, surface, physical));
+
         AppSurface {
             view: obj.view,
             scale_factor,
-            sdq: crate::SurfaceDeviceQueue {
-                surface: Arc::new(surface),
-                config,
-                adapter: Arc::new(adapter),
-                device: Arc::new(device),
-                queue: Arc::new(queue),
-            },
+            ctx,
             callback_to_app: Some(obj.callback_to_swift),
             maximum_frames: obj.maximum_frames,
             temporary_directory: "",
@@ -98,18 +77,8 @@ impl AppSurface {
 
 fn get_scale_factor(obj: *mut Object) -> f32 {
     let mut _scale_factor: CGFloat = 1.0;
-    #[cfg(target_os = "macos")]
-    unsafe {
-        let window: *mut Object = msg_send![obj, window];
-        if !window.is_null() {
-            _scale_factor = msg_send![window, backingScaleFactor];
-        }
-    };
 
-    #[cfg(target_os = "ios")]
-    {
-        _scale_factor = unsafe { msg_send![obj, contentScaleFactor] };
-    }
+    _scale_factor = unsafe { msg_send![obj, contentScaleFactor] };
 
     _scale_factor as f32
 }
