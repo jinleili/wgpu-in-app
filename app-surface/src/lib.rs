@@ -153,11 +153,11 @@ async fn create_iasdq_context(
         // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
         vec![]
     } else if format.is_srgb() {
-        // HarmonyOS 不支持 view_formats 格式
+        // TODO:HarmonyOS 不支持 view_formats 格式
         // format 的值与 view_formats 的值一致时，configure 内部会自动忽略 view_formats 的值
-        vec![format]
+        vec![format, format.remove_srgb_suffix()]
     } else {
-        vec![format.add_srgb_suffix()]
+        vec![format.add_srgb_suffix(), format.remove_srgb_suffix()]
     };
 
     let mut config = surface
