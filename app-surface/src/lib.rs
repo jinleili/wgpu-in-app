@@ -49,7 +49,6 @@ pub trait SurfaceFrame {
     fn view_size(&self) -> ViewSize;
     // After App view's size or orientation changed, need to resize surface.
     fn resize_surface(&mut self);
-    #[cfg(target_arch = "wasm32")]
     fn resize_surface_by_size(&mut self, size: (u32, u32));
     fn pintch(&mut self, _touch: Touch, _scale: f32) {}
     fn touch(&mut self, _touch: Touch) {}
@@ -109,7 +108,6 @@ impl SurfaceFrame for AppSurface {
         self.surface.configure(&self.device, &self.config);
     }
 
-    #[cfg(target_arch = "wasm32")]
     fn resize_surface_by_size(&mut self, size: (u32, u32)) {
         self.ctx.config.width = size.0;
         self.ctx.config.height = size.1;
