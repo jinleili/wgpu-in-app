@@ -31,7 +31,7 @@
 		AD4B200026EB1D31008A6AEE /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		AD9EA280293B0CAF0079F1B4 /* libs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = libs; sourceTree = "<group>"; };
 		ADA4699026EB27CB008B1C7B /* libwgpu_in_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libwgpu_in_app.h; sourceTree = "<group>"; };
-		ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wgpu_test-Bridging-Header.h"; sourceTree = "<group>"; };
+		ADA4699226EB2F9A008B1C7B /* wgpu_in_app-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wgpu_in_app-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +52,7 @@
 				AD4B1FF026EB1B90008A6AEE /* ViewController.swift */,
 				ADA4699026EB27CB008B1C7B /* libwgpu_in_app.h */,
 				AD4B200026EB1D31008A6AEE /* MetalView.swift */,
-				ADA4699226EB2F9A008B1C7B /* wgpu_test-Bridging-Header.h */,
+				ADA4699226EB2F9A008B1C7B /* wgpu_in_app-Bridging-Header.h */,
 				AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */,
 				AD4B1FF226EB1B90008A6AEE /* Main.storyboard */,
 				AD4B1FF526EB1B91008A6AEE /* Assets.xcassets */,
@@ -336,13 +336,13 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
+				PRODUCT_BUNDLE_IDENTIFIER = com.daylight.test.wgpu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_in_app-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
 			};
@@ -372,13 +372,13 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lijinlei.zixi.wgpu-test";
+				PRODUCT_BUNDLE_IDENTIFIER = com.daylight.test.wgpu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_test-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "base/wgpu_in_app-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
 			};

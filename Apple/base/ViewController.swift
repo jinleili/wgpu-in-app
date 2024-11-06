@@ -7,11 +7,11 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet var metalV: MetalView!
-    var wgpuCanvas: OpaquePointer?
+    @IBOutlet private var metalV: MetalView!
+    private var wgpuCanvas: OpaquePointer?
     
-    lazy var displayLink: CADisplayLink = {
-        CADisplayLink.init(target: self, selector: #selector(enterFrame))
+    private lazy var displayLink: CADisplayLink = {
+        CADisplayLink(target: self, selector: #selector(enterFrame))
     }()
     
     override func viewDidLoad() {
@@ -24,42 +24,42 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.view.backgroundColor = .white
-        if wgpuCanvas == nil {
-            let viewPointer = Unmanaged.passUnretained(self.metalV).toOpaque()
-            let metalLayer = Unmanaged.passUnretained(self.metalV.layer).toOpaque()
-            let maximumFrames = UIScreen.main.maximumFramesPerSecond
-            
-            let viewObj = ios_view_obj(view: viewPointer, metal_layer: metalLayer,maximum_frames: Int32(maximumFrames), callback_to_swift: callback_to_swift)
-            
-            wgpuCanvas = create_wgpu_canvas(viewObj)
-        }
+        self.setupWGPUCanvasIfNeeded()
         self.displayLink.isPaused = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        displayLink.isPaused = true
+        self.displayLink.isPaused = true
     }
     
-    @objc func enterFrame() {
-        guard let canvas = self.wgpuCanvas else {
-            return
-        }
-        // call rust
+    @objc private func enterFrame() {
+        guard let canvas = self.wgpuCanvas else { return }
         enter_frame(canvas)
     }
     
-    @IBAction func changeExample(sender: UISegmentedControl) {
-        guard let canvas = self.wgpuCanvas else {
-            return
-        }
-        var index = sender.selectedSegmentIndex
-        if index == 2 {
-            index = 5
-        }
+    @IBAction private func changeExample(sender: UISegmentedControl) {
+        guard let canvas = self.wgpuCanvas else { return }
+        let index = sender.selectedSegmentIndex == 2 ? 5 : sender.selectedSegmentIndex
         change_example(canvas, Int32(index))
     }
 
+    private func setupWGPUCanvasIfNeeded() {
+        guard self.wgpuCanvas == nil else { return }
+        
+        let viewPointer = Unmanaged.passUnretained(self.metalV).toOpaque()
+        let metalLayer = Unmanaged.passUnretained(self.metalV.layer).toOpaque()
+        let maximumFrames = Int32(UIScreen.main.maximumFramesPerSecond)
+        
+        let viewObj = ios_view_obj_t(
+            view: viewPointer,
+            metal_layer: metalLayer,
+            maximum_frames: maximumFrames,
+            callback_to_swift: callback_to_swift
+        )
+        
+        self.wgpuCanvas = create_wgpu_canvas(viewObj)
+    }
 }
 
 func callback_to_swift(arg: Int32) {
@@ -67,14 +67,10 @@ func callback_to_swift(arg: Int32) {
         switch arg {
         case 0:
             print("wgpu canvas created!")
-            break
         case 1:
             print("canvas enter frame")
-            break
-            
         default:
             break
         }
     }
-    
 }

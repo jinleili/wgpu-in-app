@@ -5,23 +5,28 @@
 //
 
 import UIKit
-import Foundation
 
 class MetalView: UIView {
     override class var layerClass: AnyClass {
         return CAMetalLayer.self
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configLayer()
-        self.layer.backgroundColor = UIColor.clear.cgColor
+    }
+        
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        configLayer()
     }
     
     private func configLayer() {
         guard let layer = self.layer as? CAMetalLayer else {
             return
         }
+        self.layer.backgroundColor = UIColor.clear.cgColor
+
         // https://developer.apple.com/documentation/quartzcore/cametallayer/1478157-presentswithtransaction/
         layer.presentsWithTransaction = false
         layer.framebufferOnly = true
@@ -30,4 +35,3 @@ class MetalView: UIView {
         self.contentScaleFactor = UIScreen.main.nativeScale
     }
 }
-
