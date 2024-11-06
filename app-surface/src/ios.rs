@@ -2,7 +2,6 @@ use core_graphics::{base::CGFloat, geometry::CGRect};
 use libc::c_void;
 use objc::{runtime::Object, *};
 use std::marker::Sync;
-use std::sync::Arc;
 
 #[repr(C)]
 pub struct IOSViewObj {

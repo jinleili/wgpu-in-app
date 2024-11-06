@@ -10,6 +10,9 @@ pub use touch::*;
 mod app_surface;
 pub use app_surface::*;
 
+#[cfg(target_arch = "wasm32")]
+pub mod web;
+
 #[repr(C)]
 #[derive(Debug)]
 pub struct ViewSize {
