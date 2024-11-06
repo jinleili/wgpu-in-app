@@ -54,7 +54,7 @@ fn main() {
             let cmd = Subcommand::new(args.subcommand_args).unwrap();
             let ndk = Ndk::from_env().unwrap();
             let build_targets = if let Some(target) = cmd.target() {
-                vec![Target::from_rust_triple(&target).ok().unwrap()]
+                vec![Target::from_rust_triple(target).ok().unwrap()]
             } else {
                 vec![
                     Target::Arm64V8a,

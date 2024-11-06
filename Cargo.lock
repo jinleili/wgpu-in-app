@@ -319,7 +319,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-so"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "cargo-subcommand",
  "clap",
@@ -328,9 +328,9 @@ dependencies = [
 
 [[package]]
 name = "cargo-subcommand"
-version = "0.11.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1898fe3af1534e8c90d4695c1f39d2d01e21fa4268cc941d769ae895bf8cdac6"
+checksum = "787d9ae54fd0dd772fe4fd3f6570a545919a125f9ff4b2984e8967819f9005d3"
 dependencies = [
  "clap",
  "current_platform",
@@ -1080,9 +1080,9 @@ dependencies = [
 
 [[package]]
 name = "ndk-build"
-version = "0.9.0"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1c3df171aaf0f60b9d771d74830ce6abc3cacfe2a5cbcf4e50e0f16f699c531"
+checksum = "f38285f506f67137b22542584e454319b0a7a7ae86a50100a8ca665195679883"
 dependencies = [
  "dirs",
  "dunce",
