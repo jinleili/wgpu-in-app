@@ -11,7 +11,7 @@ use log::info;
 pub fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject, idx: jint) -> jlong {
     crate::init_logger();
 
-    let mut canvas = WgpuCanvas::new(AppSurface::new(env as *mut _, surface), idx);
+    let canvas = WgpuCanvas::new(AppSurface::new(env as *mut _, surface), idx);
     info!("WgpuCanvas created!");
 
     Box::into_raw(Box::new(canvas)) as jlong

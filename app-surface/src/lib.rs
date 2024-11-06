@@ -152,9 +152,18 @@ async fn create_iasdq_context(
         // Caused by:
         // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
         vec![]
-    } else if format.is_srgb() {
+    } else if cfg!(target_os = "android") {
         // TODO:HarmonyOS 不支持 view_formats 格式
         // format 的值与 view_formats 的值一致时，configure 内部会自动忽略 view_formats 的值
+        //
+        // Android 不支持 view_formats:
+        // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
+        // This is not an invalid use of WebGPU: the underlying API or device does not support enough features
+        // to be a fully compliant implementation. A subset of the features can still be used.
+        // If you are running this program on native and not in a browser and wish to work around this issue,
+        // call Adapter::downlevel_properties or Device::downlevel_properties to get a listing of the features the current platform supports.
+        vec![format]
+    } else if format.is_srgb() {
         vec![format, format.remove_srgb_suffix()]
     } else {
         vec![format.add_srgb_suffix(), format.remove_srgb_suffix()]
