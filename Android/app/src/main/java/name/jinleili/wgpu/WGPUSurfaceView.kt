@@ -29,7 +29,10 @@ class WGPUSurfaceView : SurfaceView, SurfaceHolder.Callback2 {
         holder.addCallback(this)
         // The only way to set SurfaceView background color to transparent:
         // https://groups.google.com/g/android-developers/c/jYjvm7ItpXQ?pli=1
-        this.setZOrderOnTop(true)
+//        this.setZOrderOnTop(true)
+
+        // 让系统 ui 能覆盖在 SurfaceView 之上
+        this.setZOrderMediaOverlay(true)
         holder.setFormat(PixelFormat.TRANSPARENT)
     }
 

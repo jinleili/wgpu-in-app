@@ -53,14 +53,52 @@ fun SurfaceCard() {
         ) {
             Text(text = "wgpu in Android App", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .height(54.dp)
-                .padding(horizontal = 0.dp, vertical = 9.dp)
-                .fillMaxWidth()
-        ) {
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.Center,
+//            modifier = Modifier
+//                .height(54.dp)
+//                .padding(horizontal = 0.dp, vertical = 9.dp)
+//                .fillMaxWidth()
+//        ) {
+
+//            ToggleButton(
+//                currentSelection = selected,
+//                toggleStates = toggleValues,
+//                onToggleChange = { title ->
+//                    selected = title
+//                    toggleValues.forEachIndexed { idx, v ->
+//                        if (v == title) {
+//                            surfaceView?.changeExample(idx)
+//                        }
+//                    }
+//                },
+//            )
+//
+//        }
+//        Spacer(modifier = Modifier.height(8.dp))
+//        AndroidView(
+//            factory = { ctx ->
+//                val sv = WGPUSurfaceView(context = ctx)
+//                surfaceView = sv
+//                sv
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(screenWidth),
+//        )
+//    }
+        Box(modifier = Modifier.fillMaxSize()) {
+            AndroidView(
+                factory = { ctx ->
+                    val sv = WGPUSurfaceView(context = ctx)
+                    surfaceView = sv
+                    sv
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(screenWidth),
+            )
             ToggleButton(
                 currentSelection = selected,
                 toggleStates = toggleValues,
@@ -73,18 +111,6 @@ fun SurfaceCard() {
                     }
                 },
             )
-
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        AndroidView(
-            factory = { ctx ->
-                val sv = WGPUSurfaceView(context = ctx)
-                surfaceView = sv
-                sv
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(screenWidth),
-        )
     }
 }
