@@ -12,7 +12,6 @@ noise = { version = "0.8", default-features = false }
 pollster = "0.3"
 rand = "0.7.2"
 wgpu = "23"
-# wgpu = { git = "https://github.com/gfx-rs/wgpu", rev = "445fa6019b47079c9d336881dbee1c3be3ed4c38" }
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
 winit = { version = "=0.30.5" }
 web-time = "1"

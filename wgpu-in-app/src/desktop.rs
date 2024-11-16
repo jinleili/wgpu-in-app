@@ -26,6 +26,7 @@ const POLL_SLEEP_TIME: time::Duration = time::Duration::from_millis(16);
 
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq)]
 enum Mode {
+    #[allow(dead_code)]
     Wait,
     WaitUntil,
     #[default]

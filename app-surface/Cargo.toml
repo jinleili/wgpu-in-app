@@ -3,7 +3,7 @@ name = "app-surface"
 authors = ["jinleili"]
 description = "Integrate wgpu into your existing iOS, Android and Web apps without relying on winit."
 edition = "2021"
-version = "1.3.0"
+version = "1.3.1"
 rust-version = "1.76"
 repository = "https://github.com/jinleili/wgpu-in-app"
 keywords = ["android", "SurfaceView", "CAMetalLayer", "Canvas", "wgpu"]
@@ -16,6 +16,8 @@ crate-type = ["rlib"]
 default = []
 webgl = ["wgpu/webgl"]
 mac_catalyst = []
+# Use Canvas / OffscreenCanvas + raw-window-handle directly on the web, no need for winit
+web_rwh = []
 
 [dependencies]
 cfg-if.workspace = true

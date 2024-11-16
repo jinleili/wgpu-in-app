@@ -1,17 +1,38 @@
-use std::{ops::Deref, sync::Arc};
+use std::ops::Deref;
 use wgpu::{Instance, Surface};
 
 mod touch;
 pub use touch::*;
 
-#[cfg_attr(target_os = "ios", path = "ios.rs")]
+#[cfg_attr(
+    any(target_os = "ios", all(feature = "mac_catalyst", target_os = "macos")),
+    path = "ios.rs"
+)]
 #[cfg_attr(target_os = "android", path = "android.rs")]
-#[cfg_attr(all(feature = "mac_catalyst", target_os = "macos"), path = "ios.rs")]
+#[cfg_attr(
+    all(target_arch = "wasm32", feature = "web_rwh"),
+    path = "web_rwh/mod.rs"
+)]
+#[cfg_attr(
+    any(
+        all(not(feature = "mac_catalyst"), target_os = "macos"),
+        target_os = "windows",
+        target_os = "linux",
+    ),
+    path = "app_surface_use_winit.rs"
+)]
+#[cfg_attr(
+    all(target_arch = "wasm32", not(feature = "web_rwh")),
+    path = "app_surface_use_winit.rs"
+)]
 mod app_surface;
 pub use app_surface::*;
 
-#[cfg(target_arch = "wasm32")]
-pub mod web;
+// #[cfg(all(target_arch = "wasm32", feature = "web_rwh"))]
+// compile_error!("web_rwh feature is enabled for wasm32");
+
+// #[cfg(all(target_arch = "wasm32", not(feature = "web_rwh")))]
+// compile_error!("web_rwh feature is not enabled -");
 
 #[repr(C)]
 #[derive(Debug)]
@@ -20,13 +41,19 @@ pub struct ViewSize {
     pub height: u32,
 }
 
+#[cfg(target_arch = "wasm32")]
+use std::rc::Rc as SharedPtr;
+#[cfg(not(target_arch = "wasm32"))]
+use std::sync::Arc as SharedPtr;
+/// 在 wasm32 环境中，Instance、Surface、Adapter、Device 和 Queue 这些类型都不是 Send 和 Sync 的
+#[derive(Clone)]
 pub struct IASDQContext {
-    pub instance: Arc<wgpu::Instance>,
-    pub surface: Arc<wgpu::Surface<'static>>,
+    pub instance: SharedPtr<wgpu::Instance>,
+    pub surface: SharedPtr<wgpu::Surface<'static>>,
     pub config: wgpu::SurfaceConfiguration,
-    pub adapter: Arc<wgpu::Adapter>,
-    pub device: Arc<wgpu::Device>,
-    pub queue: Arc<wgpu::Queue>,
+    pub adapter: SharedPtr<wgpu::Adapter>,
+    pub device: SharedPtr<wgpu::Device>,
+    pub queue: SharedPtr<wgpu::Queue>,
 }
 
 impl IASDQContext {
@@ -182,12 +209,12 @@ async fn create_iasdq_context(
     surface.configure(&device, &config);
 
     IASDQContext {
-        instance: Arc::new(instance),
-        surface: Arc::new(surface),
+        instance: SharedPtr::new(instance),
+        surface: SharedPtr::new(surface),
         config,
-        adapter: Arc::new(adapter),
-        device: Arc::new(device),
-        queue: Arc::new(queue),
+        adapter: SharedPtr::new(adapter),
+        device: SharedPtr::new(device),
+        queue: SharedPtr::new(queue),
     }
 }
 

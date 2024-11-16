@@ -3,7 +3,6 @@ use winit::window::Window;
 
 pub struct AppSurface {
     pub view: Option<Arc<Window>>,
-    pub is_offscreen_canvas: bool,
     pub scale_factor: f32,
     pub maximum_frames: i32,
     pub ctx: crate::IASDQContext,
@@ -17,8 +16,6 @@ struct ViewSetting {
     view: Option<Arc<Window>>,
     scale_factor: f32,
     physical_size: (u32, u32),
-    #[cfg(target_arch = "wasm32")]
-    offscreen_canvas: Option<web_sys::OffscreenCanvas>,
 }
 
 impl AppSurface {
@@ -42,32 +39,10 @@ impl AppSurface {
         return self.view.as_ref().unwrap();
     }
 
-    #[cfg(target_arch = "wasm32")]
-    pub async fn from_offscreen_canvas(
-        offscreen_canvas: web_sys::OffscreenCanvas,
-        scale_factor: f32,
-        physical_size: (u32, u32),
-    ) -> Self {
-        let view_setting = ViewSetting {
-            scale_factor,
-            physical_size,
-            offscreen_canvas: Some(offscreen_canvas),
-            ..Default::default()
-        };
-        Self::create(view_setting).await
-    }
-
     #[allow(unused_variables)]
     async fn create(view_setting: ViewSetting) -> Self {
         let view = view_setting.view.unwrap();
-        #[cfg(not(target_arch = "wasm32"))]
-        let is_offscreen_canvas = false;
-        #[cfg(target_arch = "wasm32")]
-        let is_offscreen_canvas = if view_setting.offscreen_canvas.is_some() {
-            true
-        } else {
-            false
-        };
+
         let scale_factor = view_setting.scale_factor;
         let default_backends = if cfg!(feature = "webgl") {
             wgpu::Backends::GL
@@ -83,18 +58,7 @@ impl AppSurface {
 
         cfg_if::cfg_if! {
             if #[cfg(target_arch = "wasm32")] {
-                let surface = if is_offscreen_canvas {
-                    // let offscreen = canvas.transfer_control_to_offscreen().unwrap();
-                    instance.create_surface(
-                        wgpu::SurfaceTarget::OffscreenCanvas(view_setting.offscreen_canvas.unwrap())
-                    )
-                } else {
-                    // use winit::platform::web::WindowExtWebSys;
-                    // let canvas: web_sys::HtmlCanvasElement =
-                    //     view.as_ref().canvas().unwrap();
-                    // instance.create_surface(wgpu::SurfaceTarget::Canvas(canvas))
-                    instance.create_surface(view.clone())
-                };
+                let surface = instance.create_surface(view.clone());
             } else {
                 let surface = instance.create_surface(view.clone());
             }
@@ -110,7 +74,6 @@ impl AppSurface {
 
         AppSurface {
             view: Some(view),
-            is_offscreen_canvas,
             scale_factor,
             maximum_frames: 60,
             ctx,
@@ -121,12 +84,8 @@ impl AppSurface {
     }
 
     pub fn get_view_size(&self) -> (u32, u32) {
-        if self.is_offscreen_canvas {
-            panic!("Offscreen canvas cannot provide any DOM interfaces.");
-        } else {
-            let physical = self.get_view().inner_size();
-            (physical.width.max(1), physical.height.max(1))
-        }
+        let physical = self.get_view().inner_size();
+        (physical.width.max(1), physical.height.max(1))
     }
 
     pub fn request_redraw(&self) {

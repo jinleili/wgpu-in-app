@@ -1,6 +1,5 @@
 use crate::IASDQContext;
 use raw_window_handle::{HasDisplayHandle, HasWindowHandle};
-use std::ops::Deref;
 
 mod canvas;
 pub use canvas::*;
@@ -14,6 +13,7 @@ pub struct AppSurface {
     pub ctx: IASDQContext,
 }
 
+#[allow(dead_code)]
 impl AppSurface {
     pub async fn new(view: ViewObj) -> Self {
         let (scale_factor, logical_size) = match view {
@@ -56,6 +56,27 @@ impl AppSurface {
         }
     }
 
+    /// 用 Canvas id 创建 AppSurface
+    ///
+    /// element_id: 存在于当前页面中的 canvas 元素的 id
+    /// handle: 用于 WebGPU 的 raw handle number, 0 是保留的值, 不能使用
+    pub async fn from_canvas(element_id: &str, handle: u32) -> Self {
+        let wrapper = CanvasWrapper::new(Canvas::new(element_id, handle));
+        Self::new(ViewObj::Canvas(wrapper)).await
+    }
+
+    /// 用 OffscreenCanvas 创建 AppSurface
+    /// 
+    /// handle: 用于 WebGPU 的 raw handle number, 0 是保留的值, 不能使用
+    pub async fn from_offscreen_canvas(
+        offscreen_canvas: web_sys::OffscreenCanvas,
+        scale_factor: f32,
+        handle: u32,
+    ) -> Self {
+        let wrapper = OffscreenCanvasWrapper::new(OffscreenCanvas::new(offscreen_canvas, scale_factor, handle));
+        Self::new(ViewObj::Offscreen(wrapper)).await
+    }
+
     pub fn get_view_size(&self) -> (u32, u32) {
         let (scale_factor, logical_size) = match self.view {
             ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.logical_resolution()),
@@ -68,15 +89,6 @@ impl AppSurface {
             (logical_size.1 as f32 * scale_factor) as u32,
         )
     }
-}
-
-/// 用 Canvas id 创建 AppSurface
-///
-/// element_id: 存在于当前页面中的 canvas 元素的 id
-/// handle: 用于 WebGPU 的 raw handle number, 0 是保留的值, 不能使用
-pub async fn app_surface_from_canvas(element_id: &str, handle: u32) -> AppSurface {
-    let wrapper = CanvasWrapper::new(Canvas::new(element_id, handle));
-    AppSurface::new(ViewObj::Canvas(wrapper)).await
 }
 
 // 封装 ViewObj 来同时支持 Canvas 与 Offscreen
@@ -101,48 +113,3 @@ pub(crate) struct SendSyncWrapper<T>(pub(crate) T);
 
 unsafe impl<T> Send for SendSyncWrapper<T> {}
 unsafe impl<T> Sync for SendSyncWrapper<T> {}
-
-impl Deref for AppSurface {
-    type Target = IASDQContext;
-    fn deref(&self) -> &Self::Target {
-        &self.ctx
-    }
-}
-
-impl crate::SurfaceFrame for AppSurface {
-    fn view_size(&self) -> crate::ViewSize {
-        let size = self.get_view_size();
-        crate::ViewSize {
-            width: size.0,
-            height: size.1,
-        }
-    }
-
-    fn resize_surface(&mut self) {
-        let size = self.get_view_size();
-        self.ctx.config.width = size.0;
-        self.ctx.config.height = size.1;
-        self.surface.configure(&self.device, &self.config);
-    }
-
-    fn resize_surface_by_size(&mut self, size: (u32, u32)) {
-        self.ctx.config.width = size.0;
-        self.ctx.config.height = size.1;
-        self.surface.configure(&self.device, &self.config);
-    }
-
-    fn normalize_touch_point(&self, touch_point_x: f32, touch_point_y: f32) -> (f32, f32) {
-        let size = self.get_view_size();
-        (
-            touch_point_x * self.scale_factor / size.0 as f32,
-            touch_point_y * self.scale_factor / size.1 as f32,
-        )
-    }
-
-    fn get_current_frame_view(
-        &self,
-        view_format: Option<wgpu::TextureFormat>,
-    ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
-        self.create_current_frame_view(&self.device, &self.surface, &self.config, view_format)
-    }
-}
