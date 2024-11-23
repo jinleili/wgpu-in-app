@@ -1,6 +1,9 @@
 use super::{Canvas, SendSyncWrapper};
 use raw_window_handle::{HasDisplayHandle, HasWindowHandle};
-use std::{ops::Deref, ptr::NonNull};
+use std::{
+    ops::{Deref, DerefMut},
+    ptr::NonNull,
+};
 use wasm_bindgen::JsValue;
 
 #[derive(Debug)]
@@ -16,6 +19,12 @@ impl Deref for OffscreenCanvasWrapper {
 
     fn deref(&self) -> &Self::Target {
         &self.0 .0
+    }
+}
+
+impl DerefMut for OffscreenCanvasWrapper {
+    fn deref_mut(&mut self) -> &mut OffscreenCanvas {
+        &mut self.0 .0
     }
 }
 

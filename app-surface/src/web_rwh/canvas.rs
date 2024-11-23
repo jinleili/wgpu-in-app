@@ -2,7 +2,10 @@ use super::SendSyncWrapper;
 use raw_window_handle::{
     HasDisplayHandle, HasWindowHandle, RawWindowHandle, WebCanvasWindowHandle, WindowHandle,
 };
-use std::{ops::Deref, ptr::NonNull};
+use std::{
+    ops::{Deref, DerefMut},
+    ptr::NonNull,
+};
 use wasm_bindgen::{JsCast, JsValue};
 
 #[derive(Debug)]
@@ -18,6 +21,12 @@ impl Deref for CanvasWrapper {
 
     fn deref(&self) -> &Self::Target {
         &self.0 .0
+    }
+}
+
+impl DerefMut for CanvasWrapper {
+    fn deref_mut(&mut self) -> &mut Canvas {
+        &mut self.0 .0
     }
 }
 

@@ -66,14 +66,18 @@ impl AppSurface {
     }
 
     /// 用 OffscreenCanvas 创建 AppSurface
-    /// 
+    ///
     /// handle: 用于 WebGPU 的 raw handle number, 0 是保留的值, 不能使用
     pub async fn from_offscreen_canvas(
         offscreen_canvas: web_sys::OffscreenCanvas,
         scale_factor: f32,
         handle: u32,
     ) -> Self {
-        let wrapper = OffscreenCanvasWrapper::new(OffscreenCanvas::new(offscreen_canvas, scale_factor, handle));
+        let wrapper = OffscreenCanvasWrapper::new(OffscreenCanvas::new(
+            offscreen_canvas,
+            scale_factor,
+            handle,
+        ));
         Self::new(ViewObj::Offscreen(wrapper)).await
     }
 
@@ -88,6 +92,23 @@ impl AppSurface {
             (logical_size.0 as f32 * scale_factor) as u32,
             (logical_size.1 as f32 * scale_factor) as u32,
         )
+    }
+
+    pub fn get_view_logical_size(&self) -> (u32, u32) {
+        let (_, logical_size) = match self.view {
+            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.logical_resolution()),
+            ViewObj::Offscreen(ref offscreen) => {
+                (offscreen.scale_factor, offscreen.logical_resolution())
+            }
+        };
+        logical_size
+    }
+
+    pub fn update_device_pixel_ratio(&mut self, ratio: f32) {
+        match self.view {
+            ViewObj::Canvas(ref mut canvas) => canvas.scale_factor = ratio,
+            ViewObj::Offscreen(ref mut offscreen) => offscreen.scale_factor = ratio,
+        }
     }
 }
 
