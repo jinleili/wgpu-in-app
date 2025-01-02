@@ -64,7 +64,7 @@ impl From<&Canvas> for OffscreenCanvas {
     }
 }
 
-impl HasWindowHandle for OffscreenCanvas {
+impl HasWindowHandle for OffscreenCanvasWrapper {
     fn window_handle(
         &self,
     ) -> Result<raw_window_handle::WindowHandle<'_>, raw_window_handle::HandleError> {
@@ -78,7 +78,7 @@ impl HasWindowHandle for OffscreenCanvas {
     }
 }
 
-impl HasDisplayHandle for OffscreenCanvas {
+impl HasDisplayHandle for OffscreenCanvasWrapper {
     fn display_handle(
         &self,
     ) -> Result<raw_window_handle::DisplayHandle<'_>, raw_window_handle::HandleError> {

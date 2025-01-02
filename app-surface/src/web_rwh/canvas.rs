@@ -89,7 +89,7 @@ impl Deref for Canvas {
     }
 }
 
-impl HasWindowHandle for Canvas {
+impl HasWindowHandle for CanvasWrapper {
     fn window_handle(
         &self,
     ) -> Result<raw_window_handle::WindowHandle<'_>, raw_window_handle::HandleError> {
@@ -101,7 +101,7 @@ impl HasWindowHandle for Canvas {
     }
 }
 
-impl HasDisplayHandle for Canvas {
+impl HasDisplayHandle for CanvasWrapper {
     fn display_handle(
         &self,
     ) -> Result<raw_window_handle::DisplayHandle<'_>, raw_window_handle::HandleError> {

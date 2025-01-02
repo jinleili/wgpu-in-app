@@ -36,7 +36,7 @@ impl AppSurface {
     }
 
     pub fn get_view(&self) -> &Window {
-        return self.view.as_ref().unwrap();
+        self.view.as_ref().unwrap()
     }
 
     #[allow(unused_variables)]

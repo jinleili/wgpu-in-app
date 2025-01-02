@@ -3,7 +3,7 @@ name = "app-surface"
 authors = ["jinleili"]
 description = "Integrate wgpu into your existing iOS, Android and Web apps without relying on winit."
 edition = "2021"
-version = "1.3.2"
+version = "1.3.3"
 rust-version = "1.76"
 repository = "https://github.com/jinleili/wgpu-in-app"
 keywords = ["android", "SurfaceView", "CAMetalLayer", "Canvas", "wgpu"]
@@ -49,7 +49,6 @@ android_logger.workspace = true
 jni.workspace = true
 ndk-sys.workspace = true
 raw-window-handle.workspace = true
-ash.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 winit.workspace = true
