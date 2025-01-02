@@ -21,7 +21,7 @@ jobs:
 
           # MacOS
           - name: MacOS x86_64
-            os: macos-12
+            os: macos-15
             target: x86_64-apple-darwin
 
           # Linux
