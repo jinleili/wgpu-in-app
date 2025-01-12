@@ -33,6 +33,7 @@ impl WgpuCanvas {
 
     pub fn resize(&mut self) {
         self.app_surface.resize_surface();
+        self.example.resize(&self.app_surface);
     }
 
     pub fn change_example(&mut self, index: i32) {
