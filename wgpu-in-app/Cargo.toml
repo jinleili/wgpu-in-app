@@ -3,7 +3,7 @@ name = "wgpu-in-app"
 authors = ["jinleili"]
 version = "1.2.0"
 edition = "2021"
-rust-version = "1.76"
+rust-version = "1.83"
 
 [lib]
 crate-type = ["rlib", "staticlib", "cdylib"]
