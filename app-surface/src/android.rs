@@ -18,7 +18,7 @@ impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = Arc::new(NativeWindow::new(env, surface));
         let backends = wgpu::Backends::VULKAN;
-        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends,
             ..Default::default()
         });

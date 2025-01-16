@@ -186,7 +186,7 @@ impl Cube {
         queue.write_texture(
             texture.as_image_copy(),
             &texels,
-            wgpu::ImageDataLayout {
+            wgpu::TexelCopyBufferLayout {
                 offset: 0,
                 bytes_per_row: Some(size),
                 rows_per_image: None,

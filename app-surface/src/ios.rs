@@ -1,4 +1,4 @@
-use core_graphics::{base::CGFloat, geometry::CGRect};
+use core_graphics_types::{base::CGFloat, geometry::CGRect};
 use libc::c_void;
 use objc::{runtime::Object, *};
 use std::marker::Sync;
@@ -40,7 +40,7 @@ impl AppSurface {
             (s.size.height as f32 * scale_factor) as u32,
         );
         let backends = wgpu::Backends::METAL;
-        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends,
             ..Default::default()
         });

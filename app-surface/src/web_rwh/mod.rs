@@ -28,7 +28,7 @@ impl AppSurface {
         );
 
         let backends = wgpu::Backends::BROWSER_WEBGPU;
-        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends,
             ..Default::default()
         });

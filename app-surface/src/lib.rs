@@ -224,7 +224,7 @@ async fn request_device(
 ) -> (wgpu::Adapter, wgpu::Device, wgpu::Queue) {
     let adapter = instance
         .request_adapter(&wgpu::RequestAdapterOptions {
-            power_preference: wgpu::util::power_preference_from_env()
+            power_preference: wgpu::PowerPreference::from_env()
                 .unwrap_or(wgpu::PowerPreference::HighPerformance),
             force_fallback_adapter: false,
             compatible_surface: Some(surface),
