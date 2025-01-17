@@ -13,7 +13,7 @@ pollster = "0.3"
 rand = "0.7.2"
 wgpu = "24"
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
-winit = { version = "=0.30.5" }
+winit = { version = "0.30" }
 raw-window-handle = "0.6"
 env_logger = "0.11"
 
