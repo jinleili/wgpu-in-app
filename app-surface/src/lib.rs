@@ -45,15 +45,15 @@ pub struct ViewSize {
 use std::rc::Rc as SharedPtr;
 #[cfg(not(target_arch = "wasm32"))]
 use std::sync::Arc as SharedPtr;
-/// 在 wasm32 环境中，Instance、Surface、Adapter、Device 和 Queue 这些类型都不是 Send 和 Sync 的
+/// wgpu v24 开始，Instance、Adapter、Device 和 Queue 都是可 `Clone` 的
 #[derive(Clone)]
 pub struct IASDQContext {
-    pub instance: SharedPtr<wgpu::Instance>,
+    pub instance: wgpu::Instance,
     pub surface: SharedPtr<wgpu::Surface<'static>>,
     pub config: wgpu::SurfaceConfiguration,
-    pub adapter: SharedPtr<wgpu::Adapter>,
-    pub device: SharedPtr<wgpu::Device>,
-    pub queue: SharedPtr<wgpu::Queue>,
+    pub adapter: wgpu::Adapter,
+    pub device: wgpu::Device,
+    pub queue: wgpu::Queue,
 }
 
 impl IASDQContext {
@@ -209,12 +209,12 @@ async fn create_iasdq_context(
     surface.configure(&device, &config);
 
     IASDQContext {
-        instance: SharedPtr::new(instance),
+        instance,
         surface: SharedPtr::new(surface),
         config,
-        adapter: SharedPtr::new(adapter),
-        device: SharedPtr::new(device),
-        queue: SharedPtr::new(queue),
+        adapter,
+        device,
+        queue,
     }
 }
 
