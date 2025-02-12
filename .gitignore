@@ -19,3 +19,4 @@ iOS/libs/release/*
 Apple/libs/debug/*
 Apple/libs/release/*
 GPU-Frame-Caputre.xcodeproj/
+wgpu-in-app/dist/

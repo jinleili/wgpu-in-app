@@ -40,13 +40,18 @@ jni.workspace = true
 jni_fn.workspace = true
 log-panics = "*"
 
+[target.'cfg(target_env = "ohos")'.dependencies]
+napi-ohos = { workspace = true, features = ["napi8", "async"] }
+napi-derive-ohos.workspace = true
+openharmony-ability.workspace = true
+openharmony-ability-derive.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys = { workspace = true, features = [
     "Document",
     "Navigator",
     "Gpu",
-    "GpuAdapter",    
+    "GpuAdapter",
     "HtmlCanvasElement",
     "OffscreenCanvas",
     "Window",
