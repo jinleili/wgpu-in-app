@@ -1,20 +1,29 @@
-import { hilog } from '@kit.PerformanceAnalysisKit';
-import testNapi from 'libentry.so';
+import { DefaultXComponent } from "@ohos-rs/ability"
+import { ItemRestriction, SegmentButton, SegmentButtonOptions, SegmentButtonTextItem } from '@kit.ArkUI';
+import { changeRender } from "libwgpu_in_app.so"
 
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello World';
+  @State tabOptions: SegmentButtonOptions = SegmentButtonOptions.capsule({
+    buttons: [{ text: 'boids' },
+      { text: 'MSAA line' },
+      { text: 'cube' },
+      { text: "water" },
+      { text: "shadow" }] as ItemRestriction<SegmentButtonTextItem>,
+    backgroundBlurStyle: BlurStyle.BACKGROUND_THICK,
+  })
+  @State @Watch("handleChange") tabSelectedIndexes: number[] = [0]
+
+  handleChange() {
+    changeRender(this.tabSelectedIndexes[0])
+  }
 
   build() {
     Row() {
       Column() {
-        Text(this.message)
-          .fontSize(50)
-          .fontWeight(FontWeight.Bold)
-          .onClick(() => {
-            hilog.info(0x0000, 'testTag', 'Test NAPI 2 + 3 = %{public}d', testNapi.add(2, 3));
-          })
+        SegmentButton({ options: this.tabOptions, selectedIndexes: $tabSelectedIndexes })
+        DefaultXComponent()
       }
       .width('100%')
     }

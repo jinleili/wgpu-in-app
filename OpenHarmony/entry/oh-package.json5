@@ -7,7 +7,8 @@
   "license": "",
   "dependencies": {
     "libentry.so": "file:./src/main/cpp/types/libentry",
-    "@ohos-rs/ability": "^0.0.1"
+    "libwgpu_in_app.so": "file:./src/main/cpp/types/libwgpu_in_app",
+    "@ohos-rs/ability": "^0.0.2"
   },
   "devDependencies": {},
   "dynamicDependencies": {}
