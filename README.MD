@@ -109,3 +109,29 @@ WGPU_BACKEND=gl cargo run --features=angle
 WGPU_BACKEND=vk cargo run --features=vulkan-portability
 # Then, press 0, 1, 2, 3, 4 keys change running example.
 ```
+
+## **OpenHarmony/HarmonyNext**
+
+Assuming your computer already has DevEco Studio installed.
+
+Then, set the following environment variable:
+
+```sh
+export OHOS_NDK_HOME=/Applications/DevEco-Studio.app/Contents/sdk/default/openharmony
+```
+
+### Install ohrs subcommand
+
+```sh
+cargo install ohrs
+```
+
+### Build
+
+```sh
+# Add build targets
+rustup target add aarch64-unknown-linux-ohos armv7-unknown-linux-ohos x86_64-unknown-linux-ohos
+
+# Build
+sh ./ohos_lib_build.sh --release
+```

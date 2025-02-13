@@ -182,7 +182,7 @@ async fn create_iasdq_context(
         // Caused by:
         // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
         vec![]
-    } else if cfg!(target_os = "android") {
+    } else if cfg!(target_os = "android") || cfg!(target_env = "ohos") {
         // TODO:HarmonyOS 不支持 view_formats 格式
         // format 的值与 view_formats 的值一致时，configure 内部会自动忽略 view_formats 的值
         //

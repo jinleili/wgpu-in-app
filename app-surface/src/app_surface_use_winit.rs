@@ -44,7 +44,7 @@ impl AppSurface {
         let view = view_setting.view.unwrap();
 
         let scale_factor = view_setting.scale_factor;
-        let default_backends = if cfg!(feature = "webgl") {
+        let default_backends = if cfg!(feature = "webgl") || cfg!(target_env = "ohos") {
             wgpu::Backends::GL
         } else {
             wgpu::Backends::PRIMARY
@@ -89,7 +89,7 @@ impl AppSurface {
     }
 
     pub fn request_redraw(&self) {
-        self.view.as_ref().unwrap().request_redraw();
+        self.view.as_ref().unwrap().request_redraw(); 
     }
 
     pub fn pre_present_notify(&self) {
