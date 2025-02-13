@@ -557,7 +557,11 @@ impl Shadow {
                             binding: 1, // lights
                             visibility: wgpu::ShaderStages::FRAGMENT,
                             ty: wgpu::BindingType::Buffer {
-                                ty: wgpu::BufferBindingType::Storage { read_only: true },
+                                ty: if supports_storage_resources {
+                                    wgpu::BufferBindingType::Storage { read_only: true }
+                                } else {
+                                    wgpu::BufferBindingType::Uniform
+                                },
                                 has_dynamic_offset: false,
                                 min_binding_size: wgpu::BufferSize::new(light_uniform_size),
                             },
@@ -635,7 +639,11 @@ impl Shadow {
                 },
                 fragment: Some(wgpu::FragmentState {
                     module: &shader,
-                    entry_point: Some("fs_main"),
+                    entry_point: Some(if supports_storage_resources {
+                        "fs_main"
+                    } else {
+                        "fs_main_without_storage"
+                    }),
                     compilation_options: Default::default(),
                     targets: &[Some(config.format.into())],
                 }),

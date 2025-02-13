@@ -107,7 +107,7 @@ impl ApplicationHandler for WgpuApp {
 
         let app_view = pollster::block_on(AppSurface::new(window));
 
-        self.canvas = Some(WgpuCanvas::new(app_view, 3));
+        self.canvas = Some(WgpuCanvas::new(app_view, 0));
         self.get_canvas().app_surface.request_redraw();
     }
 
