@@ -2,8 +2,8 @@
 name = "wgpu-in-app"
 authors = ["jinleili"]
 version = "1.2.0"
-edition = "2021"
-rust-version = "1.83"
+edition.workspace = true
+rust-version.workspace = true
 
 [lib]
 crate-type = ["rlib", "staticlib", "cdylib"]
@@ -46,7 +46,7 @@ web-sys = { workspace = true, features = [
     "Document",
     "Navigator",
     "Gpu",
-    "GpuAdapter",    
+    "GpuAdapter",
     "HtmlCanvasElement",
     "OffscreenCanvas",
     "Window",

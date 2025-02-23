@@ -1,6 +1,6 @@
 use core::ffi::c_void;
-use jni::sys::jobject;
 use jni::JNIEnv;
+use jni::sys::jobject;
 use raw_window_handle::{
     AndroidDisplayHandle, AndroidNdkWindowHandle, DisplayHandle, HandleError, HasDisplayHandle,
     HasWindowHandle, RawDisplayHandle, RawWindowHandle, WindowHandle,

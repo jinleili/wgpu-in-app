@@ -1,7 +1,11 @@
 [workspace]
-resolver = "2"
+resolver = "3"
 members = ["wgpu-in-app", "app-surface", "cargo-so"]
 default-members = ["wgpu-in-app"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.85"
 
 [workspace.dependencies]
 bytemuck = { version = "1.21", features = ["derive", "min_const_generics"] }
@@ -9,8 +13,8 @@ cfg-if = "1.0"
 glam = "0.29"
 log = "0.4"
 noise = { version = "0.8", default-features = false }
-pollster = "0.3"
-rand = "0.7.2"
+pollster = "0.4"
+rand = "0.8"
 wgpu = "24"
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
 winit = { version = "0.30" }
@@ -29,7 +33,7 @@ jni_fn = "0.1"
 ndk-sys = "0.6"
 
 # wasm target
-web-sys = "0.3.77"
+web-sys = { version = "0.3.77", default-features = false }
 wasm-bindgen = "0.2.100"
-js-sys = "0.3.77"
+js-sys = { version = "0.3.77", default-features = false }
 wasm-bindgen-futures = "0.4.50"

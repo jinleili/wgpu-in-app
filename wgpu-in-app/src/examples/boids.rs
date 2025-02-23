@@ -3,8 +3,8 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 use rand::{
-    distributions::{Distribution, Uniform},
     SeedableRng,
+    distributions::{Distribution, Uniform},
 };
 use std::{borrow::Cow, mem};
 use wgpu::util::DeviceExt;

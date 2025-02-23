@@ -6,8 +6,8 @@ repository = "https://github.com/jinleili/wgpu-in-app"
 readme = "./README.MD"
 keywords = ["android", "so", "ndk", "jni", "cargo"]
 license = "MIT OR Apache-2.0"
-edition = "2021"
-version = "0.3.0"
+edition.workspace = true
+version = "0.3.1"
 
 [dependencies]
 cargo-subcommand = "0.12"

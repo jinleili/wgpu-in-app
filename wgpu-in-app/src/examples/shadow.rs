@@ -6,7 +6,7 @@ use app_surface::{AppSurface, SurfaceFrame};
 use std::{borrow::Cow, f32::consts, iter, mem, ops::Range, rc::Rc};
 
 use bytemuck::{Pod, Zeroable};
-use wgpu::util::{align_to, DeviceExt};
+use wgpu::util::{DeviceExt, align_to};
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]

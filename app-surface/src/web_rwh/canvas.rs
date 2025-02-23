@@ -20,13 +20,13 @@ impl Deref for CanvasWrapper {
     type Target = Canvas;
 
     fn deref(&self) -> &Self::Target {
-        &self.0 .0
+        &self.0.0
     }
 }
 
 impl DerefMut for CanvasWrapper {
     fn deref_mut(&mut self) -> &mut Canvas {
-        &mut self.0 .0
+        &mut self.0.0
     }
 }
 

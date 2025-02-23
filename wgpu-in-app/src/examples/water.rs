@@ -1,6 +1,6 @@
 //! copy from wgpu's example
 
-use super::{point_gen, Example};
+use super::{Example, point_gen};
 use app_surface::{AppSurface, SurfaceFrame};
 
 use bytemuck::{Pod, Zeroable};
@@ -136,7 +136,7 @@ impl Water {
                 const SNOW: [u8; 4] = [175, 224, 237, 255];
 
                 // Random colouration.
-                let random = terrain_random.gen::<f32>() * 0.2 + 0.9;
+                let random = terrain_random.r#gen::<f32>() * 0.2 + 0.9;
 
                 // Choose colour.
                 let colour = if y <= 0.0 {

@@ -18,13 +18,13 @@ impl Deref for OffscreenCanvasWrapper {
     type Target = OffscreenCanvas;
 
     fn deref(&self) -> &Self::Target {
-        &self.0 .0
+        &self.0.0
     }
 }
 
 impl DerefMut for OffscreenCanvasWrapper {
     fn deref_mut(&mut self) -> &mut OffscreenCanvas {
-        &mut self.0 .0
+        &mut self.0.0
     }
 }
 

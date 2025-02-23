@@ -1,8 +1,8 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 use std::borrow::Cow;
-use wgpu::util::DeviceExt;
 use wgpu::PrimitiveTopology;
+use wgpu::util::DeviceExt;
 use wgpu::{AstcBlock, AstcChannel, TextureFormat};
 
 #[allow(dead_code)]
