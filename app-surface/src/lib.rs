@@ -242,11 +242,24 @@ async fn request_device(
         None
     };
 
+    // remove raytracing features from acquired features under unix like os on nvidia discrete cards
+    // this might be related to wgpu issue, need to keep tracing.
+    let mut adp_features = adapter.features();
+    #[cfg(target_family = "unix")]
+    {
+        if adapter_info.name.contains("NVIDIA") {
+            adp_features.remove(wgpu::Features::EXPERIMENTAL_RAY_TRACING_ACCELERATION_STRUCTURE);
+            adp_features.remove(wgpu::Features::EXPERIMENTAL_RAY_QUERY);
+        }
+    }
+    // test features
+    // let adp_features = wgpu::Features::from_bits(0b0011111111011100110111111111111111111111110111000000111111001111).unwrap();
+
     let res = adapter
         .request_device(
             &wgpu::DeviceDescriptor {
                 label: None,
-                required_features: adapter.features(),
+                required_features: adp_features,
                 required_limits: adapter.limits(),
                 memory_hints: wgpu::MemoryHints::Performance,
             },
