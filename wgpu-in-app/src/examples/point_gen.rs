@@ -12,7 +12,7 @@ use std::collections::HashMap;
 /// X multiplication factor.
 /// 1.0 / sqrt(2)
 ///
-const A: f32 = std::f32::consts::FRAC_1_SQRT_2;
+const A: f32 = core::f32::consts::FRAC_1_SQRT_2;
 
 ///
 /// Y multiplication factor.
@@ -23,7 +23,7 @@ const B: f32 = SQRT_3 * A;
 ///
 /// `sin(45deg)` is used to rotate the points.
 ///
-const S45: f32 = std::f32::consts::FRAC_1_SQRT_2;
+const S45: f32 = core::f32::consts::FRAC_1_SQRT_2;
 ///
 /// `cos(45deg)` is used to rotate the points.
 ///
@@ -157,32 +157,33 @@ impl HexTerrainMesh {
         fn half(p1: &TerrainVertex, p2: &TerrainVertex) -> glam::Vec3 {
             (p1.position + p2.position) / 2.0
         }
-        let mut push_triangle = |p1: &TerrainVertex,
-                                 p2: &TerrainVertex,
-                                 p: &TerrainVertex,
-                                 c: [u8; 4]| {
-            let m = middle(p1, p2, p);
-            let ap = half(p1, p);
-            let bp = half(p2, p);
-            let p = p.position;
-            let n1 = calculate_normal(ap, m, p);
-            let n2 = calculate_normal(m, bp, p);
+        let mut push_triangle =
+            |p1: &TerrainVertex, p2: &TerrainVertex, p: &TerrainVertex, c: [u8; 4]| {
+                let m = middle(p1, p2, p);
+                let ap = half(p1, p);
+                let bp = half(p2, p);
+                let p = p.position;
+                let n1 = calculate_normal(ap, m, p);
+                let n2 = calculate_normal(m, bp, p);
 
-            vertices.extend(
-                [ap, m, p, m, bp, p]
-                    .iter()
-                    .zip(
-                        std::iter::repeat::<[f32; 3]>(n1.into())
-                            .chain(std::iter::repeat::<[f32; 3]>(n2.into())),
-                    )
-                    .zip(std::iter::repeat(c))
-                    .map(|((pos, normal), colour)| TerrainVertexAttributes {
-                        position: *pos.as_ref(),
-                        normal,
-                        colour,
-                    }),
-            );
-        };
+                vertices.extend(
+                    [ap, m, p, m, bp, p]
+                        .iter()
+                        .zip(
+                            core::iter::repeat::<[f32; 3]>(n1.into()).chain(core::iter::repeat::<
+                                [f32; 3],
+                            >(
+                                n2.into()
+                            )),
+                        )
+                        .zip(core::iter::repeat(c))
+                        .map(|((pos, normal), colour)| TerrainVertexAttributes {
+                            position: *pos.as_ref(),
+                            normal,
+                            colour,
+                        }),
+                );
+            };
         for i in -self.half_size..=self.half_size {
             for j in -self.half_size..=self.half_size {
                 if let Some(p) = self.vertices.get(&(i, j)) {
@@ -222,7 +223,7 @@ impl HexWaterMesh {
                 let z = B * (x_o * S45 + y_o * C45);
                 if x.hypot(z) < radius {
                     let x = (x * 2.0).round() as i16;
-                    let z = ((z / B) * std::f32::consts::SQRT_2).round() as i16;
+                    let z = ((z / B) * core::f32::consts::SQRT_2).round() as i16;
                     map.insert((i, j), [x, z]);
                 }
             }

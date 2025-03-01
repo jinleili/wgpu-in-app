@@ -12,7 +12,8 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 
-use std::{borrow::Cow, iter};
+use core::iter;
+use std::borrow::Cow;
 
 use bytemuck::{Pod, Zeroable};
 use wgpu::util::DeviceExt;
@@ -91,7 +92,7 @@ impl MSAALine {
             x += step;
             for i in 0..max {
                 let percent = i as f32 / max as f32;
-                let (sin, cos) = (percent * 2.0 * std::f32::consts::PI).sin_cos();
+                let (sin, cos) = (percent * 2.0 * core::f32::consts::PI).sin_cos();
                 vertex_data.push(Vertex {
                     _pos: [x, 0.0],
                     _color: [1.0, -sin, cos, 1.0],
@@ -155,7 +156,7 @@ impl MSAALine {
                 entry_point: Some("vs_main"),
                 compilation_options: Default::default(),
                 buffers: &[wgpu::VertexBufferLayout {
-                    array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
+                    array_stride: core::mem::size_of::<Vertex>() as wgpu::BufferAddress,
                     step_mode: wgpu::VertexStepMode::Vertex,
                     attributes: &wgpu::vertex_attr_array![0 => Float32x2, 1 => Float32x4],
                 }],

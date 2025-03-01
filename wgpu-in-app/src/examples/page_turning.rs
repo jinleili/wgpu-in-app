@@ -3,9 +3,8 @@ use app_surface::{AppSurface, SurfaceFrame};
 
 use zerocopy::{AsBytes, FromBytes};
 
-use std::cell::RefCell;
+use core::{cell::RefCell, f32::consts::FRAC_PI_2};
 use std::cmp::PartialEq;
-use std::f32::consts::FRAC_PI_2;
 use std::rc::Rc;
 
 #[repr(C)]
@@ -149,7 +148,7 @@ impl PageTurning {
         };
 
         let distance = (dx * dx + dy * dy).sqrt();
-        let half_circle = std::f32::consts::PI * self.turning_uniform.radius;
+        let half_circle = core::f32::consts::PI * self.turning_uniform.radius;
         let pi_2 = FRAC_PI_2;
 
         let a = -dy.atan2(dx);

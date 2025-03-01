@@ -1,10 +1,10 @@
 use super::SendSyncWrapper;
-use raw_window_handle::{
-    HasDisplayHandle, HasWindowHandle, RawWindowHandle, WebCanvasWindowHandle, WindowHandle,
-};
-use std::{
+use core::{
     ops::{Deref, DerefMut},
     ptr::NonNull,
+};
+use raw_window_handle::{
+    HasDisplayHandle, HasWindowHandle, RawWindowHandle, WebCanvasWindowHandle, WindowHandle,
 };
 use wasm_bindgen::{JsCast, JsValue};
 
@@ -94,7 +94,7 @@ impl HasWindowHandle for CanvasWrapper {
         &self,
     ) -> Result<raw_window_handle::WindowHandle<'_>, raw_window_handle::HandleError> {
         let value: &JsValue = &self.element;
-        let obj: NonNull<std::ffi::c_void> = NonNull::from(value).cast();
+        let obj: NonNull<core::ffi::c_void> = NonNull::from(value).cast();
         let handle = WebCanvasWindowHandle::new(obj);
         let raw = RawWindowHandle::WebCanvas(handle);
         unsafe { Ok(WindowHandle::borrow_raw(raw)) }

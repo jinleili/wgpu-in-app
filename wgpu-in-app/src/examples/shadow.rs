@@ -3,7 +3,8 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 
-use std::{borrow::Cow, f32::consts, iter, mem, ops::Range, rc::Rc};
+use core::{f32::consts, iter, mem, ops::Range};
+use std::{borrow::Cow, rc::Rc};
 
 use bytemuck::{Pod, Zeroable};
 use wgpu::util::{DeviceExt, align_to};

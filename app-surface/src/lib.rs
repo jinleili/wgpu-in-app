@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use core::ops::Deref;
 use wgpu::{Instance, Surface};
 
 mod touch;

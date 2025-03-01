@@ -3,8 +3,7 @@
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
 use bytemuck::{Pod, Zeroable};
-use std::mem::size_of;
-use std::{future::Future, pin::Pin, task};
+use core::{future::Future, mem::size_of, pin::Pin, task};
 use wgpu::util::DeviceExt;
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
@@ -323,7 +322,7 @@ impl Cube {
 
     fn generate_matrix(aspect_ratio: f32) -> glam::Mat4 {
         let projection =
-            glam::Mat4::perspective_rh(std::f32::consts::FRAC_PI_4, aspect_ratio, 1.0, 10.0);
+            glam::Mat4::perspective_rh(core::f32::consts::FRAC_PI_4, aspect_ratio, 1.0, 10.0);
         let view = glam::Mat4::look_at_rh(
             glam::Vec3::new(1.5f32, -5.0, 3.0),
             glam::Vec3::ZERO,

@@ -93,7 +93,7 @@ impl HasWindowHandle for NativeWindow {
         unsafe {
             let a_native_window = self.a_native_window.lock().unwrap();
             let handle = AndroidNdkWindowHandle::new(
-                std::ptr::NonNull::new(*a_native_window as *mut _ as *mut c_void).unwrap(),
+                core::ptr::NonNull::new(*a_native_window as *mut _ as *mut c_void).unwrap(),
             );
             Ok(WindowHandle::borrow_raw(RawWindowHandle::AndroidNdk(
                 handle,

@@ -2,11 +2,12 @@
 
 use super::Example;
 use app_surface::{AppSurface, SurfaceFrame};
+use core::mem;
 use rand::{
     SeedableRng,
     distributions::{Distribution, Uniform},
 };
-use std::{borrow::Cow, mem};
+use std::borrow::Cow;
 use wgpu::util::DeviceExt;
 
 // number of boid particles to simulate

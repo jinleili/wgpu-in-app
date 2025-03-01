@@ -4,9 +4,10 @@ use super::{Example, point_gen};
 use app_surface::{AppSurface, SurfaceFrame};
 
 use bytemuck::{Pod, Zeroable};
+use core::{f32::consts, iter, mem};
 use glam::Vec3;
 use rand::SeedableRng;
-use std::{borrow::Cow, f32::consts, iter, mem};
+use std::borrow::Cow;
 use wgpu::util::DeviceExt;
 
 ///

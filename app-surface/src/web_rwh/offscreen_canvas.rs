@@ -1,9 +1,9 @@
 use super::{Canvas, SendSyncWrapper};
-use raw_window_handle::{HasDisplayHandle, HasWindowHandle};
-use std::{
+use core::{
     ops::{Deref, DerefMut},
     ptr::NonNull,
 };
+use raw_window_handle::{HasDisplayHandle, HasWindowHandle};
 use wasm_bindgen::JsValue;
 
 #[derive(Debug)]
@@ -71,7 +71,7 @@ impl HasWindowHandle for OffscreenCanvasWrapper {
         use raw_window_handle::{RawWindowHandle, WebOffscreenCanvasWindowHandle, WindowHandle};
 
         let value: &JsValue = &self.inner;
-        let obj: NonNull<std::ffi::c_void> = NonNull::from(value).cast();
+        let obj: NonNull<core::ffi::c_void> = NonNull::from(value).cast();
         let handle = WebOffscreenCanvasWindowHandle::new(obj);
         let raw = RawWindowHandle::WebOffscreenCanvas(handle);
         unsafe { Ok(WindowHandle::borrow_raw(raw)) }
