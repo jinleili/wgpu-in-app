@@ -8,6 +8,7 @@ edition = "2024"
 rust-version = "1.85"
 
 [workspace.dependencies]
+app-surface = { path = "./app-surface", default-features = false }
 bytemuck = { version = "1.21", features = ["derive", "min_const_generics"] }
 cfg-if = "1.0"
 glam = "0.29"

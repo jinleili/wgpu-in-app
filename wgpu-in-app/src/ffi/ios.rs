@@ -1,7 +1,7 @@
 use crate::wgpu_canvas::WgpuCanvas;
 use app_surface::{AppSurface, IOSViewObj};
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn create_wgpu_canvas(ios_obj: IOSViewObj) -> *mut libc::c_void {
     println!(
         "create_wgpu_canvas, maximum frames: {}",
@@ -17,7 +17,7 @@ pub fn create_wgpu_canvas(ios_obj: IOSViewObj) -> *mut libc::c_void {
     Box::into_raw(box_obj) as *mut libc::c_void
 }
 
-// #[no_mangle]
+// #[unsafe(no_mangle)]
 // pub extern "C" fn enter_frame(obj: *mut libc::c_void) {
 // // 将指针转换为其指代的实际 Rust 对象，同时也拿回此对象的内存管理权
 // let mut obj: Box<WgpuCanvas> = unsafe { Box::from_raw(obj as *mut _) };
@@ -26,14 +26,14 @@ pub fn create_wgpu_canvas(ios_obj: IOSViewObj) -> *mut libc::c_void {
 //     Box::into_raw(obj);
 // }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn enter_frame(obj: *mut libc::c_void) {
     // 获取到指针指代的 Rust 对象的可变借用
     let obj = unsafe { &mut *(obj as *mut WgpuCanvas) };
     obj.enter_frame();
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn change_example(obj: *mut libc::c_void, idx: i32) {
     let obj = unsafe { &mut *(obj as *mut WgpuCanvas) };
     obj.change_example(idx);

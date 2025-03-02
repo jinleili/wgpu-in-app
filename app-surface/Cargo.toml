@@ -3,7 +3,7 @@ name = "app-surface"
 authors = ["jinleili"]
 description = "Integrate wgpu into your existing iOS, Android and Web apps without relying on winit."
 edition.workspace = true
-version = "1.5.1"
+version = "1.5.2"
 rust-version.workspace = true
 repository = "https://github.com/jinleili/wgpu-in-app"
 keywords = ["android", "SurfaceView", "CAMetalLayer", "Canvas", "wgpu"]
@@ -13,10 +13,11 @@ license = "MIT"
 crate-type = ["rlib"]
 
 [features]
-default = []
+default = ["winit"]
 cargo-clippy = []
 webgl = ["wgpu/webgl"]
 mac_catalyst = []
+winit = ["dep:winit"]
 # Use Canvas / OffscreenCanvas + raw-window-handle directly on the web, no need for winit
 web_rwh = []
 
@@ -24,7 +25,6 @@ web_rwh = []
 cfg-if.workspace = true
 log.workspace = true
 glam.workspace = true
-pollster.workspace = true
 wgpu.workspace = true
 web-sys = { workspace = true, features = [
     "Document",
@@ -34,9 +34,10 @@ web-sys = { workspace = true, features = [
     "OffscreenCanvas",
 ], optional = true }
 wasm-bindgen = { workspace = true, optional = true }
+winit = { workspace = true, optional = true }
 
-[target.'cfg(any(target_os = "macos", target_os = "windows", target_os = "linux"))'.dependencies]
-winit.workspace = true
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+pollster.workspace = true
 
 [target.'cfg(target_vendor = "apple")'.dependencies]
 libc.workspace = true
@@ -52,7 +53,6 @@ ndk-sys.workspace = true
 raw-window-handle.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-winit.workspace = true
 web-sys = { workspace = true }
 wasm-bindgen.workspace = true
 raw-window-handle.workspace = true

@@ -13,10 +13,6 @@ default = []
 angle = ["wgpu/angle"]
 vulkan-portability = ["wgpu/vulkan-portability"]
 
-[dependencies.app_surface]
-path = "../app-surface"
-package = "app-surface"
-
 [dependencies]
 bytemuck.workspace = true
 cfg-if.workspace = true
@@ -29,12 +25,17 @@ wgpu.workspace = true
 env_logger.workspace = true
 
 [target.'cfg(any(target_os = "macos", target_os = "windows", target_os = "linux"))'.dependencies]
+app-surface = { workspace = true, features = ["winit"] }
 winit.workspace = true
 
 [target.'cfg(target_vendor = "apple")'.dependencies]
 libc.workspace = true
 
+[target.'cfg(target_os = "ios")'.dependencies]
+app-surface = { workspace = true, features = [] }
+
 [target.'cfg(target_os = "android")'.dependencies]
+app-surface = { workspace = true, features = [] }
 android_logger.workspace = true
 jni.workspace = true
 jni_fn.workspace = true
@@ -42,6 +43,7 @@ log-panics = "*"
 
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
+
 web-sys = { workspace = true, features = [
     "Document",
     "Navigator",
