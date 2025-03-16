@@ -6,7 +6,7 @@ use jni::sys::{jint, jlong, jobject};
 use jni_fn::jni_fn;
 use log::info;
 
-// Starting with the 2024 Edition, it is now required to mark these attributes as unsafe. 
+// Starting with the 2024 Edition, it is now required to mark these attributes as unsafe.
 #[unsafe(no_mangle)]
 #[jni_fn("name.jinleili.wgpu.RustBridge")]
 pub fn createWgpuCanvas(env: *mut JNIEnv, _: JClass, surface: jobject, idx: jint) -> jlong {

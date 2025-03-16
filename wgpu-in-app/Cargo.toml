@@ -41,9 +41,7 @@ jni.workspace = true
 jni_fn.workspace = true
 log-panics = "*"
 
-
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-
 web-sys = { workspace = true, features = [
     "Document",
     "Navigator",

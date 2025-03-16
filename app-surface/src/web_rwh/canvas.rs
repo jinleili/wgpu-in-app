@@ -74,7 +74,7 @@ impl Canvas {
         self.handle
     }
 
-    pub fn logical_resolution(&self) -> (u32, u32) {
+    pub fn physical_resolution(&self) -> (u32, u32) {
         let width = self.element.width();
         let height = self.element.height();
         (width, height)

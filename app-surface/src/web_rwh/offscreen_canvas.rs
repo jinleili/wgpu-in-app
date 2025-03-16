@@ -49,7 +49,7 @@ impl OffscreenCanvas {
         (self.inner, self.handle)
     }
 
-    pub fn logical_resolution(&self) -> (u32, u32) {
+    pub fn physical_resolution(&self) -> (u32, u32) {
         let width = self.inner.width();
         let height = self.inner.height();
         (width, height)

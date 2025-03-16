@@ -16,17 +16,12 @@ pub struct AppSurface {
 #[allow(dead_code)]
 impl AppSurface {
     pub async fn new(view: ViewObj) -> Self {
-        let (scale_factor, logical_size) = match view {
-            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.logical_resolution()),
+        let (scale_factor, physical_size) = match view {
+            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.physical_resolution()),
             ViewObj::Offscreen(ref offscreen) => {
-                (offscreen.scale_factor, offscreen.logical_resolution())
+                (offscreen.scale_factor, offscreen.physical_resolution())
             }
         };
-        let physical_size = (
-            (logical_size.0 as f32 * scale_factor) as u32,
-            (logical_size.1 as f32 * scale_factor) as u32,
-        );
-
         let backends = wgpu::Backends::BROWSER_WEBGPU;
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends,
@@ -82,26 +77,26 @@ impl AppSurface {
     }
 
     pub fn get_view_size(&self) -> (u32, u32) {
-        let (scale_factor, logical_size) = match self.view {
-            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.logical_resolution()),
+        let (_, physical_size) = match self.view {
+            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.physical_resolution()),
             ViewObj::Offscreen(ref offscreen) => {
-                (offscreen.scale_factor, offscreen.logical_resolution())
+                (offscreen.scale_factor, offscreen.physical_resolution())
+            }
+        };
+        physical_size
+    }
+
+    pub fn get_view_logical_size(&self) -> (f32, f32) {
+        let (scale_factor, physical_size) = match self.view {
+            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.physical_resolution()),
+            ViewObj::Offscreen(ref offscreen) => {
+                (offscreen.scale_factor, offscreen.physical_resolution())
             }
         };
         (
-            (logical_size.0 as f32 * scale_factor) as u32,
-            (logical_size.1 as f32 * scale_factor) as u32,
+            physical_size.0 as f32 / scale_factor,
+            physical_size.1 as f32 / scale_factor,
         )
-    }
-
-    pub fn get_view_logical_size(&self) -> (u32, u32) {
-        let (_, logical_size) = match self.view {
-            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.logical_resolution()),
-            ViewObj::Offscreen(ref offscreen) => {
-                (offscreen.scale_factor, offscreen.logical_resolution())
-            }
-        };
-        logical_size
     }
 
     pub fn update_device_pixel_ratio(&mut self, ratio: f32) {
