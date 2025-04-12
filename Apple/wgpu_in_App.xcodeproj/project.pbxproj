@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9714D6832DAAF8ED00525AA8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9714D6822DAAF8ED00525AA8 /* UIKit.framework */; };
 		AD4A40F0295C1EA3007D50BE /* libwgpu_in_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4A40EF295C1EA3007D50BE /* libwgpu_in_app.a */; };
 		AD4B1FED26EB1B90008A6AEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */; };
 		AD4B1FF126EB1B90008A6AEE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4B1FF026EB1B90008A6AEE /* ViewController.swift */; };
@@ -18,9 +19,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9714D6822DAAF8ED00525AA8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AD20D48A2863001E00E2C98C /* wgpu_phone.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wgpu_phone.entitlements; sourceTree = "<group>"; };
-		AD37233828E17FAF001EF275 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS9.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		AD4A40EF295C1EA3007D50BE /* libwgpu_in_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_in_app.a; path = libs/debug/libwgpu_in_app.a; sourceTree = "<group>"; };
+		AD4A40EF295C1EA3007D50BE /* libwgpu_in_app.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwgpu_in_app.a; path = libs/release/libwgpu_in_app.a; sourceTree = "<group>"; };
 		AD4B1FE926EB1B90008A6AEE /* wgpu_phone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wgpu_phone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD4B1FEC26EB1B90008A6AEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AD4B1FF026EB1B90008A6AEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
