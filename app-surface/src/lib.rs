@@ -262,8 +262,8 @@ async fn request_device(
                 required_features: adp_features,
                 required_limits: adapter.limits(),
                 memory_hints: wgpu::MemoryHints::Performance,
-            },
-            None,
+                trace: wgpu::Trace::Off,
+            }
         )
         .await;
 

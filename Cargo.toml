@@ -9,14 +9,14 @@ rust-version = "1.85"
 
 [workspace.dependencies]
 app-surface = { path = "./app-surface", default-features = false }
-bytemuck = { version = "1.21", features = ["derive", "min_const_generics"] }
+bytemuck = { version = "1.22", features = ["derive", "min_const_generics"] }
 cfg-if = "1.0"
 glam = "0.29"
 log = "0.4"
 noise = { version = "0.8", default-features = false }
 pollster = "0.4"
 rand = "0.8"
-wgpu = "24"
+wgpu = "25"
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
 winit = { version = "0.30" }
 raw-window-handle = "0.6"
