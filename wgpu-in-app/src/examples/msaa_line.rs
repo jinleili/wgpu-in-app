@@ -267,6 +267,7 @@ impl Example for MSAALine {
                         load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
                         store: wgpu::StoreOp::Store,
                     },
+                    depth_slice: None,
                 }
             } else {
                 wgpu::RenderPassColorAttachment {
@@ -278,6 +279,7 @@ impl Example for MSAALine {
                         // On tile-based GPU, avoid store can reduce your app's memory footprint.
                         store: wgpu::StoreOp::Store,
                     },
+                    depth_slice: None,
                 }
             };
 

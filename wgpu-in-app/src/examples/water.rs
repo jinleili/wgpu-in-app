@@ -717,6 +717,7 @@ impl Example for Water {
                         load: wgpu::LoadOp::Clear(back_color),
                         store: wgpu::StoreOp::Store,
                     },
+                    depth_slice: None,
                 })],
                 // We still need to use the depth buffer here
                 // since the pipeline requires it.
@@ -747,6 +748,7 @@ impl Example for Water {
                         load: wgpu::LoadOp::Clear(back_color),
                         store: wgpu::StoreOp::Store,
                     },
+                    depth_slice: None,
                 })],
                 depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
                     view: &self.depth_buffer,
@@ -775,6 +777,7 @@ impl Example for Water {
                         load: wgpu::LoadOp::Load,
                         store: wgpu::StoreOp::Store,
                     },
+                    depth_slice: None,
                 })],
                 depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
                     view: &self.depth_buffer,

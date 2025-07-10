@@ -251,6 +251,7 @@ impl Example for Boids {
                     }),
                     store: wgpu::StoreOp::Store,
                 },
+                depth_slice: None,
             })];
             let render_pass_descriptor = wgpu::RenderPassDescriptor {
                 label: None,

@@ -364,6 +364,7 @@ impl Example for Cube {
                         // load: wgpu::LoadOp::Load,
                         store: wgpu::StoreOp::Store,
                     },
+                    depth_slice: None,
                 })],
                 ..Default::default()
             });
