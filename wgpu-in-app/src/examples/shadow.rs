@@ -502,7 +502,7 @@ impl Shadow {
                     module: &shader,
                     entry_point: Some("vs_bake"),
                     compilation_options: Default::default(),
-                    buffers: &[vb_desc.clone()],
+                    buffers: std::slice::from_ref(&vb_desc),
                 },
                 fragment: None,
                 primitive: wgpu::PrimitiveState {
