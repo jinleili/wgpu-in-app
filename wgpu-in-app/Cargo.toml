@@ -16,10 +16,10 @@ vulkan-portability = ["wgpu/vulkan-portability"]
 [dependencies]
 bytemuck.workspace = true
 cfg-if.workspace = true
+futures-lite.workspace = true
 glam.workspace = true
 log.workspace = true
 noise.workspace = true
-pollster.workspace = true
 rand.workspace = true
 wgpu.workspace = true
 env_logger.workspace = true

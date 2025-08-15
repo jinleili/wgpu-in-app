@@ -63,7 +63,7 @@ impl ApplicationHandler for WgpuApp {
         let window_attributes = Window::default_attributes().with_title("Wgpu on Desktop");
         let window = Arc::new(event_loop.create_window(window_attributes).unwrap());
 
-        let app_view = pollster::block_on(AppSurface::new(window));
+        let app_view = futures_lite::future::block_on(AppSurface::new(window));
 
         self.canvas = Some(WgpuCanvas::new(app_view, 0));
         self.get_canvas().app_surface.request_redraw();

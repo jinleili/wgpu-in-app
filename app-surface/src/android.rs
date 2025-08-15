@@ -28,7 +28,7 @@ impl AppSurface {
             .create_surface(wgpu::SurfaceTarget::Window(handle))
             .unwrap();
 
-        let ctx = pollster::block_on(crate::create_iasdq_context(
+        let ctx = futures_lite::future::block_on(crate::create_iasdq_context(
             instance,
             surface,
             (native_window.get_width(), native_window.get_height()),
@@ -89,7 +89,7 @@ impl Drop for NativeWindow {
 }
 
 impl HasWindowHandle for NativeWindow {
-    fn window_handle(&self) -> Result<WindowHandle, HandleError> {
+    fn window_handle(&self) -> Result<WindowHandle<'_>, HandleError> {
         unsafe {
             let a_native_window = self.a_native_window.lock().unwrap();
             let handle = AndroidNdkWindowHandle::new(

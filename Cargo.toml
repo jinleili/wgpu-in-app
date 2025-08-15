@@ -14,21 +14,21 @@ cfg-if = "1.0"
 glam = "0.30"
 log = "0.4"
 noise = { version = "0.9", default-features = false }
-pollster = "0.4"
+futures-lite = "2"
 rand = "0.8"
 wgpu = "26"
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
-winit = { version = "0.30.11" }
+winit = { version = "0.30" }
 raw-window-handle = "0.6"
 env_logger = "0.11"
 
 # macOS, iOS
-libc = "0.2"
+libc = { version = "0.2", default-features = false }
 objc = "0.2.7"
 core-graphics-types = "0.2"
 
 # android target
-android_logger = "0.14"
+android_logger = "0.15"
 jni = "0.21"
 jni_fn = "0.1"
 ndk-sys = "0.6"

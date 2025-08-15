@@ -52,7 +52,7 @@ impl AppSurface {
                 .expect("Surface creation failed")
         };
 
-        let ctx = pollster::block_on(crate::create_iasdq_context(instance, surface, physical));
+        let ctx = futures_lite::future::block_on(crate::create_iasdq_context(instance, surface, physical));
 
         AppSurface {
             view: obj.view,

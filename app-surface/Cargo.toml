@@ -3,7 +3,7 @@ name = "app-surface"
 authors = ["jinleili"]
 description = "Integrate wgpu into your existing iOS, Android and Web apps without relying on winit."
 edition.workspace = true
-version = "1.7.1"
+version = "1.7.2"
 rust-version.workspace = true
 repository = "https://github.com/jinleili/wgpu-in-app"
 keywords = ["android", "SurfaceView", "CAMetalLayer", "Canvas", "wgpu"]
@@ -24,7 +24,7 @@ web_rwh = []
 [dependencies]
 cfg-if.workspace = true
 log.workspace = true
-glam.workspace = true
+glam = { workspace = true, features = ["bytemuck"] }
 wgpu.workspace = true
 web-sys = { workspace = true, features = [
     "Document",
@@ -37,7 +37,7 @@ wasm-bindgen = { workspace = true, optional = true }
 winit = { workspace = true, optional = true }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-pollster.workspace = true
+futures-lite.workspace = true
 
 [target.'cfg(target_vendor = "apple")'.dependencies]
 libc.workspace = true
