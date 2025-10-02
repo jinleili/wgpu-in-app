@@ -248,7 +248,6 @@ async fn request_device(
     #[cfg(target_family = "unix")]
     {
         if adapter_info.name.contains("NVIDIA") {
-            adp_features.remove(wgpu::Features::EXPERIMENTAL_RAY_TRACING_ACCELERATION_STRUCTURE);
             adp_features.remove(wgpu::Features::EXPERIMENTAL_RAY_QUERY);
         }
     }
@@ -256,15 +255,14 @@ async fn request_device(
     // let adp_features = wgpu::Features::from_bits(0b0011111111011100110111111111111111111111110111000000111111001111).unwrap();
 
     let res = adapter
-        .request_device(
-            &wgpu::DeviceDescriptor {
-                label: None,
-                required_features: adp_features,
-                required_limits: adapter.limits(),
-                memory_hints: wgpu::MemoryHints::Performance,
-                trace: wgpu::Trace::Off,
-            }
-        )
+        .request_device(&wgpu::DeviceDescriptor {
+            label: None,
+            required_features: adp_features,
+            required_limits: adapter.limits(),
+            experimental_features: unsafe { wgpu::ExperimentalFeatures::enabled() },
+            memory_hints: wgpu::MemoryHints::Performance,
+            trace: wgpu::Trace::Off,
+        })
         .await;
 
     match res {

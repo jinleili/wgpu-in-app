@@ -263,12 +263,12 @@ impl HexWaterMesh {
 
         for i in -self.half_size..=self.half_size {
             for j in -self.half_size..=self.half_size {
-                if (i - j) % 3 == 0 {
-                    if let Some(&p) = self.vertices.get(&(i, j)) {
-                        surrounding_point_values_iter(&self.vertices, i, j, |(a, b)| {
-                            push_triangle(*a, *b, p)
-                        });
-                    }
+                if (i - j) % 3 == 0
+                    && let Some(&p) = self.vertices.get(&(i, j))
+                {
+                    surrounding_point_values_iter(&self.vertices, i, j, |(a, b)| {
+                        push_triangle(*a, *b, p)
+                    });
                 }
             }
         }
