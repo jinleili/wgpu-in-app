@@ -13,12 +13,29 @@ class ViewController: UIViewController {
     private lazy var displayLink: CADisplayLink = {
         CADisplayLink(target: self, selector: #selector(enterFrame))
     }()
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
        
         self.displayLink.add(to: .current, forMode: .default)
         self.displayLink.isPaused = true
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil,
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+        )
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -32,8 +49,20 @@ class ViewController: UIViewController {
         super.viewWillDisappear(animated)
         self.displayLink.isPaused = true
     }
+
+    @objc private func appWillEnterForeground() {
+        self.displayLink.isPaused = false
+    }
+
+    @objc private func appDidEnterBackground() {
+        self.displayLink.isPaused = true
+    }
     
     @objc private func enterFrame() {
+        if self.displayLink.isPaused {
+            return
+        }
+
         guard let canvas = self.wgpuCanvas else { return }
         enter_frame(canvas)
     }
