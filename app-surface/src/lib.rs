@@ -61,8 +61,10 @@ impl IASDQContext {
         self.config.format = format;
         if cfg!(feature = "webgl") {
             // webgl 后端不支持 view_formats
+        } else if format == format.remove_srgb_suffix() {
+            self.config.view_formats = vec![format.add_srgb_suffix()];
         } else {
-            self.config.view_formats = vec![format.add_srgb_suffix(), format.remove_srgb_suffix()];
+            self.config.view_formats = vec![format];
         }
         self.surface.configure(&self.device, &self.config);
     }
