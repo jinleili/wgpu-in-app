@@ -1,13 +1,13 @@
 use core::marker::Sync;
-use core_graphics_types::{base::CGFloat, geometry::CGRect};
 use libc::c_void;
-use objc::{runtime::Object, *};
+use objc2::{msg_send, runtime::AnyObject};
+use objc2_core_foundation::{CGFloat, CGRect};
 
 #[repr(C)]
 pub struct IOSViewObj {
     // metal_layer 所在的 UIView 容器
     // UIView 有一系列方便的函数可供我们在 Rust 端来调用
-    pub view: *mut Object,
+    pub view: *mut AnyObject,
     // 指向 iOS 端 CAMetalLayer 的指针
     pub metal_layer: *mut c_void,
     // 不同的 iOS 设备支持不同的屏幕刷新率，有时我们的 GPU 程序需要用到这类信息
@@ -17,7 +17,7 @@ pub struct IOSViewObj {
 }
 
 pub struct AppSurface {
-    pub view: *mut Object,
+    pub view: *mut AnyObject,
     pub scale_factor: f32,
     pub ctx: crate::IASDQContext,
     pub maximum_frames: i32,
@@ -40,9 +40,11 @@ impl AppSurface {
             (s.size.height as f32 * scale_factor) as u32,
         );
         let backends = wgpu::Backends::METAL;
-        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends,
-            ..Default::default()
+            flags: wgpu::InstanceFlags::default(),
+            backend_options: wgpu::BackendOptions::default(),
+            ..wgpu::InstanceDescriptor::new_without_display_handle()
         });
         let surface = unsafe {
             instance
@@ -52,7 +54,9 @@ impl AppSurface {
                 .expect("Surface creation failed")
         };
 
-        let ctx = futures_lite::future::block_on(crate::create_iasdq_context(instance, surface, physical));
+        let ctx = futures_lite::future::block_on(crate::create_iasdq_context(
+            instance, surface, physical,
+        ));
 
         AppSurface {
             view: obj.view,
@@ -74,7 +78,7 @@ impl AppSurface {
     }
 }
 
-fn get_scale_factor(obj: *mut Object) -> f32 {
+fn get_scale_factor(obj: *mut AnyObject) -> f32 {
     let mut _scale_factor: CGFloat = 1.0;
 
     _scale_factor = unsafe { msg_send![obj, contentScaleFactor] };

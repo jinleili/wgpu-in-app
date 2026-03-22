@@ -104,7 +104,7 @@ impl Boids {
         let compute_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("compute"),
-                bind_group_layouts: &[&compute_bind_group_layout],
+                bind_group_layouts: &[Some(&compute_bind_group_layout)],
                 immediate_size: 0,
             });
 
@@ -236,7 +236,9 @@ impl Example for Boids {
     fn enter_frame(&mut self, app_surface: &AppSurface) {
         let device = &app_surface.device;
         let queue = &app_surface.queue;
-        let (frame, view) = app_surface.get_current_frame_view(None);
+        let frame_view = app_surface.get_current_frame_view(None);
+        if frame_view.is_none() { return; }
+        let (frame, view) = frame_view.unwrap();
         {
             // create render pass descriptor and its color attachments
             let color_attachments = [Some(wgpu::RenderPassColorAttachment {

@@ -18,9 +18,9 @@ impl AppSurface {
     pub fn new(env: *mut JNIEnv, surface: jobject) -> Self {
         let native_window = Arc::new(NativeWindow::new(env, surface));
         let backends = wgpu::Backends::VULKAN;
-        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends,
-            ..Default::default()
+            ..wgpu::InstanceDescriptor::new_with_display_handle(Box::new(native_window.clone()))
         });
 
         let handle: Box<dyn wgpu::WindowHandle> = Box::new(native_window.clone());
@@ -52,6 +52,12 @@ impl AppSurface {
 
 pub struct NativeWindow {
     a_native_window: Arc<Mutex<*mut ndk_sys::ANativeWindow>>,
+}
+
+impl std::fmt::Debug for NativeWindow {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("NativeWindow").finish()
+    }
 }
 
 impl NativeWindow {

@@ -16,7 +16,7 @@ log = "0.4"
 noise = { version = "0.9", default-features = false }
 futures-lite = "2"
 rand = "0.8"
-wgpu = "28"
+wgpu = "29"
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
 winit = { version = "0.30" }
 raw-window-handle = "0.6"
@@ -24,8 +24,9 @@ env_logger = "0.11"
 
 # macOS, iOS
 libc = { version = "0.2", default-features = false }
-objc = "0.2.7"
-core-graphics-types = "0.2"
+objc2 = "0.6"
+objc2-core-foundation = "0.3"
+objc2-foundation = "0.3"
 
 # android target
 android_logger = "0.15"

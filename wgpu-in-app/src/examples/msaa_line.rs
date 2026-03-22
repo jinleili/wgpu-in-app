@@ -254,8 +254,12 @@ impl Example for MSAALine {
                 MSAALine::create_multisampled_framebuffer(device, &self.config, self.sample_count);
             self.rebuild_bundle = false;
         }
-        let (frame, view) =
+        let frame_view =
             app_surface.get_current_frame_view(Some(self.config.format.add_srgb_suffix()));
+        if frame_view.is_none() {
+            return;
+        }
+        let (frame, view) = frame_view.unwrap();
         let mut encoder =
             device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
         {

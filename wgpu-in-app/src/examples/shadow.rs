@@ -473,7 +473,7 @@ impl Shadow {
                 });
             let pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("shadow"),
-                bind_group_layouts: &[&bind_group_layout, &local_bind_group_layout],
+                bind_group_layouts: &[Some(&bind_group_layout), Some(&local_bind_group_layout)],
                 immediate_size: 0,
             });
 
@@ -516,8 +516,8 @@ impl Shadow {
                 },
                 depth_stencil: Some(wgpu::DepthStencilState {
                     format: Self::SHADOW_FORMAT,
-                    depth_write_enabled: true,
-                    depth_compare: wgpu::CompareFunction::LessEqual,
+                    depth_write_enabled: Some(true),
+                    depth_compare: Some(wgpu::CompareFunction::LessEqual),
                     stencil: wgpu::StencilState::default(),
                     bias: wgpu::DepthBiasState {
                         constant: 2, // corresponds to bilinear filtering
@@ -585,7 +585,7 @@ impl Shadow {
                 });
             let pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("main"),
-                bind_group_layouts: &[&bind_group_layout, &local_bind_group_layout],
+                bind_group_layouts: &[Some(&bind_group_layout), Some(&local_bind_group_layout)],
                 immediate_size: 0,
             });
 
@@ -647,8 +647,8 @@ impl Shadow {
                 },
                 depth_stencil: Some(wgpu::DepthStencilState {
                     format: Self::DEPTH_FORMAT,
-                    depth_write_enabled: true,
-                    depth_compare: wgpu::CompareFunction::Less,
+                    depth_write_enabled: Some(true),
+                    depth_compare: Some(wgpu::CompareFunction::Less),
                     stencil: wgpu::StencilState::default(),
                     bias: wgpu::DepthBiasState::default(),
                 }),
@@ -784,7 +784,9 @@ impl Example for Shadow {
         }
         encoder.pop_debug_group();
 
-        let (frame, view) = app_surface.get_current_frame_view(None);
+        let frame_view = app_surface.get_current_frame_view(None);
+        if frame_view.is_none() { return; }
+        let (frame, view) = frame_view.unwrap();
 
         // forward pass
         encoder.push_debug_group("forward rendering pass");

@@ -252,14 +252,14 @@ impl Water {
         let water_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("water"),
-                bind_group_layouts: &[&water_bind_group_layout],
+                bind_group_layouts: &[Some(&water_bind_group_layout)],
                 immediate_size: 0,
             });
 
         let terrain_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("terrain"),
-                bind_group_layouts: &[&terrain_bind_group_layout],
+                bind_group_layouts: &[Some(&terrain_bind_group_layout)],
                 immediate_size: 0,
             });
 
@@ -392,8 +392,8 @@ impl Water {
             depth_stencil: Some(wgpu::DepthStencilState {
                 // We don't use stencil.
                 format: wgpu::TextureFormat::Depth32Float,
-                depth_write_enabled: false,
-                depth_compare: wgpu::CompareFunction::Less,
+                depth_write_enabled: Some(false),
+                depth_compare: Some(wgpu::CompareFunction::Less),
                 stencil: wgpu::StencilState::default(),
                 bias: wgpu::DepthBiasState::default(),
             }),
@@ -430,8 +430,8 @@ impl Water {
             },
             depth_stencil: Some(wgpu::DepthStencilState {
                 format: wgpu::TextureFormat::Depth32Float,
-                depth_write_enabled: true,
-                depth_compare: wgpu::CompareFunction::Less,
+                depth_write_enabled: Some(true),
+                depth_compare: Some(wgpu::CompareFunction::Less),
                 stencil: wgpu::StencilState::default(),
                 bias: wgpu::DepthBiasState::default(),
             }),
@@ -705,7 +705,9 @@ impl Example for Water {
             label: Some("Main Command Encoder"),
         });
 
-        let (frame, view) = app_surface.get_current_frame_view(None);
+        let frame_view = app_surface.get_current_frame_view(None);
+        if frame_view.is_none() { return; }
+        let (frame, view) = frame_view.unwrap();
         // First pass: render the reflection.
         {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {

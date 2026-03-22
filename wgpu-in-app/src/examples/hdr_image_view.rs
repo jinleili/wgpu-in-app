@@ -109,7 +109,7 @@ impl HDRImageView {
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("render"),
-                bind_group_layouts: &[&bind_group_layout],
+                bind_group_layouts: &[Some(&bind_group_layout)],
                 immediate_size: 0,
             });
         let pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
@@ -155,7 +155,9 @@ impl Example for HDRImageView {
     fn enter_frame(&mut self, app_surface: &AppSurface) {
         let device = &app_surface.device;
         let queue = &app_surface.queue;
-        let (frame, view) = app_surface.get_current_frame_view(None);
+        let frame_view = app_surface.get_current_frame_view(None);
+        if frame_view.is_none() { return; }
+        let (frame, view) = frame_view.unwrap();
         let mut encoder =
             device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
         {

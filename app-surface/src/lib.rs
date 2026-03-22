@@ -91,7 +91,7 @@ pub trait SurfaceFrame {
     fn get_current_frame_view(
         &self,
         _view_format: Option<wgpu::TextureFormat>,
-    ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+    ) -> Option<(wgpu::SurfaceTexture, wgpu::TextureView)> {
         unimplemented!()
     }
     fn create_current_frame_view(
@@ -100,15 +100,22 @@ pub trait SurfaceFrame {
         surface: &wgpu::Surface,
         config: &wgpu::SurfaceConfiguration,
         view_format: Option<wgpu::TextureFormat>,
-    ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+    ) -> Option<(wgpu::SurfaceTexture, wgpu::TextureView)> {
         let frame = match surface.get_current_texture() {
-            Ok(frame) => frame,
-            Err(_) => {
+            wgpu::CurrentSurfaceTexture::Success(frame)
+            | wgpu::CurrentSurfaceTexture::Suboptimal(frame) => frame,
+            wgpu::CurrentSurfaceTexture::Timeout
+            | wgpu::CurrentSurfaceTexture::Outdated
+            | wgpu::CurrentSurfaceTexture::Lost => {
                 surface.configure(device, config);
-                surface
-                    .get_current_texture()
-                    .expect("Failed to acquire next swap chain texture!")
+                match surface.get_current_texture() {
+                    wgpu::CurrentSurfaceTexture::Success(frame)
+                    | wgpu::CurrentSurfaceTexture::Suboptimal(frame) => frame,
+                    _ => panic!("Failed to acquire next swap chain texture!"),
+                }
             }
+            wgpu::CurrentSurfaceTexture::Occluded => return None,
+            wgpu::CurrentSurfaceTexture::Validation => panic!("Validation error acquiring texture"),
         };
         let view = frame.texture.create_view(&wgpu::TextureViewDescriptor {
             label: Some("frame texture view"),
@@ -120,7 +127,7 @@ pub trait SurfaceFrame {
             },
             ..Default::default()
         });
-        (frame, view)
+        Some((frame, view))
     }
 }
 
@@ -157,7 +164,7 @@ impl SurfaceFrame for AppSurface {
     fn get_current_frame_view(
         &self,
         view_format: Option<wgpu::TextureFormat>,
-    ) -> (wgpu::SurfaceTexture, wgpu::TextureView) {
+    ) -> Option<(wgpu::SurfaceTexture, wgpu::TextureView)> {
         self.create_current_frame_view(&self.device, &self.surface, &self.config, view_format)
     }
 }

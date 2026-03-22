@@ -51,9 +51,11 @@ impl AppSurface {
         };
         log::info!("{:?}", default_backends);
         let backends = wgpu::Backends::from_env().unwrap_or(default_backends);
-        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends,
-            ..Default::default()
+            flags: wgpu::InstanceFlags::default(),
+            backend_options: wgpu::BackendOptions::default(),
+            ..wgpu::InstanceDescriptor::new_without_display_handle()
         });
 
         cfg_if::cfg_if! {
