@@ -33,11 +33,12 @@ impl AppSurface {
         // hook up rust logging
         _ = env_logger::try_init();
 
-        let scale_factor = get_scale_factor(obj.view);
+        let scale_factor = crate::normalize_scale_factor(get_scale_factor(obj.view));
         let s: CGRect = unsafe { msg_send![obj.view, frame] };
-        let physical = (
-            (s.size.width as f32 * scale_factor) as u32,
-            (s.size.height as f32 * scale_factor) as u32,
+        let physical = crate::physical_size_from_logical_size(
+            s.size.width as f32,
+            s.size.height as f32,
+            scale_factor,
         );
         let backends = wgpu::Backends::METAL;
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
@@ -71,9 +72,10 @@ impl AppSurface {
 
     pub fn get_view_size(&self) -> (u32, u32) {
         let s: CGRect = unsafe { msg_send![self.view, frame] };
-        (
-            (s.size.width as f32 * self.scale_factor) as u32,
-            (s.size.height as f32 * self.scale_factor) as u32,
+        crate::physical_size_from_logical_size(
+            s.size.width as f32,
+            s.size.height as f32,
+            self.scale_factor,
         )
     }
 }

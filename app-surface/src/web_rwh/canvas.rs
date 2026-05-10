@@ -51,7 +51,7 @@ impl Canvas {
 
         Self {
             element,
-            scale_factor,
+            scale_factor: crate::normalize_scale_factor(scale_factor),
             handle,
         }
     }
@@ -77,7 +77,7 @@ impl Canvas {
     pub fn physical_resolution(&self) -> (u32, u32) {
         let width = self.element.width();
         let height = self.element.height();
-        (width, height)
+        crate::normalize_view_size((width, height))
     }
 }
 

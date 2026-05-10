@@ -1,44 +1,147 @@
-use core::ops::Deref;
 use wgpu::{Instance, Surface};
 
 mod touch;
 pub use touch::*;
 
-#[cfg_attr(
-    any(target_os = "ios", all(feature = "mac_catalyst", target_os = "macos")),
-    path = "ios.rs"
-)]
-#[cfg_attr(target_os = "android", path = "android.rs")]
-#[cfg_attr(
-    all(target_arch = "wasm32", feature = "web_rwh"),
-    path = "web_rwh/mod.rs"
-)]
-#[cfg_attr(
+#[cfg(any(target_os = "ios", all(feature = "mac_catalyst", target_os = "macos")))]
+#[path = "ios.rs"]
+mod app_surface;
+
+#[cfg(target_os = "android")]
+#[path = "android.rs"]
+mod app_surface;
+
+#[cfg(all(target_arch = "wasm32", feature = "web_rwh"))]
+#[path = "web_rwh/mod.rs"]
+mod app_surface;
+
+#[cfg(all(
+    feature = "winit",
     any(
         all(not(feature = "mac_catalyst"), target_os = "macos"),
         target_os = "windows",
         target_os = "linux",
-    ),
-    path = "app_surface_use_winit.rs"
-)]
-#[cfg_attr(
-    all(target_arch = "wasm32", not(feature = "web_rwh")),
-    path = "app_surface_use_winit.rs"
-)]
+        all(target_arch = "wasm32", not(feature = "web_rwh")),
+    )
+))]
+#[path = "app_surface_use_winit.rs"]
 mod app_surface;
+
+#[cfg(any(
+    all(
+        not(feature = "winit"),
+        any(
+            all(not(feature = "mac_catalyst"), target_os = "macos"),
+            target_os = "windows",
+            target_os = "linux",
+        ),
+    ),
+    all(
+        target_arch = "wasm32",
+        not(feature = "winit"),
+        not(feature = "web_rwh")
+    ),
+))]
+#[path = "unsupported.rs"]
+mod app_surface;
+#[cfg(not(any(
+    all(
+        not(feature = "winit"),
+        any(
+            all(not(feature = "mac_catalyst"), target_os = "macos"),
+            target_os = "windows",
+            target_os = "linux",
+        ),
+    ),
+    all(
+        target_arch = "wasm32",
+        not(feature = "winit"),
+        not(feature = "web_rwh")
+    ),
+)))]
 pub use app_surface::*;
-
-// #[cfg(all(target_arch = "wasm32", feature = "web_rwh"))]
-// compile_error!("web_rwh feature is enabled for wasm32");
-
-// #[cfg(all(target_arch = "wasm32", not(feature = "web_rwh")))]
-// compile_error!("web_rwh feature is not enabled -");
 
 #[repr(C)]
 #[derive(Debug)]
 pub struct ViewSize {
     pub width: u32,
     pub height: u32,
+}
+
+pub(crate) fn normalize_view_size(size: (u32, u32)) -> (u32, u32) {
+    (size.0.max(1), size.1.max(1))
+}
+
+pub(crate) fn normalize_scale_factor(scale_factor: f32) -> f32 {
+    if scale_factor.is_finite() && scale_factor > 0.0 {
+        scale_factor
+    } else {
+        1.0
+    }
+}
+
+#[allow(dead_code)]
+pub(crate) fn physical_size_from_logical_size(
+    width: f32,
+    height: f32,
+    scale_factor: f32,
+) -> (u32, u32) {
+    let scale_factor = normalize_scale_factor(scale_factor);
+    let width = if width.is_finite() && width > 0.0 {
+        (width * scale_factor) as u32
+    } else {
+        0
+    };
+    let height = if height.is_finite() && height > 0.0 {
+        (height * scale_factor) as u32
+    } else {
+        0
+    };
+
+    normalize_view_size((width, height))
+}
+
+#[allow(dead_code)]
+pub(crate) fn logical_size_from_physical_size(
+    physical_size: (u32, u32),
+    scale_factor: f32,
+) -> (f32, f32) {
+    let physical_size = normalize_view_size(physical_size);
+    let scale_factor = normalize_scale_factor(scale_factor);
+
+    (
+        physical_size.0 as f32 / scale_factor,
+        physical_size.1 as f32 / scale_factor,
+    )
+}
+
+pub(crate) fn normalize_touch_point(
+    touch_point_x: f32,
+    touch_point_y: f32,
+    physical_size: (u32, u32),
+    scale_factor: f32,
+) -> (f32, f32) {
+    let physical_size = normalize_view_size(physical_size);
+    let scale_factor = normalize_scale_factor(scale_factor);
+
+    (
+        touch_point_x * scale_factor / physical_size.0 as f32,
+        touch_point_y * scale_factor / physical_size.1 as f32,
+    )
+}
+
+pub(crate) fn resize_surface_config(
+    config: &mut wgpu::SurfaceConfiguration,
+    size: (u32, u32),
+) -> bool {
+    let size = normalize_view_size(size);
+    if config.width == size.0 && config.height == size.1 {
+        return false;
+    }
+
+    config.width = size.0;
+    config.height = size.1;
+    true
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -70,7 +173,22 @@ impl IASDQContext {
     }
 }
 
-impl Deref for AppSurface {
+#[cfg(not(any(
+    all(
+        not(feature = "winit"),
+        any(
+            all(not(feature = "mac_catalyst"), target_os = "macos"),
+            target_os = "windows",
+            target_os = "linux",
+        ),
+    ),
+    all(
+        target_arch = "wasm32",
+        not(feature = "winit"),
+        not(feature = "web_rwh")
+    ),
+)))]
+impl core::ops::Deref for AppSurface {
     type Target = IASDQContext;
     fn deref(&self) -> &Self::Target {
         &self.ctx
@@ -131,6 +249,21 @@ pub trait SurfaceFrame {
     }
 }
 
+#[cfg(not(any(
+    all(
+        not(feature = "winit"),
+        any(
+            all(not(feature = "mac_catalyst"), target_os = "macos"),
+            target_os = "windows",
+            target_os = "linux",
+        ),
+    ),
+    all(
+        target_arch = "wasm32",
+        not(feature = "winit"),
+        not(feature = "web_rwh")
+    ),
+)))]
 impl SurfaceFrame for AppSurface {
     fn view_size(&self) -> ViewSize {
         let size = self.get_view_size();
@@ -142,22 +275,23 @@ impl SurfaceFrame for AppSurface {
 
     fn resize_surface(&mut self) {
         let size = self.get_view_size();
-        self.ctx.config.width = size.0;
-        self.ctx.config.height = size.1;
-        self.surface.configure(&self.device, &self.config);
+        if resize_surface_config(&mut self.ctx.config, size) {
+            self.surface.configure(&self.device, &self.config);
+        }
     }
 
     fn resize_surface_by_size(&mut self, size: (u32, u32)) {
-        self.ctx.config.width = size.0;
-        self.ctx.config.height = size.1;
-        self.surface.configure(&self.device, &self.config);
+        if resize_surface_config(&mut self.ctx.config, size) {
+            self.surface.configure(&self.device, &self.config);
+        }
     }
 
     fn normalize_touch_point(&self, touch_point_x: f32, touch_point_y: f32) -> (f32, f32) {
-        let size = self.get_view_size();
-        (
-            touch_point_x * self.scale_factor / size.0 as f32,
-            touch_point_y * self.scale_factor / size.1 as f32,
+        normalize_touch_point(
+            touch_point_x,
+            touch_point_y,
+            self.get_view_size(),
+            self.scale_factor,
         )
     }
 
@@ -174,6 +308,7 @@ async fn create_iasdq_context(
     surface: Surface<'static>,
     physical_size: (u32, u32),
 ) -> IASDQContext {
+    let physical_size = normalize_view_size(physical_size);
     let (adapter, device, queue) = crate::request_device(&instance, &surface).await;
 
     let caps = surface.get_capabilities(&adapter);
@@ -253,13 +388,15 @@ async fn request_device(
 
     // remove raytracing features from acquired features under unix like os on nvidia discrete cards
     // this might be related to wgpu issue, need to keep tracing.
-    let mut adp_features = adapter.features();
+    let adp_features = adapter.features();
     #[cfg(target_family = "unix")]
-    {
+    let adp_features = {
+        let mut adp_features = adp_features;
         if adapter_info.name.contains("NVIDIA") {
             adp_features.remove(wgpu::Features::EXPERIMENTAL_RAY_QUERY);
         }
-    }
+        adp_features
+    };
     // test features
     // let adp_features = wgpu::Features::from_bits(0b0011111111011100110111111111111111111111110111000000111111001111).unwrap();
 
@@ -279,5 +416,72 @@ async fn request_device(
             panic!("request_device failed: {err:?}");
         }
         Ok(tuple) => (adapter, tuple.0, tuple.1),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn normalize_view_size_clamps_zero_axes() {
+        assert_eq!(normalize_view_size((0, 720)), (1, 720));
+        assert_eq!(normalize_view_size((1280, 0)), (1280, 1));
+        assert_eq!(normalize_view_size((0, 0)), (1, 1));
+    }
+
+    #[test]
+    fn normalize_scale_factor_falls_back_to_one_for_invalid_values() {
+        assert_eq!(normalize_scale_factor(0.0), 1.0);
+        assert_eq!(normalize_scale_factor(-2.0), 1.0);
+        assert_eq!(normalize_scale_factor(f32::NAN), 1.0);
+        assert_eq!(normalize_scale_factor(f32::INFINITY), 1.0);
+        assert_eq!(normalize_scale_factor(2.0), 2.0);
+    }
+
+    #[test]
+    fn physical_size_from_logical_size_normalizes_scale_and_size() {
+        assert_eq!(
+            physical_size_from_logical_size(100.0, 50.0, 2.0),
+            (200, 100)
+        );
+        assert_eq!(physical_size_from_logical_size(0.0, 0.0, 2.0), (1, 1));
+        assert_eq!(physical_size_from_logical_size(12.0, 8.0, 0.0), (12, 8));
+    }
+
+    #[test]
+    fn logical_size_from_physical_size_normalizes_scale_and_size() {
+        assert_eq!(
+            logical_size_from_physical_size((200, 100), 2.0),
+            (100.0, 50.0)
+        );
+        assert_eq!(logical_size_from_physical_size((0, 0), 0.0), (1.0, 1.0));
+    }
+
+    #[test]
+    fn normalize_touch_point_uses_normalized_size_and_scale() {
+        assert_eq!(
+            normalize_touch_point(50.0, 25.0, (200, 100), 2.0),
+            (0.5, 0.5)
+        );
+        assert_eq!(normalize_touch_point(1.0, 1.0, (0, 0), 0.0), (1.0, 1.0));
+    }
+
+    #[test]
+    fn resize_surface_config_updates_only_when_size_changes() {
+        let mut config = wgpu::SurfaceConfiguration {
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+            format: wgpu::TextureFormat::Bgra8Unorm,
+            width: 640,
+            height: 480,
+            present_mode: wgpu::PresentMode::Fifo,
+            desired_maximum_frame_latency: 2,
+            alpha_mode: wgpu::CompositeAlphaMode::Auto,
+            view_formats: vec![],
+        };
+
+        assert!(!resize_surface_config(&mut config, (640, 480)));
+        assert!(resize_surface_config(&mut config, (0, 720)));
+        assert_eq!((config.width, config.height), (1, 720));
     }
 }

@@ -21,13 +21,11 @@ struct ViewSetting {
 impl AppSurface {
     #[allow(clippy::needless_update)]
     pub async fn new(view: Arc<Window>) -> Self {
-        let scale_factor = view.scale_factor() as f32;
-        let mut physical_size = view.inner_size();
-        physical_size.width = physical_size.width.max(1);
-        physical_size.height = physical_size.height.max(1);
+        let scale_factor = crate::normalize_scale_factor(view.scale_factor() as f32);
+        let physical_size = view.inner_size();
         let view_setting = ViewSetting {
             scale_factor,
-            physical_size: (physical_size.width, physical_size.height),
+            physical_size: crate::normalize_view_size((physical_size.width, physical_size.height)),
             view: Some(view),
             ..Default::default()
         };
@@ -87,7 +85,7 @@ impl AppSurface {
 
     pub fn get_view_size(&self) -> (u32, u32) {
         let physical = self.get_view().inner_size();
-        (physical.width.max(1), physical.height.max(1))
+        crate::normalize_view_size((physical.width, physical.height))
     }
 
     pub fn request_redraw(&self) {

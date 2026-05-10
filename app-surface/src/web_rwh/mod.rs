@@ -1,5 +1,4 @@
 use crate::IASDQContext;
-use raw_window_handle::{HasDisplayHandle, HasWindowHandle};
 
 mod canvas;
 pub use canvas::*;
@@ -16,29 +15,27 @@ pub struct AppSurface {
 #[allow(dead_code)]
 impl AppSurface {
     pub async fn new(view: ViewObj) -> Self {
-        let (scale_factor, physical_size) = match view {
-            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.physical_resolution()),
-            ViewObj::Offscreen(ref offscreen) => {
-                (offscreen.scale_factor, offscreen.physical_resolution())
-            }
-        };
+        let scale_factor = view.scale_factor();
+        let physical_size = view.physical_resolution();
         let backends = wgpu::Backends::BROWSER_WEBGPU;
-        let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends,
-            ..Default::default()
+            ..wgpu::InstanceDescriptor::new_without_display_handle()
         });
+        let target = unsafe {
+            match view {
+                ViewObj::Canvas(ref canvas) => {
+                    wgpu::SurfaceTargetUnsafe::from_display_and_window(canvas, canvas)
+                }
+                ViewObj::Offscreen(ref offscreen) => {
+                    wgpu::SurfaceTargetUnsafe::from_display_and_window(offscreen, offscreen)
+                }
+            }
+            .expect("Surface raw handle creation failed")
+        };
         let surface = unsafe {
             instance
-                .create_surface_unsafe(match view {
-                    ViewObj::Canvas(ref canvas) => wgpu::SurfaceTargetUnsafe::RawHandle {
-                        raw_display_handle: canvas.display_handle().unwrap().into(),
-                        raw_window_handle: canvas.window_handle().unwrap().into(),
-                    },
-                    ViewObj::Offscreen(ref offscreen) => wgpu::SurfaceTargetUnsafe::RawHandle {
-                        raw_display_handle: offscreen.display_handle().unwrap().into(),
-                        raw_window_handle: offscreen.window_handle().unwrap().into(),
-                    },
-                })
+                .create_surface_unsafe(target)
                 .expect("Surface creation failed")
         };
 
@@ -77,32 +74,30 @@ impl AppSurface {
     }
 
     pub fn get_view_size(&self) -> (u32, u32) {
-        let (_, physical_size) = match self.view {
-            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.physical_resolution()),
-            ViewObj::Offscreen(ref offscreen) => {
-                (offscreen.scale_factor, offscreen.physical_resolution())
-            }
-        };
-        physical_size
+        self.view.physical_resolution()
     }
 
     pub fn get_view_logical_size(&self) -> (f32, f32) {
-        let (scale_factor, physical_size) = match self.view {
-            ViewObj::Canvas(ref canvas) => (canvas.scale_factor, canvas.physical_resolution()),
-            ViewObj::Offscreen(ref offscreen) => {
-                (offscreen.scale_factor, offscreen.physical_resolution())
-            }
-        };
-        (
-            physical_size.0 as f32 / scale_factor,
-            physical_size.1 as f32 / scale_factor,
+        crate::logical_size_from_physical_size(
+            self.view.physical_resolution(),
+            self.view.scale_factor(),
         )
     }
 
     pub fn update_device_pixel_ratio(&mut self, ratio: f32) {
         match self.view {
-            ViewObj::Canvas(ref mut canvas) => canvas.scale_factor = ratio,
-            ViewObj::Offscreen(ref mut offscreen) => offscreen.scale_factor = ratio,
+            ViewObj::Canvas(ref mut canvas) => {
+                canvas.scale_factor = crate::normalize_scale_factor(ratio);
+            }
+            ViewObj::Offscreen(ref mut offscreen) => {
+                offscreen.scale_factor = crate::normalize_scale_factor(ratio);
+            }
+        }
+        self.scale_factor = crate::normalize_scale_factor(ratio);
+        if crate::resize_surface_config(&mut self.ctx.config, self.view.physical_resolution()) {
+            self.ctx
+                .surface
+                .configure(&self.ctx.device, &self.ctx.config);
         }
     }
 }
@@ -121,6 +116,22 @@ impl ViewObj {
 
     pub fn from_offscreen_canvas(canvas: OffscreenCanvas) -> Self {
         ViewObj::Offscreen(OffscreenCanvasWrapper::new(canvas))
+    }
+
+    fn scale_factor(&self) -> f32 {
+        let scale_factor = match self {
+            ViewObj::Canvas(canvas) => canvas.scale_factor,
+            ViewObj::Offscreen(offscreen) => offscreen.scale_factor,
+        };
+        crate::normalize_scale_factor(scale_factor)
+    }
+
+    fn physical_resolution(&self) -> (u32, u32) {
+        let physical_size = match self {
+            ViewObj::Canvas(canvas) => canvas.physical_resolution(),
+            ViewObj::Offscreen(offscreen) => offscreen.physical_resolution(),
+        };
+        crate::normalize_view_size(physical_size)
     }
 }
 

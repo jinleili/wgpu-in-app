@@ -37,10 +37,10 @@ pub struct OffscreenCanvas {
 
 #[allow(dead_code)]
 impl OffscreenCanvas {
-    pub const fn new(canvas: web_sys::OffscreenCanvas, scale_factor: f32, handle: u32) -> Self {
+    pub fn new(canvas: web_sys::OffscreenCanvas, scale_factor: f32, handle: u32) -> Self {
         Self {
             inner: canvas,
-            scale_factor,
+            scale_factor: crate::normalize_scale_factor(scale_factor),
             handle,
         }
     }
@@ -52,7 +52,7 @@ impl OffscreenCanvas {
     pub fn physical_resolution(&self) -> (u32, u32) {
         let width = self.inner.width();
         let height = self.inner.height();
-        (width, height)
+        crate::normalize_view_size((width, height))
     }
 }
 

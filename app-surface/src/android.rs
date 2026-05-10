@@ -31,22 +31,19 @@ impl AppSurface {
         let ctx = futures_lite::future::block_on(crate::create_iasdq_context(
             instance,
             surface,
-            (native_window.get_width(), native_window.get_height()),
+            native_window.view_size(),
         ));
 
         Self {
             native_window,
-            scale_factor: 1.0,
+            scale_factor: crate::normalize_scale_factor(1.0),
             ctx,
             callback_to_app: None,
         }
     }
 
     pub fn get_view_size(&self) -> (u32, u32) {
-        (
-            self.native_window.get_width(),
-            self.native_window.get_height(),
-        )
+        self.native_window.view_size()
     }
 }
 
@@ -83,6 +80,10 @@ impl NativeWindow {
 
     fn get_height(&self) -> u32 {
         unsafe { ndk_sys::ANativeWindow_getHeight(*self.a_native_window.lock().unwrap()) as u32 }
+    }
+
+    fn view_size(&self) -> (u32, u32) {
+        crate::normalize_view_size((self.get_width(), self.get_height()))
     }
 }
 
