@@ -785,7 +785,9 @@ impl Example for Shadow {
         encoder.pop_debug_group();
 
         let frame_view = app_surface.get_current_frame_view(None);
-        if frame_view.is_none() { return; }
+        if frame_view.is_none() {
+            return;
+        }
         let (frame, view) = frame_view.unwrap();
 
         // forward pass

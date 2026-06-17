@@ -56,10 +56,11 @@ impl AppSurface {
             ..wgpu::InstanceDescriptor::new_without_display_handle()
         });
 
-        cfg_if::cfg_if! {
-            if #[cfg(target_arch = "wasm32")] {
+        cfg_select! {
+            target_arch = "wasm32" => {
                 let surface = instance.create_surface(view.clone());
-            } else {
+            }
+            _ => {
                 let surface = instance.create_surface(view.clone());
             }
         }

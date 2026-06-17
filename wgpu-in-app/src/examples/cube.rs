@@ -328,7 +328,9 @@ impl Example for Cube {
         let device = &app_surface.device;
         let queue = &app_surface.queue;
         let frame_view = app_surface.get_current_frame_view(None);
-        if frame_view.is_none() { return; }
+        if frame_view.is_none() {
+            return;
+        }
         let (frame, view) = frame_view.unwrap();
         let mut encoder =
             device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });

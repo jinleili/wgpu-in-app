@@ -706,7 +706,9 @@ impl Example for Water {
         });
 
         let frame_view = app_surface.get_current_frame_view(None);
-        if frame_view.is_none() { return; }
+        if frame_view.is_none() {
+            return;
+        }
         let (frame, view) = frame_view.unwrap();
         // First pass: render the reflection.
         {

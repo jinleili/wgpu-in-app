@@ -14,15 +14,16 @@ pub mod desktop;
 
 // Initialize logging in platform dependant ways.
 fn init_logger() {
-    cfg_if::cfg_if! {
-        if #[cfg(target_os = "android")] {
+    cfg_select! {
+        target_os = "android" => {
             // 添加 Android 平台的日志初始化
             android_logger::init_once(
                 android_logger::Config::default()
                     .with_max_level(log::LevelFilter::Info)
             );
             log_panics::init();
-        } else {
+        }
+        _ => {
             // parse_default_env will read the RUST_LOG environment variable and apply it on top
             // of these default filters.
             env_logger::builder()

@@ -5,12 +5,11 @@ default-members = ["wgpu-in-app"]
 
 [workspace.package]
 edition = "2024"
-rust-version = "1.92"
+rust-version = "1.95"
 
 [workspace.dependencies]
 app-surface = { path = "./app-surface", default-features = false }
 bytemuck = { version = "1.22", features = ["derive", "min_const_generics"] }
-cfg-if = "1.0"
 glam = "0.32"
 log = "0.4"
 noise = { version = "0.9", default-features = false }

@@ -237,7 +237,9 @@ impl Example for Boids {
         let device = &app_surface.device;
         let queue = &app_surface.queue;
         let frame_view = app_surface.get_current_frame_view(None);
-        if frame_view.is_none() { return; }
+        if frame_view.is_none() {
+            return;
+        }
         let (frame, view) = frame_view.unwrap();
         {
             // create render pass descriptor and its color attachments

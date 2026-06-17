@@ -386,19 +386,21 @@ async fn request_device(
         None
     };
 
-    // remove raytracing features from acquired features under unix like os on nvidia discrete cards
-    // this might be related to wgpu issue, need to keep tracing.
-    let adp_features = adapter.features();
-    #[cfg(target_family = "unix")]
-    let adp_features = {
-        let mut adp_features = adp_features;
-        if adapter_info.name.contains("NVIDIA") {
-            adp_features.remove(wgpu::Features::EXPERIMENTAL_RAY_QUERY);
+    cfg_select! {
+        target_arch = "wasm32" => {
+            let adp_features = adapter.features() & wgpu::Features::all_webgpu_mask();
         }
-        adp_features
-    };
-    // test features
-    // let adp_features = wgpu::Features::from_bits(0b0011111111011100110111111111111111111111110111000000111111001111).unwrap();
+        _ => {
+            let mut adp_features = adapter.features();
+            adp_features.remove(wgpu::Features::MAPPABLE_PRIMARY_BUFFERS);
+            // remove raytracing features from acquired features under unix like os on nvidia discrete cards
+            // this might be related to wgpu issue, need to keep tracing.
+            #[cfg(target_family = "unix")]
+            if adapter_info.name.contains("NVIDIA") {
+                adp_features.remove(wgpu::Features::EXPERIMENTAL_RAY_QUERY);
+            }
+        }
+    }
 
     let res = adapter
         .request_device(&wgpu::DeviceDescriptor {
