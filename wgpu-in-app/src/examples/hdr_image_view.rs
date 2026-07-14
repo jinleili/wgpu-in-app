@@ -181,6 +181,6 @@ impl Example for HDRImageView {
             rpass.draw(0..3, 0..1);
         }
         queue.submit(Some(encoder.finish()));
-        frame.present();
+        queue.present(frame);
     }
 }
