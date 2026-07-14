@@ -372,6 +372,7 @@ async fn request_device(
                 .unwrap_or(wgpu::PowerPreference::HighPerformance),
             force_fallback_adapter: false,
             compatible_surface: Some(surface),
+            apply_limit_buckets: false,
         })
         .await
         .expect("No suitable GPU adapters found on the system!");
@@ -474,6 +475,7 @@ mod tests {
         let mut config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: wgpu::TextureFormat::Bgra8Unorm,
+            color_space: wgpu::SurfaceColorSpace::Auto,
             width: 640,
             height: 480,
             present_mode: wgpu::PresentMode::Fifo,

@@ -123,16 +123,16 @@ impl Boids {
                 entry_point: Some("main_vs"),
                 compilation_options: Default::default(),
                 buffers: &[
-                    wgpu::VertexBufferLayout {
+                    Some(wgpu::VertexBufferLayout {
                         array_stride: 4 * 4,
                         step_mode: wgpu::VertexStepMode::Instance,
                         attributes: &wgpu::vertex_attr_array![0 => Float32x2, 1 => Float32x2],
-                    },
-                    wgpu::VertexBufferLayout {
+                    }),
+                    Some(wgpu::VertexBufferLayout {
                         array_stride: 2 * 4,
                         step_mode: wgpu::VertexStepMode::Vertex,
                         attributes: &wgpu::vertex_attr_array![2 => Float32x2],
-                    },
+                    }),
                 ],
             },
             fragment: Some(wgpu::FragmentState {
@@ -298,7 +298,7 @@ impl Example for Boids {
             // done
             queue.submit(Some(command_encoder.finish()));
         }
-        frame.present();
+        queue.present(frame);
         // update frame count
         self.frame_num += 1;
     }

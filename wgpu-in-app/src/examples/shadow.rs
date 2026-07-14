@@ -441,11 +441,11 @@ impl Shadow {
         });
 
         let vertex_attr = wgpu::vertex_attr_array![0 => Sint8x4, 1 => Sint8x4];
-        let vb_desc = wgpu::VertexBufferLayout {
+        let vb_desc = Some(wgpu::VertexBufferLayout {
             array_stride: vertex_size as wgpu::BufferAddress,
             step_mode: wgpu::VertexStepMode::Vertex,
             attributes: &vertex_attr,
-        };
+        });
 
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: None,
@@ -832,6 +832,6 @@ impl Example for Shadow {
         encoder.pop_debug_group();
 
         queue.submit(iter::once(encoder.finish()));
-        frame.present()
+        queue.present(frame)
     }
 }

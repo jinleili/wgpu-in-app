@@ -204,7 +204,7 @@ impl Cube {
         let shader =
             device.create_shader_module(wgpu::include_wgsl!("../../wgsl_shader/cube.wgsl"));
 
-        let vertex_buffers = [wgpu::VertexBufferLayout {
+        let vertex_buffers = [Some(wgpu::VertexBufferLayout {
             array_stride: vertex_size as wgpu::BufferAddress,
             step_mode: wgpu::VertexStepMode::Vertex,
             attributes: &[
@@ -219,7 +219,7 @@ impl Cube {
                     shader_location: 1,
                 },
             ],
-        }];
+        })];
 
         let pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
             label: None,
@@ -368,6 +368,6 @@ impl Example for Cube {
             }
         }
         queue.submit(Some(encoder.finish()));
-        frame.present();
+        queue.present(frame);
     }
 }

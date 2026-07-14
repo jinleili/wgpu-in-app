@@ -15,7 +15,7 @@ log = "0.4"
 noise = { version = "0.9", default-features = false }
 futures-lite = "2"
 rand = "0.8"
-wgpu = "29"
+wgpu = "30"
 # wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
 winit = { version = "0.30" }
 raw-window-handle = "0.6"

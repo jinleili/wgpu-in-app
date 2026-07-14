@@ -18,17 +18,17 @@ struct TurningUniform {
 @group(0) @binding(0) var<uniform> mvp_mat: MVPMatUniform;
 @group(0) @binding(1) var<uniform> params: TurningUniform;
 
-let PI: f32 = 3.14159265358979;
-let PI_2: f32 = 1.57079632675;
+const PI: f32 = 3.14159265358979;
+const PI_2: f32 = 1.57079632675;
 
 struct VertexOutput {
-    @builtin(position) position: vec4f;
-    @location(0) paper_uv: vec2f;
-    @location(1) brush_uv: vec2f;
-    @location(2) verCoord: vec3f;
+    @builtin(position) position: vec4f,
+    @location(0) paper_uv: vec2f,
+    @location(1) brush_uv: vec2f,
+    @location(2) verCoord: vec3f,
     // 卷起的高度
-    @location(3) roll_height: f32;
-    @location(4) instance_index: u32;
+    @location(3) roll_height: f32,
+    @location(4) @interpolate(flat) instance_index: u32,
 };
 
 @vertex
@@ -94,8 +94,8 @@ fn vs_main(
 @group(0) @binding(3) var front_texture: texture_2d<f32>;
 @group(0) @binding(4) var tex_sampler: sampler;
 
-let whiteWeight: f32 = 0.25;
-let texWeight: f32 = 0.75;
+const whiteWeight: f32 = 0.25;
+const texWeight: f32 = 0.75;
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4f {
