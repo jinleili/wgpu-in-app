@@ -15,8 +15,9 @@ log = "0.4"
 noise = { version = "0.9", default-features = false }
 futures-lite = "2"
 rand = "0.8"
-wgpu = "30"
-# wgpu = { git = "https://github.com/jinleili/wgpu", branch="visionOS" }
+# wgpu = "30"
+# wgpu = { path = "../forks/wgpu/wgpu" }
+wgpu = { git = "https://github.com/jinleili/wgpu", branch = "fix-metal-srgb-10013" }
 winit = { version = "0.30" }
 raw-window-handle = "0.6"
 env_logger = "0.11"
