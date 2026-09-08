@@ -397,6 +397,7 @@ impl Shadow {
                     mip_level_count: None,
                     base_array_layer: i as u32,
                     array_layer_count: Some(1),
+                    swizzle: wgpu::TextureComponentSwizzle::default(),
                 }))
             })
             .collect::<Vec<_>>();

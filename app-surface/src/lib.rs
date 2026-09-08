@@ -337,7 +337,7 @@ async fn create_iasdq_context(
         // If you are running this program on native and not in a browser and wish to work around this issue,
         // call Adapter::downlevel_properties or Device::downlevel_properties to get a listing of the features the current platform supports.
         vec![format]
-    } else if format.is_srgb() {
+    } else if format.has_srgb_suffix() {
         vec![format, format.remove_srgb_suffix()]
     } else {
         vec![format.add_srgb_suffix(), format.remove_srgb_suffix()]
@@ -410,6 +410,7 @@ async fn request_device(
             required_limits: adapter.limits(),
             experimental_features: unsafe { wgpu::ExperimentalFeatures::enabled() },
             memory_hints: wgpu::MemoryHints::Performance,
+            default_queue: wgpu::QueueDescriptor { label: None },
             trace: wgpu::Trace::Off,
         })
         .await;
