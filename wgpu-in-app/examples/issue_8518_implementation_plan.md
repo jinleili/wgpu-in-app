@@ -4,13 +4,17 @@
 
 关联任务：[Optimize the initialization check for already initialized buffers and textures #8518](https://github.com/gfx-rs/wgpu/issues/8518)
 
-状态：阶段 A 已完成；阶段 B 已实现并完成性能实验，性能验收未通过；C/D 尚未实施。实际改动、测试与 A/B 数据见 [阶段 A/B 实施记录](issue_8518_phase_ab_result.md)。下文保留设计与验收标准，不以已有实现替代验收。
+状态：阶段 A 已完成；阶段 B 已实现并完成性能实验，性能验收未通过。实际改动、测试与 A/B 数据见 [阶段 A/B 实施记录](issue_8518_phase_ab_result.md)。2026-09-19 已独立推进[texture 永久缓存候选](issue_8518_texture_ready_result.md)，并建立[command buffer 局部 folding 候选与三方对照](issue_8518_texture_folding_result.md)；完整 scope → command buffer → device folding 与阶段 D 尚未完成。下文保留设计与验收标准，不以已有实现替代验收。
+
+永久缓存实现已从 `f12c3e450` 的 trunk 新建 `codex/issue-8518-texture-ready`，改为按 bind group 固定视图范围缓存初始化完成状态，不再增加单纹理状态。分支、测试与实测结论见[独立 texture 分支与提交前验证](issue_8518_texture_ready_result.md)，不沿用本文旧候选的验收数据。
+
+后续在 `codex/issue-8518-texture-folding` 补充真正的 render 附件写入与采样，完成 A/A 噪声检查、局部范围合并的分配修正和配对性能复核，见[render 流程复核](issue_8518_texture_render_result.md)。本机代表性 render 场景已有局部收益证据；完整 tracker folding、Lavapipe poison-memory 和真实应用验收尚未完成。代码现已提交并推送，跨设备执行说明见 [Windows 验证交接](issue_8518_windows_validation_handoff.md)。
 
 实现提交：`3ba57ab26244044dcfe789add07b33df7b5d64b7`，分支 `codex/issue-8518-buffer-init`；作为实验候选存档，尚未 push。
 
 ## 1. 决策与实施范围
 
-阶段 A/B 实测后，建议暂不直接合入当前 buffer 候选：共享 buffer 的并行编码有收益，但通用 compute 未达到 5% 目标，独立 buffer 的 2 线程场景有退化信号。先解决 B 的性能问题，再判断是否投入 texture。
+阶段 A/B 实测后，建议暂不直接合入当前 buffer 候选：共享 buffer 的并行编码有收益，但通用 compute 未达到 5% 目标，独立 buffer 的 2 线程场景有退化信号。这个结果只约束 buffer 原型；texture 应根据自身的热点与 A/B 数据独立判断，不要求先完成 B 的性能优化。
 
 本方案的设计是在保留现有细粒度初始化跟踪的基础上，对“整个资源已经初始化”的情况，以原子状态读取跳过初始化检查的读锁。
 
@@ -224,6 +228,8 @@ with_tracker_mut(operation):
 测试至少控制三类交错：编码与初始化发布并行、先编码后初始化再提交、初始化命令编码后丢弃。使用 barrier/channel 控制线程步骤；随机压力测试只作为补充。
 
 ## 9. 阶段 C：不会被 discard 的普通纹理
+
+2026-09-19 的候选采用读侧惰性发布：首次查询在原读锁内确认所有 mip/layer 完成后缓存结果，原写入路径保持。同时比较了 bind group 层的完成摘要，只有组内全部纹理永久完成才跳过后续遍历。实际实现、测量与限制以 [Texture 后续实验](issue_8518_texture_result.md) 为准；这不是完整的 scope → command buffer → device folding。
 
 ### 9.1 准入条件
 
