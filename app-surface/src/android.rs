@@ -32,7 +32,9 @@ impl AppSurface {
             instance,
             surface,
             native_window.view_size(),
-        ));
+            wgpu::TextureUsages::RENDER_ATTACHMENT,
+        ))
+        .expect("Surface initialization failed");
 
         Self {
             native_window,

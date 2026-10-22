@@ -52,6 +52,8 @@ Then, Open `Apple/wgpu_in_App.xcodeproj` with Xcode 15 Beta 2+ and run on vision
 
 ### About Rust and Swift Interaction
 
+`app-surface` retains the synchronous `AppSurface::new(IOSViewObj)` constructor. For asynchronous initialization with GPU creation errors returned to the caller, use `unsafe { AppSurface::try_new(view, metal_layer, physical_size, scale_factor, usage).await }`. Pass the UIKit view’s actual pixel dimensions, scale factor, and texture usage. Create and poll the initialization future on the main thread, use the resulting surface on the main thread, and keep the UIView and CAMetalLayer alive until the surface is released.
+
 [Passing Primitive Data Between Rust and iOS](https://bignerdranch.com/blog/building-an-ios-app-in-rust-part-2-passing-primitive-data-between-rust-and-ios/)
 
 [Passing Owned Objects between Rust and iOS](https://bignerdranch.com/blog/building-an-ios-app-in-rust-part-3-passing-owned-objects-between-rust-and-ios/)

@@ -39,7 +39,14 @@ impl AppSurface {
                 .expect("Surface creation failed")
         };
 
-        let ctx = crate::create_iasdq_context(instance, surface, physical_size).await;
+        let ctx = crate::create_iasdq_context(
+            instance,
+            surface,
+            physical_size,
+            wgpu::TextureUsages::RENDER_ATTACHMENT,
+        )
+        .await
+        .expect("Surface initialization failed");
 
         Self {
             view,
