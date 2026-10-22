@@ -11,37 +11,11 @@ pub struct AppSurface {
     pub library_directory: &'static str,
 }
 
-#[derive(Default)]
-struct ViewSetting {
-    view: Option<Arc<Window>>,
-    scale_factor: f32,
-    physical_size: (u32, u32),
-}
-
 impl AppSurface {
-    #[allow(clippy::needless_update)]
     pub async fn new(view: Arc<Window>) -> Self {
         let scale_factor = crate::normalize_scale_factor(view.scale_factor() as f32);
         let physical_size = view.inner_size();
-        let view_setting = ViewSetting {
-            scale_factor,
-            physical_size: crate::normalize_view_size((physical_size.width, physical_size.height)),
-            view: Some(view),
-            ..Default::default()
-        };
-
-        Self::create(view_setting).await
-    }
-
-    pub fn get_view(&self) -> &Window {
-        self.view.as_ref().unwrap()
-    }
-
-    #[allow(unused_variables)]
-    async fn create(view_setting: ViewSetting) -> Self {
-        let view = view_setting.view.unwrap();
-
-        let scale_factor = view_setting.scale_factor;
+        let physical_size = crate::normalize_view_size((physical_size.width, physical_size.height));
         let default_backends = if cfg!(feature = "webgl") {
             wgpu::Backends::GL
         } else {
@@ -51,27 +25,21 @@ impl AppSurface {
         let backends = wgpu::Backends::from_env().unwrap_or(default_backends);
         let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
             backends,
-            flags: wgpu::InstanceFlags::default(),
-            backend_options: wgpu::BackendOptions::default(),
             ..wgpu::InstanceDescriptor::new_without_display_handle()
         });
 
-        cfg_select! {
-            target_arch = "wasm32" => {
-                let surface = instance.create_surface(view.clone());
-            }
-            _ => {
-                let surface = instance.create_surface(view.clone());
-            }
-        }
-        let surface = match surface {
-            Ok(surface) => surface,
-            Err(e) => {
-                panic!("Failed to create surface: {e:?}");
-            }
-        };
+        let surface = instance
+            .create_surface(view.clone())
+            .expect("Surface creation failed");
 
-        let ctx = crate::create_iasdq_context(instance, surface, view_setting.physical_size).await;
+        let ctx = crate::create_iasdq_context(
+            instance,
+            surface,
+            physical_size,
+            wgpu::TextureUsages::RENDER_ATTACHMENT,
+        )
+        .await
+        .expect("Surface initialization failed");
 
         AppSurface {
             view: Some(view),
@@ -82,6 +50,10 @@ impl AppSurface {
             temporary_directory: "",
             library_directory: "",
         }
+    }
+
+    pub fn get_view(&self) -> &Window {
+        self.view.as_ref().unwrap()
     }
 
     pub fn get_view_size(&self) -> (u32, u32) {

@@ -307,21 +307,21 @@ async fn create_iasdq_context(
     instance: Instance,
     surface: Surface<'static>,
     physical_size: (u32, u32),
-) -> IASDQContext {
-    let physical_size = normalize_view_size(physical_size);
-    let (adapter, device, queue) = crate::request_device(&instance, &surface).await;
-
-    let caps = surface.get_capabilities(&adapter);
-    let prefered = caps.formats[0];
+    usage: wgpu::TextureUsages,
+) -> Result<IASDQContext, String> {
+    let (adapter, device, queue) = crate::request_device(&instance, &surface).await?;
+    let mut config = surface
+        .get_default_config(&adapter, physical_size.0, physical_size.1)
+        .ok_or("Surface is not supported by the adapter")?;
 
     let format = if cfg!(all(target_arch = "wasm32", not(feature = "webgl"))) {
         // Chrome WebGPU doesn't support sRGB:
         // unsupported swap chain format "xxxx8unorm-srgb"
-        prefered.remove_srgb_suffix()
+        config.format.remove_srgb_suffix()
     } else {
-        prefered
+        config.format
     };
-    let view_formats = if cfg!(feature = "webgl") {
+    config.view_formats = if cfg!(feature = "webgl") {
         // panicked at 'Error in Surface::configure: Validation Error
         // Caused by:
         // Downlevel flags DownlevelFlags(SURFACE_VIEW_FORMATS) are required but not supported on the device.
@@ -343,29 +343,25 @@ async fn create_iasdq_context(
         vec![format.add_srgb_suffix(), format.remove_srgb_suffix()]
     };
 
-    let mut config = surface
-        .get_default_config(&adapter, physical_size.0, physical_size.1)
-        .expect("Surface isn't supported by the adapter.");
-
-    config.view_formats = view_formats;
     config.format = format;
+    config.usage = usage;
 
     surface.configure(&device, &config);
 
-    IASDQContext {
+    Ok(IASDQContext {
         instance,
         surface: SharedPtr::new(surface),
         config,
         adapter,
         device,
         queue,
-    }
+    })
 }
 
 async fn request_device(
     instance: &Instance,
     surface: &Surface<'static>,
-) -> (wgpu::Adapter, wgpu::Device, wgpu::Queue) {
+) -> Result<(wgpu::Adapter, wgpu::Device, wgpu::Queue), String> {
     let adapter = instance
         .request_adapter(&wgpu::RequestAdapterOptions {
             power_preference: wgpu::PowerPreference::from_env()
@@ -375,17 +371,10 @@ async fn request_device(
             apply_limit_buckets: false,
         })
         .await
-        .expect("No suitable GPU adapters found on the system!");
+        .map_err(|error| format!("GPU adapter request failed: {error}"))?;
 
     let adapter_info = adapter.get_info();
     println!("Using {} ({:?})", adapter_info.name, adapter_info.backend);
-
-    let base_dir = std::env::var("CARGO_MANIFEST_DIR");
-    let _trace_path = if let Ok(base_dir) = base_dir {
-        Some(std::path::PathBuf::from(&base_dir).join("WGPU_TRACE_ERROR"))
-    } else {
-        None
-    };
 
     cfg_select! {
         target_arch = "wasm32" => {
@@ -403,7 +392,7 @@ async fn request_device(
         }
     }
 
-    let res = adapter
+    let (device, queue) = adapter
         .request_device(&wgpu::DeviceDescriptor {
             label: None,
             required_features: adp_features,
@@ -412,14 +401,10 @@ async fn request_device(
             memory_hints: wgpu::MemoryHints::Performance,
             trace: wgpu::Trace::Off,
         })
-        .await;
+        .await
+        .map_err(|error| format!("GPU device request failed: {error}"))?;
 
-    match res {
-        Err(err) => {
-            panic!("request_device failed: {err:?}");
-        }
-        Ok(tuple) => (adapter, tuple.0, tuple.1),
-    }
+    Ok((adapter, device, queue))
 }
 
 #[cfg(test)]
