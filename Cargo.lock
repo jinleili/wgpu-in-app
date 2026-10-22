@@ -175,7 +175,7 @@ dependencies = [
 
 [[package]]
 name = "app-surface"
-version = "1.14.0"
+version = "1.14.1"
 dependencies = [
  "android_logger",
  "env_logger",
@@ -791,9 +791,9 @@ dependencies = [
 
 [[package]]
 name = "glam"
-version = "0.32.1"
+version = "0.33.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f70749695b063ecbf6b62949ccccde2e733ec3ecbbd71d467dca4e5c6c97cca0"
+checksum = "37bfe73dc8ec21f54d181e5a60554327ec3f1c600c455a75ccbfc65d2106a6c4"
 dependencies = [
  "bytemuck",
 ]
